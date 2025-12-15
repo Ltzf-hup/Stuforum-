@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>探索 - StuForum</title>
+  <link rel="stylesheet" href="css/index.css">
+</head>
+
+<body>
+  <div id="app">
+    <div id="header">
+      <div class="logo">
+        <span class="logo-icon">🎓</span>
+        <span>StuForum</span>
+      </div>
+      <div class="nav-links">
+        <a href="index.html" class="nav-link">首页</a>
+        <a href="explore.html" class="nav-link">探索</a>
+        <a href="notifications.html" class="nav-link">通知</a>
+        <a href="messages.html" class="nav-link">消息</a>
+        <a href="profile.html" class="nav-link">个人资料</a>
+      </div>
+      <button class="post-btn"><a href="login.html">登录</a></button>
+    </div>
+
+    <div id="body">
+      <div id="left-body">
+        <span>热门话题</span>
+        <div class="trending-item">
+          <div class="trend-category">编程</div>
+          <div class="trend-name">#Python学习</div>
+          <div class="trend-count">12.3k讨论</div>
+        </div>
+        <div class="trending-item">
+          <div class="trend-category">学习</div>
+          <div class="trend-name">#期末复习</div>
+          <div class="trend-count">8.9k讨论</div>
+        </div>
+        <div class="trending-item">
+          <div class="trend-category">校园生活</div>
+          <div class="trend-name">#校园活动</div>
+          <div class="trend-count">5.6k讨论</div>
+        </div>
+        <div class="trending-item">
+          <div class="trend-category">就业</div>
+          <div class="trend-name">#实习经验</div>
+          <div class="trend-count">3.4k讨论</div>
+        </div>
+      </div>
+
+      <div id="middle-body">
+        <div class="section-title">探索</div>
+
+        <div style="padding: 1rem; border-bottom: 1px solid #e9ecef;">
+          <input type="text" placeholder="搜索话题、用户或内容..."
+            style="width: 100%; padding: 0.75rem; border: 1px solid #e9ecef; border-radius: 25px; background-color: #f8f9fa; font-size: 1rem;">
+        </div>
+
+        <div class="posts-container">
+          <div class="post">
+            <div class="post-avatar">
+              <div class="avatar" style="background-color: #794bc4;">L</div>
+            </div>
+            <div class="post-content">
+              <div class="post-header-info">
+                <span class="post-user">Linda Wang</span>
+                <span class="post-handle">@lindaw ·</span>
+                <span class="post-time">2小时前</span>
+              </div>
+              <div class="post-text">
+                今天去图书馆学习了一天，感觉效率很高！分享一下我的学习方法：#学习方法 #图书馆
+              </div>
+              <div class="post-actions-bar">
+                <div class="post-action">
+                  <span>💬</span>
+                  <span class="action-count">15</span>
+                </div>
+                <div class="post-action">
+                  <span>🔄</span>
+                  <span class="action-count">7</span>
+                </div>
+                <div class="post-action">
+                  <span>❤️</span>
+                  <span class="action-count">42</span>
+                </div>
+                <div class="post-action">
+                  <span>📤</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="post">
+            <div class="post-avatar">
+              <div class="avatar" style="background-color: #10ac84;">M</div>
+            </div>
+            <div class="post-content">
+              <div class="post-header-info">
+                <span class="post-user">Mike Chen</span>
+                <span class="post-handle">@mikec ·</span>
+                <span class="post-time">5小时前</span>
+              </div>
+              <div class="post-text">
+                周末有没有一起打羽毛球的？#校园活动 #运动
+              </div>
+              <div class="post-actions-bar">
+                <div class="post-action">
+                  <span>💬</span>
+                  <span class="action-count">28</span>
+                </div>
+                <div class="post-action">
+                  <span>🔄</span>
+                  <span class="action-count">12</span>
+                </div>
+                <div class="post-action">
+                  <span>❤️</span>
+                  <span class="action-count">36</span>
+                </div>
+                <div class="post-action">
+                  <span>📤</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="right-body">
+        <span>推荐关注</span>
+        <div class="user-item">
+          <div class="user-info">
+            <div class="avatar" style="background-color: #ff758f;">S</div>
+            <div class="user-details">
+              <div class="user-name">Sarah Liu</div>
+              <div class="user-handle">@sarahliu</div>
+            </div>
+          </div>
+          <button class="follow-btn">关注</button>
+        </div>
+        <div class="user-item">
+          <div class="user-info">
+            <div class="avatar" style="background-color: #38b000;">D</div>
+            <div class="user-details">
+              <div class="user-name">David Park</div>
+              <div class="user-handle">@davidp</div>
+            </div>
+          </div>
+          <button class="follow-btn">关注</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+    <script src="lib/vue.js"></script>
+    <div id="app">
+        <div id="login">
+            <h2>{{ isLogin ? '登入' : '注册' }}</h2>
+            <form @submit.prevent="handleSubmit">
+                <label>账号</label>
+                <input type="text" v-model="username" placeholder="请输入账号"/>
+                <label>密码</label>
+                <input type="password" v-model="password" placeholder="请输入密码(密码不能少于6位)"/>
+                
+                <div id="a" v-if="!isLogin">
+                    <label>确认密码</label>
+                    <input type="password" v-model="confirmPassword" placeholder="请确认密码"/>
+                </div>
+            </form>
+            <div id="login-btn">
+                <a href="#" @click="handleSubmit">{{ isLogin ? '登入' : '注册' }}</a>
+                <a href="#" @click="toggleMode">{{ isLogin ? '注册' : '登入' }}</a>
+            </div>
+        </div>    
+    </div>
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                isLogin: true,
+                username: '',
+                password: '',
+                confirmPassword: ''
+            },
+            methods: {
+                toggleMode() {
+                    this.isLogin = !this.isLogin;
+                    this.clearForm();
+                },
+                
+                clearForm() {
+                    this.username = '';
+                    this.password = '';
+                    this.confirmPassword = '';
+                },
+                
+                handleSubmit() {
+                    if (this.isLogin) {
+                        this.login();
+                    } else {
+                        this.register();
+                    }
+                },
+                
+                login() {
+                    if (!this.username || !this.password) {
+                        alert('请输入账号和密码');
+                        return;
+                    }
+                    else if(this.password.length<6){
+                        alert('密码不能少于6位');
+                        return;
+                    }
+                    
+                    console.log('登录信息:', this.username, this.password);
+                    alert('登录成功！');
+                },
+                
+                register() {
+                    if (!this.username || !this.password) {
+                        alert('请输入账号和密码');
+                        return;
+                    }else if(this.password.length<6){
+                        alert('密码不能少于6位');
+                        return;
+                    }else if (this.password !== this.confirmPassword) {
+                        alert('输入的密码不一致');
+                        return;
+                    }
+                    
+                    console.log('注册信息:', this.username, this.password);
+                    alert('注册成功！');
+                    this.isLogin = true;
+                    this.clearForm();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
