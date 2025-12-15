@@ -206,7 +206,7 @@ body {
 }
 
 .action-icon:hover {
-  color: #1e60c9;
+  background-color: rgba(44, 123, 229, 0.1);
 }
 
 .post-submit {
