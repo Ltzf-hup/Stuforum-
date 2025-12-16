@@ -1,32 +1,74 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>{{ isLogin ? '登录 - StuForum' : '注册 - StuForum' }}</title>
     <link rel="stylesheet" href="css/login.css">
 </head>
 <body>
-    
     <div id="app">
-        <div id="login">
-            <h2>{{ isLogin ? '登入' : '注册' }}</h2>
-            <form @submit.prevent="handleSubmit">
-                <label>账号</label>
-                <input type="text" v-model="username" placeholder="请输入账号"/>
-                <label>密码</label>
-                <input type="password" v-model="password" placeholder="请输入密码(密码不能少于6位)"/>
-                
-                <div id="a" v-if="!isLogin">
-                    <label>确认密码</label>
-                    <input type="password" v-model="confirmPassword" placeholder="请确认密码"/>
-                </div>
-            </form>
-            <div id="login-btn">
-                <a href="#" @click="handleSubmit">{{ isLogin ? '登入' : '注册' }}</a>
-                <a href="#" @click="toggleMode">{{ isLogin ? '注册' : '登入' }}</a>
+        <div class="container">
+            <div class="login-form">
+                <h2>{{ isLogin ? '登录' : '注册' }}</h2>
+                <form @submit.prevent="handleSubmit">
+                    <!-- 登录方式切换 -->
+                    <div v-if="isLogin" class="login-methods">
+                        <div 
+                            class="login-method" 
+                            :class="{ active: loginMethod === 'username' }"
+                            @click="loginMethod = 'username'"
+                        >
+                            账号登录
+                        </div>
+                        <div 
+                            class="login-method" 
+                            :class="{ active: loginMethod === 'email' }"
+                            @click="loginMethod = 'email'"
+                        >
+                            邮箱登录
+                        </div>
+                    </div>
+                    
+                    <div v-if="isLogin && loginMethod === 'username'" class="form-group">
+                        <label for="username">账号</label>
+                        <input type="text" id="username" v-model="username" placeholder="请输入账号" required>
+                    </div>
+                    
+                    <div v-if="isLogin && loginMethod === 'email'" class="form-group">
+                        <label for="email">邮箱</label>
+                        <input type="email" id="email" v-model="email" placeholder="请输入邮箱" required>
+                    </div>
+                    
+                    <div v-else-if="!isLogin" class="form-group">
+                        <label for="username">账号</label>
+                        <input type="text" id="username" v-model="username" placeholder="请输入账号" required>
+                    </div>
+                    
+                    <div v-if="!isLogin" class="form-group">
+                        <label for="email">邮箱 (可选)</label>
+                        <input type="email" id="email" v-model="email" placeholder="请输入邮箱（可选）">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">密码</label>
+                        <input type="password" id="password" v-model="password" placeholder="请输入密码" required>
+                    </div>
+
+                    <div v-if="!isLogin">
+                        <div class="form-group">
+                            <label for="confirmPassword">确认密码</label>
+                            <input type="password" id="confirmPassword" v-model="confirmPassword" placeholder="请再次输入密码" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="btn">{{ isLogin ? '登录' : '注册' }}</button>
+                        <p class="toggle-text">{{ isLogin ? '没有账号？' : '已有账号？' }} <a href="#" @click.prevent="toggleMode">{{ isLogin ? '立即注册' : '立即登录' }}</a></p>
+                    </div>
+                </form>
             </div>
-        </div>    
+        </div>
     </div>
     <script src="lib/vue.js"></script>
     <script src="js/login.js"></script>

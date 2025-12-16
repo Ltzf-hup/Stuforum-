@@ -6,7 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>首页 - StuForum</title>
   <link rel="stylesheet" href="css/index.css">
-
 </head>
 
 <body>
@@ -54,12 +53,12 @@
       <div id="middle-body">
         <div id="middle-body-text">
           <div class="post-header">
-            <div class="avatar" style="background-color: #2c7be5;">你</div>
+            <div class="avatar" style="background-color: #667eea;">你</div>
             <textarea class="post-input" placeholder="分享你的想法..."></textarea>
           </div>
           <div class="post-actions">
             <div class="action-icons">
-              <a class="action-icon"><img src="img/1.png" alt="照片"></a>
+              <span class="action-icon"><img src="img/1.png" alt="照片"></span>
               <span class="action-icon"><img src="img/2.png" alt="视频"></span>
               <span class="action-icon"><img src="img/3.png" alt="位置"></span>
             </div>
@@ -68,7 +67,7 @@
         </div>
 
         <div class="posts-container">
-          <div class="post" v-for=" lists in list">
+          <div class="post" v-for="lists in list" :key="lists.id">
             <div class="post-avatar">
               <div class="avatar" style="background-color: #10ac84;">M</div>
             </div>
@@ -79,7 +78,7 @@
                 <span class="post-time">5小时前</span>
               </div>
               <div class="post-text">
-                {{lists.txt}}
+                {{ lists.txt || '今天天气不错，适合学习！' }}
               </div>
               <div class="post-actions-bar">
                 <div class="post-action">
