@@ -363,7 +363,7 @@ body {
 
 /* 右侧边栏 - 固定定位 */
 #right-body {
-  width: 280px;
+  width: 300px;
   background-color: #fff;
   padding: 1.5rem;
   position: sticky;
