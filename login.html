@@ -3,74 +3,334 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ isLogin ? '登录 - StuForum' : '注册 - StuForum' }}</title>
-    <link rel="stylesheet" href="css/login.css">
+    <title>用户登录/注册</title>
+    <style>
+        /* 全局样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        /* 容器样式 */
+        .container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
+            overflow: hidden;
+        }
+        
+        /* 表单头部 */
+        .form-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .form-header h2 {
+            margin-bottom: 10px;
+        }
+        
+        .mode-toggle {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            display: inline-block;
+            padding: 5px;
+        }
+        
+        .mode-toggle button {
+            background: transparent;
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .mode-toggle button.active {
+            background: white;
+            color: #667eea;
+            font-weight: bold;
+        }
+        
+        /* 表单内容 */
+        .form-content {
+            padding: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
+        }
+        
+        /* 按钮样式 */
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        /* 结果显示 */
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        
+        .result.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .result.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .result.loading {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+    </style>
 </head>
 <body>
-    <div id="app">
-        <div class="container">
-            <div class="login-form">
-                <h2>{{ isLogin ? '登录' : '注册' }}</h2>
-                <form @submit.prevent="handleSubmit">
-                    <!-- 登录方式切换 -->
-                    <div v-if="isLogin" class="login-methods">
-                        <div 
-                            class="login-method" 
-                            :class="{ active: loginMethod === 'username' }"
-                            @click="loginMethod = 'username'"
-                        >
-                            账号登录
-                        </div>
-                        <div 
-                            class="login-method" 
-                            :class="{ active: loginMethod === 'email' }"
-                            @click="loginMethod = 'email'"
-                        >
-                            邮箱登录
-                        </div>
-                    </div>
-                    
-                    <div v-if="isLogin && loginMethod === 'username'" class="form-group">
-                        <label for="username">账号</label>
-                        <input type="text" id="username" v-model="username" placeholder="请输入账号" required>
-                    </div>
-                    
-                    <div v-if="isLogin && loginMethod === 'email'" class="form-group">
-                        <label for="email">邮箱</label>
-                        <input type="email" id="email" v-model="email" placeholder="请输入邮箱" required>
-                    </div>
-                    
-                    <div v-else-if="!isLogin" class="form-group">
-                        <label for="username">账号</label>
-                        <input type="text" id="username" v-model="username" placeholder="请输入账号" required>
-                    </div>
-                    
-                    <div v-if="!isLogin" class="form-group">
-                        <label for="email">邮箱 (可选)</label>
-                        <input type="email" id="email" v-model="email" placeholder="请输入邮箱（可选）">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="password">密码</label>
-                        <input type="password" id="password" v-model="password" placeholder="请输入密码" required>
-                    </div>
-
-                    <div v-if="!isLogin">
-                        <div class="form-group">
-                            <label for="confirmPassword">确认密码</label>
-                            <input type="password" id="confirmPassword" v-model="confirmPassword" placeholder="请再次输入密码" required>
-                        </div>
-                    </div>
-                    
-                    <div class="form-actions">
-                        <button type="submit" class="btn">{{ isLogin ? '登录' : '注册' }}</button>
-                        <p class="toggle-text">{{ isLogin ? '没有账号？' : '已有账号？' }} <a href="#" @click.prevent="toggleMode">{{ isLogin ? '立即注册' : '立即登录' }}</a></p>
-                    </div>
-                </form>
+    <div id="app" class="container">
+        <div class="form-header">
+            <h2>{{ isLogin ? '用户登录' : '用户注册' }}</h2>
+            <div class="mode-toggle">
+                <button :class="{ active: isLogin }" @click="isLogin = true">登录</button>
+                <button :class="{ active: !isLogin }" @click="isLogin = false">注册</button>
+            </div>
+        </div>
+        
+        <div class="form-content">
+            <!-- 登录表单 -->
+            <div v-if="isLogin">
+                <div class="form-group">
+                    <label for="loginName">用户名</label>
+                    <input type="text" id="loginName" v-model="loginData.name" placeholder="请输入用户名">
+                </div>
+                
+                <div class="form-group">
+                    <label for="loginPassword">密码</label>
+                    <input type="password" id="loginPassword" v-model="loginData.password" placeholder="请输入密码">
+                </div>
+                
+                <button class="btn" @click="login">登录</button>
+            </div>
+            
+            <!-- 注册表单 -->
+            <div v-else>
+                <div class="form-group">
+                    <label for="registerName">用户名</label>
+                    <input type="text" id="registerName" v-model="registerData.name" placeholder="请输入用户名">
+                </div>
+                
+                <div class="form-group">
+                    <label for="registerEmail">邮箱</label>
+                    <input type="email" id="registerEmail" v-model="registerData.email" placeholder="请输入邮箱">
+                </div>
+                
+                <div class="form-group">
+                    <label for="registerPassword">密码</label>
+                    <input type="password" id="registerPassword" v-model="registerData.password" placeholder="请输入密码">
+                </div>
+                
+                <div class="form-group">
+                    <label for="registerConfirm">确认密码</label>
+                    <input type="password" id="registerConfirm" v-model="registerData.confirmPassword" placeholder="请再次输入密码">
+                </div>
+                
+                <button class="btn" @click="register">注册</button>
+            </div>
+            
+            <!-- 显示结果 -->
+            <div v-if="message" :class="['result', message.type]">
+                <h3>{{ message.title }}</h3>
+                <p>{{ message.content }}</p>
             </div>
         </div>
     </div>
+
     <script src="lib/vue.js"></script>
-    <script src="js/login.js"></script>
+    <script src="lib/jquery-1.12.4.js"></script>
+
+    <script>
+    new Vue({
+        el: '#app',
+        data: {
+            isLogin: true,
+            loginData: {
+                name: '',
+                password: ''
+            },
+            
+            // 注册数据
+            registerData: {
+                name: '',
+                email: '',
+                password: '',
+                confirmPassword: ''
+            },
+            
+            message: null
+        },
+        methods: {
+            login() {
+                if (this.loginData.name === '' || this.loginData.password === '') {
+                    this.showMessage('error', '登录失败', '请输入用户名和密码');
+                    return;
+                }
+                
+                this.showMessage('loading', '处理中', '登录中...');
+                
+                $.ajax({
+                    url: 'http://10.11.192.162:8080/StuForum_Web_exploded/login',
+                    type: 'POST',
+                    data: {
+                        uname: this.loginData.name,
+                        password: this.loginData.password
+                    },
+                    dataType: 'json',
+                    success: (data) => {
+                        console.log('登录成功，后端返回数据:', data);
+                        
+                        if (data && data.uname) {
+                            this.showMessage('success', '登录成功', `欢迎您，${data.uname}`);
+                        } else {
+                            this.showMessage('error', '登录失败', '用户名或密码错误');
+                        }
+                    },
+                    error: (xhr, status, error) => {
+                        console.error('登录失败:', status, error);
+                        this.showMessage('error', '登录失败', '无法连接到服务器，请稍后重试');
+                    }
+                });
+            },
+            
+            // 注册方法
+            register() {
+                // 表单验证
+                if (this.registerData.name === '' || this.registerData.password === '') {
+                    this.showMessage('error', '注册失败', '请输入用户名和密码');
+                    return;
+                }
+                
+                if (this.registerData.password !== this.registerData.confirmPassword) {
+                    this.showMessage('error', '注册失败', '两次输入的密码不一致');
+                    return;
+                }
+                
+                if (this.registerData.password.length < 6) {
+                    this.showMessage('error', '注册失败', '密码长度不能少于6位');
+                    return;
+                }
+                
+                // 显示加载状态
+                this.showMessage('loading', '处理中', '注册中...');
+                
+                // 发送AJAX请求
+                $.ajax({
+                    url: 'http://10.11.192.162:8080/StuForum_Web_exploded/register', // 假设注册接口
+                    type: 'POST',
+                    data: {
+                        uname: this.registerData.name,
+                        email: this.registerData.email,
+                        password: this.registerData.password
+                    },
+                    dataType: 'json',
+                    success: (data) => {
+                        console.log('注册成功，后端返回数据:', data);
+                        
+                        if (data && data.uname) {
+                            this.showMessage('success', '注册成功', `注册成功！欢迎您，${data.uname}`);
+                            // 切换到登录模式
+                            setTimeout(() => {
+                                this.isLogin = true;
+                                this.clearForm();
+                            }, 1500);
+                        } else {
+                            this.showMessage('error', '注册失败', '注册失败，请稍后重试');
+                        }
+                    },
+                    error: (xhr, status, error) => {
+                        console.error('注册失败:', status, error);
+                        this.showMessage('error', '注册失败', '无法连接到服务器，请稍后重试');
+                    }
+                });
+            },
+            
+            // 显示消息
+            showMessage(type, title, content) {
+                this.message = {
+                    type: type,
+                    title: title,
+                    content: content
+                };
+            },
+            
+            // 清空表单
+            clearForm() {
+                this.loginData = { name: '', password: '' };
+                this.registerData = { name: '', email: '', password: '', confirmPassword: '' };
+                this.message = null;
+            }
+        }
+    });
+    </script>
 </body>
 </html>
