@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script src="lib/jquery-1.12.4.js"></script>
+    <input type="text" id="officeName" name="name" placeholder="请输入名称">
+    <input type="password" id="officePassword" name="password" placeholder="请输入密码">
+    <button id="btnLogin">登录</button>
+
+    <script>
+    $('#btnLogin').click(function () {
+        const name = $('#officeName').val();
+        const password = $('#officePassword').val();
+    
+        if (name === '' || password === '') {
+            alert('请输入用户名和密码');
+            return;
+        }
+
+     $.ajax({
+    url: 'http://10.11.192.162:8080/StuForum_Web_exploded/login',
+    type: 'POST',
+    data: {uname: name, password: password},
+    dataType: 'json',          // 若后台返回纯文本可改成 'text'
+    success: function (data) {
+        console.log(data);       // 先看后台到底返了什么
+        if (!(data.uname === name && data.password === password)) {
+            alert('登录成功！'+name +'，欢迎您！' + password);
+        } else {
+            alert('用户名或密码错误');
+        }
+    }
+});
+    });
+
+    </script>
+</body>
+</html>
