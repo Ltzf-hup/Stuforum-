@@ -83,10 +83,10 @@ new Vue({
                     },
                     dataType: 'json',
                     success: (data) => {
-                        console.log('注册成功，后端返回数据:', data);
+                        console.log('注册成功', data);
                         
-                        if (data && data.uname) {
-                            this.showMessage('success', '注册成功', `注册成功！欢迎您，${data.uname}`);
+                        if (data && data[0].uname) {
+                            this.showMessage('success', '注册成功', `注册成功！欢迎您，${data[0].uname}`);
                             // 切换到登录模式
                             setTimeout(() => {
                                 this.isLogin = true;
