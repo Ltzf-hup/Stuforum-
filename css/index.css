@@ -490,3 +490,40 @@ body {
     font-size: 1rem;
   }
 }
+.tab-container {
+      display: flex;
+      border-bottom: 1px solid #e9ecef;
+      margin-bottom: 1rem;
+    }
+    
+    .tab {
+      flex: 1;
+      padding: 1rem;
+      text-align: center;
+      cursor: pointer;
+      font-weight: 600;
+      color: #6c757d;
+      transition: all 0.2s ease;
+    }
+    
+    .tab.active {
+      color: #2c7be5;
+      border-bottom: 2px solid #2c7be5;
+    }
+    
+    .tab:hover {
+      background-color: rgba(44, 123, 229, 0.05);
+    }
+    
+    #messages-section .conversation-list {
+      height: calc(100vh - 180px);
+      overflow-y: auto;
+    }
+    
+    #messages-section .message-input-area {
+      position: sticky;
+      bottom: 0;
+      background-color: white;
+      padding: 1rem;
+      border-top: 1px solid #e9ecef;
+    }
