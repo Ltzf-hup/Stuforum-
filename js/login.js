@@ -55,6 +55,11 @@ new Vue({
                 this.showMessage('error', '注册失败', '请填写所有必填字段');
                 return;
             }
+            //.邮箱验证
+            if (!this.registerData.email.includes('@')) {
+                this.showMessage('error', '注册失败', '请输入有效的邮箱地址');
+                return;
+            }
             
             // 2. 密码一致性验证
             if (this.registerData.password !== this.registerData.confirmPassword) {
