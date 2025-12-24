@@ -43,7 +43,7 @@ new Vue({
                             this.showMessage('error', '登录失败', '用户名或密码错误');
                         }
                     },
-                    error: (xhr, status, error) => {
+                    error: (status, error) => {
                         console.error('登录失败:', status, error);
                         this.showMessage('error', '登录失败', '无法连接到服务器，请稍后重试');
                     }
@@ -53,6 +53,11 @@ new Vue({
  register() {
             if (this.registerData.name === '' || this.registerData.email === '' || this.registerData.password === '') {
                 this.showMessage('error', '注册失败', '请填写所有必填字段');
+                return;
+            }
+            // 邮箱格式验证
+            if (!this.registerData.email.includes('@')) {
+                this.showMessage('error', '注册失败', '请输入有效的邮箱地址');
                 return;
             }
             
@@ -88,7 +93,7 @@ new Vue({
                 },
                 error: (status, error) => {
                     console.error('注册失败:', status, error);
-                    this.showMessage('error', '注册失败', '无法连接到服务器，请稍后重试');
+                    // this.showMessage('error', '注册失败', '无法连接到服务器，请稍后重试');
                 }
             });
         },
