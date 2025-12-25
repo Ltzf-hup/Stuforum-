@@ -40,7 +40,7 @@ new Vue({
                             this.showMessage('success', '登录成功', `欢迎您，${data.user.uname}`);
                             // 登录成功后，跳转到首页
                             setTimeout(() => {
-                                window.location.href = 'index.html';
+                                window.location.href = 'login.html';
                             }, 1000);
                         } else {
                             this.showMessage('error', '登录失败', '用户名或密码错误');
@@ -49,7 +49,7 @@ new Vue({
                     error: (status, error) => {
                         console.error('登录失败:', status, error);
                         this.showMessage('error', '登录失败', '无法连接到服务器，请稍后重试');
-                    }
+                    },
                 });
             },
            // 注册方法
