@@ -5,6 +5,7 @@ new Vue({
             loginData: {
                 name: '',
                 password: ''
+                ,list:[]
             },
             
             // 注册数据
@@ -40,7 +41,9 @@ new Vue({
                             this.showMessage('success', '登录成功', `欢迎您，${data.user.uname}`);
                             // 登录成功后，跳转到首页
                             setTimeout(() => {
+                                this.list.push(data.user);
                                 window.location.href = 'index.html';
+                            
                             }, 1000);
                         } else {
                             this.showMessage('error', '登录失败', '用户名或密码错误');
