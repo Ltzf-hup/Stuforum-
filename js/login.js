@@ -43,7 +43,7 @@ new Vue({
                             this.showMessage('error', '登录失败', '用户名或密码错误');
                         }
                     },
-                    error: (xhr, status, error) => {
+                    error: (status, error) => {
                         console.error('登录失败:', status, error);
                         this.showMessage('error', '登录失败', '无法连接到服务器，请稍后重试');
                     }
