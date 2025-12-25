@@ -1,4 +1,4 @@
-new Vue({
+const vm = new Vue({
         el: '#app',
         data: {
             isLogin: true,
@@ -39,9 +39,10 @@ new Vue({
                         console.log('登录成功，后端返回数据:', data);
                         if (data && data.user.uname) {
                             this.showMessage('success', '登录成功', `欢迎您，${data.user.uname}`);
+                            // 保存用户数据到localStorage
+                            localStorage.setItem('userData', JSON.stringify(data.user));
                             // 登录成功后，跳转到首页
-                            setTimeout(() => {
-                                this.list.push(data.user);                    
+                            setTimeout(() => {                
                                 location.href = 'index.html';
                             }, 1000);
                         } else {

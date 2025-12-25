@@ -21,17 +21,16 @@
         <a href="m-n.html" class="nav-link">消息/通知</a>
         <a href="profile.html" class="nav-link">个人资料</a>
       </div>
-      <button class="post-btn"><a href="login.html">登录</a></button>
     </div>
 
     <div id="body">
       <div id="left-body">
         <div style="display: flex; flex-direction: column; align-items: center; margin-bottom: 2rem;">
           <div class="avatar"
-            style="width: 100px; height: 100px; font-size: 3rem; background-color: #2c7be5; margin-bottom: 1rem;">S
+            style="width: 100px; height: 100px; font-size: 3rem; background-color: #2c7be5; margin-bottom: 1rem;"> {{list.uname ? list.uname.charAt(0) : ''}}
           </div>
-          <div style="font-size: 1.5rem; font-weight: 700; color: #495057; margin-bottom: 0.5rem;">{{list[0].uname}}</div>
-          <div style="color: #6c757d; margin-bottom: 1rem;">@{{list[0].uname}}</div>
+          <div style="font-size: 1.5rem; font-weight: 700; color: #495057; margin-bottom: 0.5rem;">{{list.uname}}</div>
+          <div style="color: #6c757d; margin-bottom: 1rem;">@{{list.uname}}</div>
           
              <button class="post-btn" id="editProfileBtn" style="width: 100%;">编辑资料</button>
           
@@ -40,35 +39,31 @@
         <span>个人信息</span>
         <div class="trending-item" style="cursor: default;">
           <div class="trend-category">用户名</div>
-          <div class="trend-name"><input type="text"></div>
+          <div class="trend-name"><input type="text" :value="list.uname"></div>
         </div>
         <div class="trending-item" style="cursor: default;">
           <div class="trend-category">邮箱</div>
-          <div class="trend-name"><input type="text"></div>
-        </div>
-        <div class="trending-item" style="cursor: default;">
-          <div class="trend-category">注册时间</div>
-          <div class="trend-name"><input type="text"></div>
+          <div class="trend-name"><input type="text" :value="list.email"></div>
         </div>
         <div class="trending-item" style="cursor: default;">
           <div class="trend-category">个人简介</div>
-          <div class="trend-name"><input type="text"></div>
+          <div class="trend-name"><input type="text" :value="list.intro"></div>
         </div>
         <div class="trending-item" style="cursor: default;">
           <div class="trend-category">学院</div>
-          <div class="trend-name"><input type="text"></div>
+          <div class="trend-name"><input type="text" :value="list.college"></div>
         </div>
         <div class="trending-item" style="cursor: default;">
           <div class="trend-category">年级</div>
-          <div class="trend-name"><input type="text"></div>
+          <div class="trend-name"><input type="text" :value="list.grade"></div>
         </div>
         <div class="trending-item" style="cursor: default;">
           <div class="trend-category">专业</div>
-          <div class="trend-name"><input type="text"></div>
+          <div class="trend-name"><input type="text" :value="list.major"></div>
         </div>
         <div class="trending-item" style="cursor: default;">
           <div class="trend-category">兴趣爱好</div>
-          <div class="trend-name"><input type="text"></div>
+          <div class="trend-name"><input type="text" :value="list.hobby"></div>
         </div>
       </div>
 
@@ -292,8 +287,8 @@
       </div>
     </div>
   </div>
+  <script src="lib/vue.js"></script>
   <script src="js/profile.js"></script>
-  <script src="js/login.js"></script>
 </body>
 
 </html>
