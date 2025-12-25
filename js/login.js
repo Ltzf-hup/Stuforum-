@@ -40,7 +40,7 @@ new Vue({
                             this.showMessage('success', '登录成功', `欢迎您，${data.user.uname}`);
                             // 登录成功后，跳转到首页
                             setTimeout(() => {
-                                window.location.href = 'index.html';
+                                location.href = 'index.html';
                             }, 1000);
                         } else {
                             this.showMessage('error', '登录失败', '用户名或密码错误');
@@ -94,7 +94,7 @@ new Vue({
                         this.showMessage('success', '注册成功', '注册成功！即将跳转到登录页...');
                         // 注册成功后，跳转到登录页
                         setTimeout(() => {
-                            window.location.href = 'index.html';
+                            location.href = 'index.html';
                         }, 2000); // 2秒后跳转
 
                    
