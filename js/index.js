@@ -2,13 +2,12 @@ new Vue({
     el: '#app',
     data: {
         list: [],
-        a: "天气不错"
     },
     methods: {
         getAll() {
             // 使用箭头函数回调
             $.ajax({
-                url: "fs",
+                url: "http://10.11.192.192:8080/fs",
                 type: "GET",
                 dataType: "json",
                 success: (data) => {
@@ -24,4 +23,5 @@ new Vue({
     created(){
         this.getAll();
     }
+
 });
