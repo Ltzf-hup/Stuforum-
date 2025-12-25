@@ -89,6 +89,11 @@ new Vue({
                 
                         // 成功情况
                         this.showMessage('success', '注册成功', '注册成功！即将跳转到登录页...');
+                        // 注册成功后，跳转到登录页
+                        setTimeout(() => {
+                            window.location.href = 'index.html';
+                        }, 2000); // 2秒后跳转
+
                    
                 },
                 error: (status, error) => {
