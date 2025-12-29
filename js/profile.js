@@ -2,7 +2,7 @@ const profileVm = new Vue({
     el: '#app',
     data: {
         list: {},
-        isLoggedIn: false
+        isLoggedIn: false, 
     },
     methods: {
         toggleEditMode() {
@@ -23,7 +23,30 @@ const profileVm = new Vue({
                 });
             }
         },
-               // 退出登录
+        // 触发文件输入框
+        triggerFileInput() {
+            document.getElementById('avatarInput').click();
+        },
+        // 处理头像文件选择
+        handleAvatarChange(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    // 更新头像预览
+                    this.list.avatar = event.target.result;
+                    // 保存到localStorage
+                    this.saveUserData();
+                };
+                reader.readAsDataURL(file);
+            }
+            
+        },
+        // 保存用户数据到localStorage
+        saveUserData() {
+            localStorage.setItem('userData', JSON.stringify(this.list));
+        },
+        // 退出登录
         logout() {
             // 清除localStorage中的用户数据
             localStorage.removeItem('userData');
@@ -41,6 +64,7 @@ const profileVm = new Vue({
             }
         }
     },
+    
     mounted() {
         // 获取用户数据
         this.getUserData();
