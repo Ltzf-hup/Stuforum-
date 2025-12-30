@@ -51,69 +51,36 @@
       <div id="middle-body">
 
         <div style="padding: 1rem; border-bottom: 1px solid #e9ecef;">
-          <input type="text" placeholder="搜索话题、用户或内容..."
-            style="width: 100%; padding: 0.75rem; border: 1px solid #e9ecef; border-radius: 25px; background-color: #f8f9fa; font-size: 1rem;">
+          <input type="text" placeholder="搜索话题、用户或内容..." style="width: 100%; padding: 0.75rem; 
+          border: 1px solid #e9ecef; border-radius: 25px; background-color: #f8f9fa; font-size: 1rem;">
         </div>
 
-        <div class="posts-container">
+        <div class="posts-container" v-for="item in list">
           <div class="post">
             <div class="post-avatar">
               <div class="avatar" style="background-color: #794bc4;">L</div>
             </div>
             <div class="post-content">
               <div class="post-header-info">
-                <span class="post-user">Linda Wang</span>
-                <span class="post-handle">@lindaw ·</span>
-                <span class="post-time">2小时前</span>
+                <span class="post-user">{{item.uname}}</span>
+                <span class="post-handle">@{{item.uname}}</span>
+                <span class="post-time">{{item.postedTime}}</span>
               </div>
               <div class="post-text">
-                今天去图书馆学习了一天，感觉效率很高！分享一下我的学习方法：#学习方法 #图书馆
+                {{item.txt}}
               </div>
               <div class="post-actions-bar">
                 <div class="post-action">
                   <span>💬</span>
-                  <span class="action-count">15</span>
+                  <span class="action-count">{{item.replyCount}}</span>
                 </div>
                 <div class="post-action">
                   <span>🔄</span>
-                  <span class="action-count">7</span>
+                  <span class="action-count">{{item.viewCount}}</span>
                 </div>
                 <div class="post-action">
                   <span>❤️</span>
-                  <span class="action-count">42</span>
-                </div>
-                <div class="post-action">
-                  <span>📤</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="post">
-            <div class="post-avatar">
-              <div class="avatar" style="background-color: #10ac84;">M</div>
-            </div>
-            <div class="post-content">
-              <div class="post-header-info">
-                <span class="post-user">Mike Chen</span>
-                <span class="post-handle">@mikec ·</span>
-                <span class="post-time">5小时前</span>
-              </div>
-              <div class="post-text">
-                周末有没有一起打羽毛球的？#校园活动 #运动
-              </div>
-              <div class="post-actions-bar">
-                <div class="post-action">
-                  <span>💬</span>
-                  <span class="action-count">28</span>
-                </div>
-                <div class="post-action">
-                  <span>🔄</span>
-                  <span class="action-count">12</span>
-                </div>
-                <div class="post-action">
-                  <span>❤️</span>
-                  <span class="action-count">36</span>
+                  <span class="action-count">{{item.likeCount}}</span>
                 </div>
                 <div class="post-action">
                   <span>📤</span>
@@ -148,7 +115,10 @@
         </div>
       </div>
     </div>
-  </div> 
+  </div>
+  <script src="lib/jquery-1.12.4.js"></script>
+  <script src="lib/vue.js"></script>
+  <script src="js/explore.js"></script>
 </body>
 
 </html>

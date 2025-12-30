@@ -119,6 +119,7 @@ const profileVm = new Vue({
             }
         },
 
+
         // 验证表单
         validateForm() {
             this.fieldErrors = {};
@@ -156,6 +157,36 @@ const profileVm = new Vue({
             }
 
             return Object.keys(this.fieldErrors).length === 0;
+        },
+        // 触发文件输入框
+        triggerFileInput() {
+            document.getElementById('avatarInput').click();
+        },
+        // 处理头像文件选择
+        handleAvatarChange(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    // 更新头像预览
+                    this.list.avatar = event.target.result;
+                    // 保存到localStorage
+                    this.saveUserData();
+                };
+                reader.readAsDataURL(file);
+            }
+
+        },
+        // 保存用户数据到localStorage
+        saveUserData() {
+            localStorage.setItem('userData', JSON.stringify(this.list));
+        },
+        // 退出登录
+        logout() {
+            // 清除localStorage中的用户数据
+            localStorage.removeItem('userData');
+            // 跳转到登录页面
+            location.href = 'login.html';
         },
 
         // 验证单个字段
@@ -322,6 +353,7 @@ const profileVm = new Vue({
             // Vue的双向绑定已经处理了，这里不需要额外操作
         }
     },
+
     mounted() {
         // 获取用户数据
         this.getUserData();
