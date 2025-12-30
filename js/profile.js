@@ -16,14 +16,14 @@ const profileVm = new Vue({
             grade: '',
             major: '',
             hobby: '',
-            avatar_url: ''
+            avatarUrl: ''
         },
         isEditing: false,
         isLoggedIn: false,
         originalData: {},
         message: '',
         messageType: '',
-        fieldErrors: {}
+        fieldErrors: {},
     },
     computed: {
         // 计算头像样式
@@ -63,6 +63,17 @@ const profileVm = new Vue({
         }
     },
     methods: {
+        // 保存用户数据到localStorage
+        saveUserData() {
+            localStorage.setItem('userData', JSON.stringify(this.list));
+        },
+        // 退出登录
+        logout() {
+            // 清除localStorage中的用户数据
+            localStorage.removeItem('userData');
+            // 跳转到登录页面
+            location.href = 'login.html';
+        },
         // 开始编辑
         startEditing() {
             // 保存原始数据
@@ -79,6 +90,7 @@ const profileVm = new Vue({
             this.fieldErrors = {};
             this.showMessage('已取消编辑', 'success');
         },
+        // 触发文件输入框
 
         // 保存资料
         async saveProfile() {
@@ -158,36 +170,7 @@ const profileVm = new Vue({
 
             return Object.keys(this.fieldErrors).length === 0;
         },
-        // 触发文件输入框
-        triggerFileInput() {
-            document.getElementById('avatarInput').click();
-        },
-        // 处理头像文件选择
-        handleAvatarChange(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                    // 更新头像预览
-                    this.list.avatar = event.target.result;
-                    // 保存到localStorage
-                    this.saveUserData();
-                };
-                reader.readAsDataURL(file);
-            }
 
-        },
-        // 保存用户数据到localStorage
-        saveUserData() {
-            localStorage.setItem('userData', JSON.stringify(this.list));
-        },
-        // 退出登录
-        logout() {
-            // 清除localStorage中的用户数据
-            localStorage.removeItem('userData');
-            // 跳转到登录页面
-            location.href = 'login.html';
-        },
 
         // 验证单个字段
         validateField(fieldName, event) {
@@ -218,16 +201,102 @@ const profileVm = new Vue({
                     break;
             }
         },
+        triggerFileInput() {
+            document.getElementById('avatarInput').click();
+        },
+        // 处理头像文件选择
+        handleAvatarChange(e) {
+            const file = e.target.files[0];
+            console.log(file);
+            if (file) {
+                // 压缩图片
+                const img = new Image();
+                img.src = URL.createObjectURL(file);
 
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = 150;  // 缩小尺寸
+                    canvas.height = 150;
+
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, 150, 150);
+
+                    // 获取base64，低质量
+                    const base64 = canvas.toDataURL('image/jpeg', 0.5);
+
+                    // 检查长度
+                    if (base64.length > 10000) {
+                        alert('图片太大，数据库可能存不下！');
+                        return;
+                    }
+
+                    // 更新头像预览
+                    this.list.avatarUrl = base64;
+                    // 保存到localStorage
+                    this.saveUserData();
+                };
+            }
+        },
+        compressImage(file) {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                const canvas = document.createElement('canvas');
+
+                img.onload = () => {
+                    // 设置缩略图尺寸
+                    const MAX_SIZE = 200;
+                    let width = img.width;
+                    let height = img.height;
+
+                    // 计算缩放比例
+                    if (width > height) {
+                        if (width > MAX_SIZE) {
+                            height = Math.round(height * MAX_SIZE / width);
+                            width = MAX_SIZE;
+                        }
+                    } else {
+                        if (height > MAX_SIZE) {
+                            width = Math.round(width * MAX_SIZE / height);
+                            height = MAX_SIZE;
+                        }
+                    }
+
+                    // 设置canvas尺寸
+                    canvas.width = width;
+                    canvas.height = height;
+
+                    // 绘制图片
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    // 转换为base64，低质量
+                    const base64 = canvas.toDataURL('image/jpeg', 0.5);
+                    resolve(base64);
+                };
+
+                img.onerror = reject;
+                img.src = URL.createObjectURL(file);
+            });
+        },
         // 保存到数据库
         async saveToDatabase() {
             try {
                 const userData = localStorage.getItem('userData');
+                console.log('userData 原始数据:', userData);
+
                 if (!userData) return false;
 
                 const user = JSON.parse(userData);
-                const userId = user.uid;
-                if (!userId) return false;
+                console.log('解析后的 user 对象:', user);
+
+                // 检查 uid 是否存在，不存在则使用默认值
+                let userId = user.uid;
+                if (!userId) {
+                    console.warn('uid 不存在，使用默认值 1');
+                    userId = 1; // 使用默认值，根据实际情况修改
+                }
+
+                console.log('使用的 userId:', userId);
 
                 // 构建URL参数
                 const params = new URLSearchParams({
@@ -238,10 +307,13 @@ const profileVm = new Vue({
                     college: this.list.college || '',
                     grade: this.list.grade || '',
                     major: this.list.major || '',
-                    hobby: this.list.hobby || ''
+                    hobby: this.list.hobby || '',
+                    avatarUrl: this.list.avatarUrl || ''
                 });
 
-                // 使用POST方法发送表单数据
+                console.log('发送的参数:', params.toString());
+                console.log('头像数据长度:', this.list.avatarUrl ? this.list.avatarUrl.length : 0);
+
                 const response = await fetch('http://10.11.192.14:8080/StuForum_war_exploded/api/user/update', {
                     method: 'POST',
                     headers: {
@@ -252,7 +324,10 @@ const profileVm = new Vue({
 
                 console.log('响应状态:', response.status);
 
-                // 你的Servlet没有返回JSON，所以直接检查状态码
+                // 获取响应文本，看是否有错误信息
+                const responseText = await response.text();
+                console.log('响应内容:', responseText);
+
                 if (response.status === 200) {
                     console.log('更新成功');
                     return true;
@@ -312,7 +387,7 @@ const profileVm = new Vue({
                         grade: parsedData.grade || '',
                         major: parsedData.major || '',
                         hobby: parsedData.hobby || '',
-                        avatar_url: parsedData.avatar_url || '',
+                        avatarUrl: parsedData.avatarUrl || '',
                         uid: parsedData.uid || parsedData.id || 0
                     };
 

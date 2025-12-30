@@ -126,7 +126,15 @@
           <div class="post" v-for="lists in list">
             <div class="post-avatar">
               <div class="avatar" :style="getAvatarColorStyle(lists.user?.username || lists.uname)">
-                {{ getAvatarInitial(lists.user?.username || lists.uname) }}
+                <!-- 如果有头像数据，显示图片 -->
+                <img v-if="lists.avatarUrl" :src="lists.avatarUrl"
+                  style="width: 100%; height: 100%; object-fit: cover;">
+
+
+                <!-- 如果没有头像，显示首字母 -->
+                <div v-else>
+                  {{ getAvatarInitial(lists.user?.username || lists.uname) }}
+                </div>
               </div>
             </div>
             <div class="post-content">

@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>个人资料 - StuForum</title>
   <link rel="stylesheet" href="css/index.css">
+  <link rel="stylesheet" href="css/profile.css">
 </head>
 
 <body>
@@ -26,8 +27,17 @@
     <div id="body">
       <div id="left-body">
         <div style="display: flex; flex-direction: column; align-items: center; margin-bottom: 2rem;">
-          <div class="avatar" :style="avatarStyle">
-            {{ list.uname ? list.uname.charAt(0).toUpperCase() : '?' }}
+          <div class="avatar" :class="{ editing: isEditing }"
+            style="width: 100px; height: 100px; font-size: 3rem; background-color: #2c7be5; margin-bottom: 1rem; position: relative; overflow: hidden; cursor: pointer;"
+            @click="isEditing ? triggerFileInput() : null">
+            <img v-if="list.avatarUrl" :src="list.avatarUrl"
+              style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;">
+            <div v-else class="avatar-text">
+              {{ list.uname ? list.uname.charAt(0).toUpperCase() : '?' }}
+            </div>
+            <!-- 隐藏的文件输入框 -->
+            <input type="file" id="avatarInput" accept="image/*" style="display: none;" @change="handleAvatarChange">
+            <div class="avatar-mask" v-if="isEditing">更换头像</div>
           </div>
           <div style="font-size: 1.5rem; font-weight: 700; color: #495057; margin-bottom: 0.5rem;">
             {{ list.uname }}
