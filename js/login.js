@@ -28,7 +28,7 @@ const vm = new Vue({
                 this.showMessage('loading', '处理中', '登录中...');
                 
                 $.ajax({
-                    url: 'http://10.11.192.192:8080/login',
+                    url: 'http://10.11.192.233:8080/login',
                     type: 'POST',
                     data: {
                         uname: this.loginData.name,
@@ -84,7 +84,7 @@ const vm = new Vue({
             
             // 发送AJAX请求
             $.ajax({
-                url: 'http://10.11.192.192:8080/login-r',
+                url: 'http://10.11.192.233:8080/login-r',
                 type: 'POST',
                 data: {
                     uname: this.registerData.name,
