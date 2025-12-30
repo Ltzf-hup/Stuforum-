@@ -57,8 +57,15 @@ body {
 }
 
 @keyframes pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.05);
+  }
 }
 
 .nav-links {
@@ -441,6 +448,7 @@ body {
 
 /* 响应式设计 */
 @media (max-width: 1200px) {
+
   #left-body,
   #right-body {
     width: 250px;
@@ -448,11 +456,12 @@ body {
 }
 
 @media (max-width: 1024px) {
+
   #left-body,
   #right-body {
     display: none;
   }
-  
+
   #middle-body {
     border: none;
   }
@@ -462,11 +471,11 @@ body {
   #header {
     padding: 1rem;
   }
-  
+
   .nav-links {
     display: none;
   }
-  
+
   #middle-body-text,
   .post {
     padding: 1rem;
@@ -477,97 +486,174 @@ body {
   .logo span {
     display: none;
   }
-  
+
   .post-input {
     font-size: 1rem;
   }
-  
+
   .action-icons {
     gap: 1rem;
   }
-  
+
   .action-icon {
     font-size: 1rem;
   }
 }
-.tab-container {
-      display: flex;
-      border-bottom: 1px solid #e9ecef;
-      margin-bottom: 1rem;
-    }
-    
-    .tab {
-      flex: 1;
-      padding: 1rem;
-      text-align: center;
-      cursor: pointer;
-      font-weight: 600;
-      color: #6c757d;
-      transition: all 0.2s ease;
-    }
-    
-    .tab.active {
-      color: #2c7be5;
-      border-bottom: 2px solid #2c7be5;
-    }
-    
-    .tab:hover {
-      background-color: rgba(44, 123, 229, 0.05);
-    }
-    
-    #messages-section .conversation-list {
-      height: calc(100vh - 180px);
-      overflow-y: auto;
-    }
-    
-    #messages-section .message-input-area {
-      position: sticky;
-      bottom: 0;
-      background-color: white;
-      padding: 1rem;
-      border-top: 1px solid #e9ecef;
-    }
 
-    .trending-item .trend-name input {
-      width: 100%;
-      border: none;
-      border-bottom: 2px solid #667eea;
-      background: transparent;
-      padding: 0.5rem 0;
-      font-size: 1rem;
-      outline: none;
-      transition: border-color 0.3s ease;
-    }
-    
-    .trending-item .trend-name input:focus {
-      border-bottom-color: #764ba2;
-    }
-    
-    .trending-item .trend-name input:hover {
-      border-bottom-color: #5a6fd8;
-    }
-    
+.tab-container {
+  display: flex;
+  border-bottom: 1px solid #e9ecef;
+  margin-bottom: 1rem;
+}
+
+.tab {
+  flex: 1;
+  padding: 1rem;
+  text-align: center;
+  cursor: pointer;
+  font-weight: 600;
+  color: #6c757d;
+  transition: all 0.2s ease;
+}
+
+.tab.active {
+  color: #2c7be5;
+  border-bottom: 2px solid #2c7be5;
+}
+
+.tab:hover {
+  background-color: rgba(44, 123, 229, 0.05);
+}
+
+#messages-section .conversation-list {
+  height: calc(100vh - 180px);
+  overflow-y: auto;
+}
+
+#messages-section .message-input-area {
+  position: sticky;
+  bottom: 0;
+  background-color: white;
+  padding: 1rem;
+  border-top: 1px solid #e9ecef;
+}
+
+.trending-item .trend-name input {
+  width: 100%;
+  border: none;
+  border-bottom: 2px solid #667eea;
+  background: transparent;
+  padding: 0.5rem 0;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.trending-item .trend-name input:focus {
+  border-bottom-color: #764ba2;
+}
+
+.trending-item .trend-name input:hover {
+  border-bottom-color: #5a6fd8;
+}
+
 .logout-btn {
-    background-color: #dc3545;
-    color: white;
-    border: none;
-    cursor: pointer;
-    text-decoration: none;
-    padding: 0.5rem 1rem;
-    border-radius: 0.375rem;
-    font-size: 0.875rem;
-    font-weight: 500;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 500;
 }
 
 .logout-btn:hover {
-    background-color: #c82333;
+  background-color: #c82333;
 }
 
 /* 确保登录按钮内的链接样式正确 */
 .post-btn a {
-    color: inherit;
-    text-decoration: none;
-    display: block;
-    width: 100%;
-    height: 100%;
+  color: inherit;
+  text-decoration: none;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* 新增的样式 */
+.editable-input {
+  background-color: white !important;
+  color: #333 !important;
+  border: 1px solid #2c7be5 !important;
+  cursor: text !important;
+}
+
+.readonly-input {
+  background-color: #f8f9fa !important;
+  color: #666 !important;
+  border: 1px solid #dee2e6 !important;
+  cursor: default !important;
+}
+
+.message {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  padding: 12px 20px;
+  border-radius: 5px;
+  font-weight: bold;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  animation: fadeInOut 3s ease-in-out;
+}
+
+.message-success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.message-error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+
+  10% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  90% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+}
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.btn-cancel {
+  background-color: #6c757d !important;
+  color: white !important;
+}
+
+.btn-cancel:hover {
+  background-color: #5a6268 !important;
 }
