@@ -49,38 +49,50 @@
       </div>
 
       <div id="middle-body">
-
-        <div style="padding: 1rem; border-bottom: 1px solid #e9ecef;">
-          <input type="text" placeholder="搜索话题、用户或内容..." style="width: 100%; padding: 0.75rem; 
-          border: 1px solid #e9ecef; border-radius: 25px; background-color: #f8f9fa; font-size: 1rem;">
+        <div style="padding: 1rem; border-bottom: 1px solid #e9ecef; position: relative;">
+          <input type="text" v-model="searchQuery" placeholder="搜索话题、用户或内容..."
+            style="width: 100%; padding: 0.75rem; border: 1px solid #e9ecef; border-radius: 25px; background-color: #f8f9fa; font-size: 1rem; padding-right: 2.5rem;">
+          <div class="search-icon" @click="performSearch"
+            style="position: absolute; right: 2rem; top: 50%; transform: translateY(-50%); cursor: pointer; color: #adb5bd;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </div>
         </div>
 
-        <div class="posts-container" v-for="item in list">
+        <div v-if="list.length === 0" style="text-align: center; padding: 2rem; color: #6c757d;">
+          暂无内容
+        </div>
+
+        <div v-else class="posts-container" v-for="(item, index) in list" :key="item.id">
           <div class="post">
             <div class="post-avatar">
-              <div class="avatar" style="background-color: #794bc4;">L</div>
+              <img :src="item.user.image" alt="用户头像" class="avatar"
+                style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;">
             </div>
             <div class="post-content">
               <div class="post-header-info">
-                <span class="post-user">{{item.uname}}</span>
-                <span class="post-handle">@{{item.uname}}</span>
-                <span class="post-time">{{item.postedTime}}</span>
+                <span class="post-user">{{item.user.uname || '未知用户'}}</span>
+                <span class="post-handle">@{{item.user.uname || 'unknown'}}</span>
+                <span class="post-time">{{item.postedTime || '未知时间'}}</span>
               </div>
               <div class="post-text">
-                {{item.txt}}
+                {{item.txt || ''}}
               </div>
               <div class="post-actions-bar">
                 <div class="post-action">
                   <span>💬</span>
-                  <span class="action-count">{{item.replyCount}}</span>
+                  <span class="action-count">{{item.replyCount || 0}}</span>
                 </div>
                 <div class="post-action">
                   <span>🔄</span>
-                  <span class="action-count">{{item.viewCount}}</span>
+                  <span class="action-count">{{item.viewCount || 0}}</span>
                 </div>
                 <div class="post-action">
                   <span>❤️</span>
-                  <span class="action-count">{{item.likeCount}}</span>
+                  <span class="action-count">{{item.likeCount || 0}}</span>
                 </div>
                 <div class="post-action">
                   <span>📤</span>
