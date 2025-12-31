@@ -26,7 +26,6 @@ let vm = new Vue({
                 this.getExplore();
                 return;
             }
-
             // 执行搜索操作
             $.ajax({
                 url: "http://10.11.192.233:8080/explore/search",
