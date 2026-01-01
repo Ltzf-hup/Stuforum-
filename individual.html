@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人主页 - StuForum</title>
+    <link rel="stylesheet" href="css/individual.css">
+</head>
+<body>
+    <div id="app">
+        <div id="header">
+        </div>
+
+        <div class="box">
+            <div class="left">
+                <div class="left-top">
+                    <!-- 背景封面区域 -->
+                </div>
+                <div class="left-middle">
+                    <div class="tx" onclick="triggerFileInput()">
+                        
+                    </div>
+                    
+                    <div class="user-info">
+                        <div class="user-name">User123</div>
+                        <div class="user-handle">@user123</div>
+                    </div>
+                    
+                    <div class="stats">
+                        <div class="stat-item">
+                            <div class="stat-number">12</div>
+                            <div class="stat-label">关注</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">45</div>
+                            <div class="stat-label">粉丝</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">28</div>
+                            <div class="stat-label">帖子</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">234</div>
+                            <div class="stat-label">获赞</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="right">
+                <div class="right-top">
+                    <div class="tab active" onclick="switchTab('posts')">帖子</div>
+                    <div class="tab" onclick="switchTab('favorites')">收藏</div>
+                    <div class="tab" onclick="switchTab('replies')">回复</div>
+                    <div class="tab" onclick="switchTab('media')">媒体</div>
+                </div>
+                
+                <div class="right-content">
+                    <div id="posts" class="content-section active">
+                        <div class="post">
+                            <div class="post-header-info">
+                                <span class="post-user">User123</span>
+                                <span class="post-handle">@user123 ·</span>
+                                <span class="post-time">3天前</span>
+                            </div>
+                            <div class="post-text">
+                                分享一下我最近学习Python的心得体会，希望对大家有所帮助！#Python学习 #编程
+                            </div>
+                            <div class="post-actions-bar">
+                                <div class="post-action">
+                                    <span>💬</span>
+                                    <span class="action-count">12</span>
+                                </div>
+                                <div class="post-action">
+                                    <span>🔄</span>
+                                    <span class="action-count">8</span>
+                                </div>
+                                <div class="post-action">
+                                    <span>❤️</span>
+                                    <span class="action-count">56</span>
+                                </div>
+                                <div class="post-action">
+                                    <span>📤</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="post">
+                            <div class="post-header-info">
+                                <span class="post-user">User123</span>
+                                <span class="post-handle">@user123 ·</span>
+                                <span class="post-time">1周前</span>
+                            </div>
+                            <div class="post-text">
+                                有没有同学推荐一些好的算法学习资源？#算法 #学习资源
+                            </div>
+                            <div class="post-actions-bar">
+                                <div class="post-action">
+                                    <span>💬</span>
+                                    <span class="action-count">18</span>
+                                </div>
+                                <div class="post-action">
+                                    <span>🔄</span>
+                                    <span class="action-count">5</span>
+                                </div>
+                                <div class="post-action">
+                                    <span>❤️</span>
+                                    <span class="action-count">34</span>
+                                </div>
+                                <div class="post-action">
+                                    <span>📤</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="post">
+                            <div class="post-header-info">
+                                <span class="post-user">User123</span>
+                                <span class="post-handle">@user123 ·</span>
+                                <span class="post-time">1周前</span>
+                            </div>
+                            <div class="post-text">
+                                有没有同学推荐一些好的算法学习资源？#算法 #学习资源
+                            </div>
+                            <div class="post-actions-bar">
+                                <div class="post-action">
+                                    <span>💬</span>
+                                    <span class="action-count">18</span>
+                                </div>
+                                <div class="post-action">
+                                    <span>🔄</span>
+                                    <span class="action-count">5</span>
+                                </div>
+                                <div class="post-action">
+                                    <span>❤️</span>
+                                    <span class="action-count">34</span>
+                                </div>
+                                <div class="post-action">
+                                    <span>📤</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="favorites" class="content-section">
+                        <div class="post">
+                            <div class="post-header-info">
+                                <span class="post-user">Mike Chen</span>
+                                <span class="post-handle">@mikec ·</span>
+                                <span class="post-time">2周前</span>
+                            </div>
+                            <div class="post-text">
+                                周末有没有一起打羽毛球的？#校园活动 #运动
+                            </div>
+                            <div class="post-actions-bar">
+                                <div class="post-action">
+                                    <span>💬</span>
+                                    <span class="action-count">28</span>
+                                </div>
+                                <div class="post-action">
+                                    <span>🔄</span>
+                                    <span class="action-count">12</span>
+                                </div>
+                                <div class="post-action">
+                                    <span>❤️</span>
+                                    <span class="action-count">36</span>
+                                </div>
+                                <div class="post-action">
+                                    <span>📤</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="replies" class="content-section">
+                        <div class="post">
+                            <div class="post-header-info">
+                                <span class="post-user">User123</span>
+                                <span class="post-handle">@user123 ·</span>
+                                <span class="post-time">5天前</span>
+                            </div>
+                            <div class="post-text">
+                                回复 Sarah Liu：非常感谢你的分享，对我很有帮助！
+                            </div>
+                            <div class="post-actions-bar">
+                                <div class="post-action">
+                                    <span>💬</span>
+                                    <span class="action-count">3</span>
+                                </div>
+                                <div class="post-action">
+                                    <span>❤️</span>
+                                    <span class="action-count">12</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="media" class="content-section">
+                        <div style="text-align: center; padding: 2rem; color: #6c757d;">
+                            暂无媒体内容
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="js/individual.js"></script>
+</body>
+</html>
