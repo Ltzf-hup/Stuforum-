@@ -4,8 +4,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>通知与消息 - StuForum</title>
+  <title>消息</title>
   <link rel="stylesheet" href="css/index.css">
+  <link rel="stylesheet" href="css/m-n.css">
 </head>
 
 <body>
@@ -18,358 +19,237 @@
       <div class="nav-links">
         <a href="index.html" class="nav-link">首页</a>
         <a href="explore.html" class="nav-link">探索</a>
-        <a href="m-n.html" class="nav-link">消息/通知</a>
+        <a href="weibo-message.html" class="nav-link">消息</a>
         <a href="profile.html" class="nav-link">个人资料</a>
       </div>
     </div>
 
-    <div id="body">
-      <!-- 左侧边栏 - 保持不变 -->
-      <div id="left-body">
-        <div id="notifications-section" v-if="activeTab === 'notifications'">
-          <span>通知设置</span>
-          <div class="trending-item" style="cursor: default;">
-            <div class="trend-category">新消息通知</div>
-            <div class="trend-name">开启</div>
-          </div>
-          <div class="trending-item" style="cursor: default;">
-            <div class="trend-category">关注通知</div>
-            <div class="trend-name">开启</div>
-          </div>
-          <div class="trending-item" style="cursor: default;">
-            <div class="trend-category">评论通知</div>
-            <div class="trend-name">开启</div>
-          </div>
-          <div class="trending-item" style="cursor: default;">
-            <div class="trend-category">点赞通知</div>
-            <div class="trend-name">开启</div>
-          </div>
-          <div class="trending-item" style="cursor: default;">
-            <div class="trend-category">系统通知</div>
-            <div class="trend-name">开启</div>
-          </div>
+    <div class="weibo-message-container">
+      <!-- 左侧边栏 - 消息类型 -->
+      <div class="message-type-sidebar">
+        <div class="message-type-item active">
+          <span class="message-type-icon">💬</span>
+          <span>私信</span>
         </div>
+        <div class="message-type-item">
+          <span class="message-type-icon">🔔</span>
+          <span>通知</span>
+        </div>
+        <div class="message-type-item">
+          <span class="message-type-icon">💌</span>
+          <span>评论</span>
+        </div>
+      </div>
 
-        <div id="messages-section" v-if="activeTab === 'messages'">
-          <span>对话列表</span>
-          <div class="conversation-list">
-            <div class="trending-item"
-              :class="{ 'active-conversation': activeConversation === 'Sarah Liu' }"
-              style="cursor: pointer; border-left: 4px solid transparent;"
-              @click="activeConversation = 'Sarah Liu'"
-            >
-              <div class="trend-name">Sarah Liu</div>
-              <div class="trend-count">你好！最近在忙什么？</div>
+      <!-- 中间边栏 - 会话列表 -->
+      <div class="conversation-sidebar">
+        <div class="sidebar-header">私信</div>
+        <div class="search-bar">
+          <input type="text" class="search-input" placeholder="搜索私信">
+        </div>
+        <!-- 张三 -->
+        <div class="weibo-conversation-list">
+          <div class="weibo-conversation-item" :class="{ 'active': activeConversation === '张三' }" @click="selectConversation('张三')">
+            <div class="conversation-avatar">
+              <div class="avatar" style="background-color: #ff758f;">张</div>
             </div>
-            <div class="trending-item"
-              :class="{ 'active-conversation': activeConversation === 'David Park' }"
-              style="cursor: pointer; border-left: 4px solid transparent;"
-              @click="activeConversation = 'David Park'"
-            >
-              <div class="trend-name">David Park</div>
-              <div class="trend-count">感谢关注！</div>
+            
+            <div class="conversation-info">
+              <div class="conversation-header">
+                <div class="conversation-name">张三</div>
+                <div class="conversation-time">今天 14:30</div>
+              </div>
+              <div class="conversation-last-message">你好！最近在忙什么？</div>
             </div>
-            <div class="trending-item"
-              :class="{ 'active-conversation': activeConversation === 'John Smith' }"
-              style="cursor: pointer; border-left: 4px solid transparent;"
-              @click="activeConversation = 'John Smith'"
-            >
-              <div class="trend-name">John Smith</div>
-              <div class="trend-count">关于你分享的资源...</div>
+          </div>
+          <!-- 李四 -->
+          <div class="weibo-conversation-item" :class="{ 'active': activeConversation === '李四' }" @click="selectConversation('李四')">
+            <div class="conversation-avatar">
+              <div class="avatar" style="background-color: #10ac84;">李</div>
             </div>
-            <div class="trending-item"
-              :class="{ 'active-conversation': activeConversation === 'Anna Chen' }"
-              style="cursor: pointer; border-left: 4px solid transparent;"
-              @click="activeConversation = 'Anna Chen'"
-            >
-              <div class="trend-name">Anna Chen</div>
-              <div class="trend-count">作业求助</div>
+            
+            <div class="conversation-info">
+              <div class="conversation-header">
+                <div class="conversation-name">李四</div>
+                <div class="conversation-time">今天 10:15</div>
+              </div>
+              <div class="conversation-last-message">感谢分享的文章，非常有帮助！</div>
             </div>
-            <div class="trending-item"
-              :class="{ 'active-conversation': activeConversation === 'Michael Wang' }"
-              style="cursor: pointer; border-left: 4px solid transparent;"
-              @click="activeConversation = 'Michael Wang'"
-            >
-              <div class="trend-name">Michael Wang</div>
-              <div class="trend-count">周末活动</div>
+          </div>
+          <!-- 王五 -->
+          <div class="weibo-conversation-item" :class="{ 'active': activeConversation === '王五' }" @click="selectConversation('王五')">
+            <div class="conversation-avatar">
+              <div class="avatar" style="background-color: #794bc4;">王</div>
+            </div>
+            <div class="conversation-info">
+              <div class="conversation-header">
+                <div class="conversation-name">王五</div>
+                <div class="conversation-time">昨天 18:45</div>
+              </div>
+              <div class="conversation-last-message">周末有空一起去打球吗？</div>
+            </div>
+          </div>
+          <!-- 赵六 -->
+          <div class="weibo-conversation-item" :class="{ 'active': activeConversation === '赵六' }" @click="selectConversation('赵六')">
+            <div class="conversation-avatar">
+              <div class="avatar" style="background-color: #ff9800;">赵</div>
+            </div>
+            <div class="conversation-info">
+              <div class="conversation-header">
+                <div class="conversation-name">赵六</div>
+                <div class="conversation-time">昨天 09:20</div>
+              </div>
+              <div class="conversation-last-message">关于项目的最新进展...</div>
+            </div>
+          </div>
+          <!-- 孙七 -->
+          <div class="weibo-conversation-item" :class="{ 'active': activeConversation === '孙七' }" @click="selectConversation('孙七')">
+            <div class="conversation-avatar">
+              <div class="avatar" style="background-color: #3f51b5;">孙</div>
+            </div>
+            <div class="conversation-info">
+              <div class="conversation-header">
+                <div class="conversation-name">孙七</div>
+                <div class="conversation-time">2天前</div>
+              </div>
+              <div class="conversation-last-message">你看到最新的新闻了吗？</div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- 中间内容区 -->
-      <div id="middle-body">
-        <!-- 标签页切换 -->
-        <div class="tab-container">
-          <div class="tab" :class="{ active: activeTab === 'notifications' }" @click="activeTab = 'notifications'">
-            通知
+      <!-- 主内容区 - 消息详情 -->
+      <div class="message-detail">
+        <div class="message-detail-header">
+          <div class="detail-avatar">
+            <div class="avatar" style="background-color: #ff758f;" v-if="activeConversation === '张三'">张</div>
+            <div class="avatar" style="background-color: #10ac84;" v-else-if="activeConversation === '李四'">李</div>
+            <div class="avatar" style="background-color: #794bc4;" v-else-if="activeConversation === '王五'">王</div>
+            <div class="avatar" style="background-color: #ff9800;" v-else-if="activeConversation === '赵六'">赵</div>
+            <div class="avatar" style="background-color: #3f51b5;" v-else-if="activeConversation === '孙七'">孙</div>
           </div>
-          <div class="tab" :class="{ active: activeTab === 'messages' }" @click="activeTab = 'messages'">
-            消息
-          </div>
-        </div>
-
-        <!-- 通知内容 -->
-        <div id="notifications-content" v-if="activeTab === 'notifications'" class="posts-container" style="padding: 1rem;">
-          <div style="padding: 1rem; border-bottom: 1px solid #e9ecef; margin-bottom: 1rem;">
-            <div style="display: flex; align-items: flex-start;">
-              <div class="avatar" style="background-color: #2c7be5; margin-right: 1rem;">S</div>
-              <div style="flex: 1;">
-                <div style="font-weight: 700; margin-bottom: 0.25rem;">
-                  <span class="post-user">Sarah Liu</span> 关注了你
-                </div>
-                <div style="font-size: 0.875rem; color: #6c757d; margin-bottom: 0.5rem;">1小时前</div>
-                <div class="user-info"
-                  style="margin-bottom: 0.75rem; padding: 0.75rem; background-color: #f8f9fa; border-radius: 8px;">
-                  <div class="user-details">
-                    <div class="user-name">Sarah Liu</div>
-                    <div class="user-handle">@sarahliu</div>
-                  </div>
-                  <button class="follow-btn">关注</button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div style="padding: 1rem; border-bottom: 1px solid #e9ecef; margin-bottom: 1rem;">
-            <div style="display: flex; align-items: flex-start;">
-              <div class="avatar" style="background-color: #794bc4; margin-right: 1rem;">D</div>
-              <div style="flex: 1;">
-                <div style="font-weight: 700; margin-bottom: 0.25rem;">
-                  <span class="post-user">David Park</span> 在你的帖子下评论了
-                </div>
-                <div style="font-size: 0.875rem; color: #6c757d; margin-bottom: 0.5rem;">3小时前</div>
-                <div style="padding: 0.75rem; background-color: #f8f9fa; border-radius: 8px; margin-bottom: 0.75rem;">
-                  <div style="color: #6c757d; margin-bottom: 0.5rem;">回复 <span class="post-user">Student123</span>：
-                  </div>
-                  <div>非常有用的分享!我也在学习Python,感谢你的资源!</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div style="padding: 1rem; border-bottom: 1px solid #e9ecef; margin-bottom: 1rem;">
-            <div style="display: flex; align-items: flex-start;">
-              <div class="avatar" style="background-color: #10ac84; margin-right: 1rem;">J</div>
-              <div style="flex: 1;">
-                <div style="font-weight: 700; margin-bottom: 0.25rem;">
-                  <span class="post-user">John Smith</span> 点赞了你的帖子
-                </div>
-                <div style="font-size: 0.875rem; color: #6c757d; margin-bottom: 0.5rem;">昨天</div>
-                <div style="padding: 0.75rem; background-color: #f8f9fa; border-radius: 8px;">
-                  <div style="color: #6c757d; margin-bottom: 0.5rem;">帖子：</div>
-                  <div>分享一下我最近学习Python的心得体会，希望对大家有所帮助！#Python学习 #编程</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div style="padding: 1rem; border-bottom: 1px solid #e9ecef; margin-bottom: 1rem;">
-            <div style="display: flex; align-items: flex-start;">
-              <div class="avatar" style="background-color: #ff758f; margin-right: 1rem;">A</div>
-              <div style="flex: 1;">
-                <div style="font-weight: 700; margin-bottom: 0.25rem;">
-                  <span class="post-user">Anna Chen</span> 提到了你
-                </div>
-                <div style="font-size: 0.875rem; color: #6c757d; margin-bottom: 0.5rem;">2天前</div>
-                <div style="padding: 0.75rem; background-color: #f8f9fa; border-radius: 8px;">
-                  <div style="color: #6c757d; margin-bottom: 0.5rem;">帖子：</div>
-                  <div>@student123 你有什么好的Python学习资源推荐吗？</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div style="padding: 1rem; border-bottom: 1px solid #e9ecef; margin-bottom: 1rem;">
-            <div style="display: flex; align-items: flex-start;">
-              <div class="avatar" style="background-color: #38b000; margin-right: 1rem;">M</div>
-              <div style="flex: 1;">
-                <div style="font-weight: 700; margin-bottom: 0.25rem;">
-                  <span class="post-user">Michael Wang</span> 转发了你的帖子
-                </div>
-                <div style="font-size: 0.875rem; color: #6c757d; margin-bottom: 0.5rem;">3天前</div>
-                <div style="padding: 0.75rem; background-color: #f8f9fa; border-radius: 8px;">
-                  <div style="color: #6c757d; margin-bottom: 0.5rem;">转发内容：</div>
-                  <div>分享一下我最近学习Python的心得体会，希望对大家有所帮助！#Python学习 #编程</div>
-                </div>
-              </div>
-            </div>
+          <div class="detail-info">
+            <div class="detail-name">{{ activeConversation }}</div>
+            <div class="detail-status">在线</div>
           </div>
         </div>
-
-        <!-- 消息内容 -->
-        <div id="messages-content" v-if="activeTab === 'messages'" class="posts-container" style="padding: 1rem;">
-          <div class="messages-display">
-            <div style="display: flex; justify-content: flex-start; margin-bottom: 1rem;">
-              <div class="avatar" style="background-color: #2c7be5; margin-right: 0.5rem;">S</div>
-              <div style="background-color: #f8f9fa; padding: 0.75rem; border-radius: 18px; max-width: 70%;">
-                <div style="font-size: 0.875rem; color: #6c757d; margin-bottom: 0.25rem;">Sarah Liu · 昨天</div>
-                <div>你好！我看到你分享的Python学习资源，非常有用！</div>
+        
+        <div class="message-content">
+          <!-- 张三的对话 -->
+          <template v-if="activeConversation === '张三'">
+            
+            </div>
+            
+            <div class="message-bubble user">
+              
+            </div>
+            
+            <div class="message-bubble other">
+              
+            </div>
+            
+            <div class="message-bubble user">
+              
+            </div>
+            
+            <div class="message-bubble other">
+             
+            </div>
+            
+            <div class="message-bubble other">
+              
+            </div>
+          </template>
+          
+          <!-- 李四的对话 -->
+          <template v-else-if="activeConversation === '李四'">
+            <div class="message-bubble other">
+              <div class="bubble-content">
+                你好！感谢你分享的文章，非常有帮助！
+                <span class="bubble-time">今天 10:15</span>
               </div>
             </div>
-
-            <div style="display: flex; justify-content: flex-end; margin-bottom: 1rem;">
-              <div
-                style="background-color: #2c7be5; color: white; padding: 0.75rem; border-radius: 18px; max-width: 70%;">
-                <div style="font-size: 0.875rem; color: rgba(255,255,255,0.8); margin-bottom: 0.25rem;">你 · 昨天</div>
-                <div>很高兴对你有帮助！如果有任何问题随时问我。</div>
-              </div>
-              <div class="avatar" style="background-color: #1d9bf0; margin-left: 0.5rem;">你</div>
-            </div>
-
-            <div style="display: flex; justify-content: flex-start; margin-bottom: 1rem;">
-              <div class="avatar" style="background-color: #2c7be5; margin-right: 0.5rem;">S</div>
-              <div style="background-color: #f8f9fa; padding: 0.75rem; border-radius: 18px; max-width: 70%;">
-                <div style="font-size: 0.875rem; color: #6c757d; margin-bottom: 0.25rem;">Sarah Liu · 今天</div>
-                <div>你好！最近在忙什么？有没有时间帮我看看这个Python问题？</div>
+            
+            <div class="message-bubble user">
+              <div class="bubble-content">
+                不客气！很高兴对你有帮助
+                <span class="bubble-time">今天 10:18</span>
               </div>
             </div>
-
-            <div style="display: flex; justify-content: flex-end; margin-bottom: 1rem;">
-              <div
-                style="background-color: #2c7be5; color: white; padding: 0.75rem; border-radius: 18px; max-width: 70%;">
-                <div style="font-size: 0.875rem; color: rgba(255,255,255,0.8); margin-bottom: 0.25rem;">你 · 今天</div>
-                <div>最近在准备期末项目，有点忙。不过可以抽时间帮你看看，把代码发给我吧。</div>
-              </div>
-              <div class="avatar" style="background-color: #1d9bf0; margin-left: 0.5rem;">你</div>
-            </div>
-
-            <div style="display: flex; justify-content: flex-start; margin-bottom: 1rem;">
-              <div class="avatar" style="background-color: #2c7be5; margin-right: 0.5rem;">S</div>
-              <div style="background-color: #f8f9fa; padding: 0.75rem; border-radius: 18px; max-width: 70%;">
-                <div style="font-size: 0.875rem; color: #6c757d; margin-bottom: 0.25rem;">Sarah Liu · 今天</div>
-                <div>好的，我马上发给你。主要是关于列表操作的问题，我想实现数据筛选功能。</div>
+          </template>
+          
+          <!-- 王五的对话 -->
+          <template v-else-if="activeConversation === '王五'">
+            <div class="message-bubble other">
+              <div class="bubble-content">
+                你好！周末有空一起去打球吗？
+                <span class="bubble-time">昨天 18:45</span>
               </div>
             </div>
-
-            <div style="display: flex; justify-content: flex-end; margin-bottom: 1rem;">
-              <div
-                style="background-color: #2c7be5; color: white; padding: 0.75rem; border-radius: 18px; max-width: 70%;">
-                <div style="font-size: 0.875rem; color: rgba(255,255,255,0.8); margin-bottom: 0.25rem;">你 · 今天</div>
-                <div>没问题，Python的列表推导式或者filter函数应该可以解决。等我看到代码再具体说。</div>
-              </div>
-              <div class="avatar" style="background-color: #1d9bf0; margin-left: 0.5rem;">你</div>
-            </div>
-
-            <div style="display: flex; justify-content: flex-start; margin-bottom: 1rem;">
-              <div class="avatar" style="background-color: #2c7be5; margin-right: 0.5rem;">S</div>
-              <div style="background-color: #f8f9fa; padding: 0.75rem; border-radius: 18px; max-width: 70%;">
-                <div style="font-size: 0.875rem; color: #6c757d; margin-bottom: 0.25rem;">Sarah Liu · 今天</div>
-                <div>好的，谢谢！你真是太热心了😊</div>
+            
+            <div class="message-bubble user">
+              <div class="bubble-content">
+                抱歉，周末我要复习功课，下次吧
+                <span class="bubble-time">昨天 19:00</span>
               </div>
             </div>
-
-            <div style="display: flex; justify-content: flex-end; margin-bottom: 1rem;">
-              <div
-                style="background-color: #2c7be5; color: white; padding: 0.75rem; border-radius: 18px; max-width: 70%;">
-                <div style="font-size: 0.875rem; color: rgba(255,255,255,0.8); margin-bottom: 0.25rem;">你 · 今天</div>
-                <div>不客气，互相帮助嘛！一起进步💪</div>
+          </template>
+          
+          <!-- 赵六的对话 -->
+          <template v-else-if="activeConversation === '赵六'">
+            <div class="message-bubble other">
+              <div class="bubble-content">
+                你好！关于项目的最新进展，我们需要讨论一下
+                <span class="bubble-time">昨天 09:20</span>
               </div>
-              <div class="avatar" style="background-color: #1d9bf0; margin-left: 0.5rem;">你</div>
             </div>
-          </div>
-
-          <div class="message-input-area">
-            <div style="display: flex;">
-              <input type="text" placeholder="输入消息..."
-                style="flex: 1; padding: 0.75rem; border: 1px solid #e9ecef; border-radius: 25px; background-color: #f8f9fa; font-size: 1rem; margin-right: 1rem;">
-              <button class="post-submit">发送</button>
+            
+            <div class="message-bubble user">
+              <div class="bubble-content">
+                好的，今天下午3点可以吗？
+                <span class="bubble-time">昨天 09:30</span>
+              </div>
             </div>
-          </div>
+          </template>
+          
+          <!-- 孙七的对话 -->
+          <template v-else-if="activeConversation === '孙七'">
+            <div class="message-bubble other">
+              <div class="bubble-content">
+                你好！你看到最新的新闻了吗？
+                <span class="bubble-time">2天前</span>
+              </div>
+            </div>
+            
+            <div class="message-bubble user">
+              <div class="bubble-content">
+                还没有，是什么新闻？
+                <span class="bubble-time">2天前</span>
+              </div>
+            </div>
+          </template>
         </div>
-      </div>
-
-      <!-- 右侧边栏 -->
-      <div id="right-body">
-        <div id="notifications-right" v-if="activeTab === 'notifications'">
-          <span>未读通知</span>
-          <div class="trending-item" style="cursor: default;">
-            <div class="trend-category">关注通知</div>
-            <div class="trend-name">5</div>
+        
+        <div class="weibo-message-input-area">
+          <div class="input-toolbar">
+            <span style="cursor: pointer;">📷</span>
+            <span style="cursor: pointer;">🎤</span>
+            <span style="cursor: pointer;">📝</span>
+            <span style="cursor: pointer;">📍</span>
           </div>
-          <div class="trending-item" style="cursor: default;">
-            <div class="trend-category">评论通知</div>
-            <div class="trend-name">3</div>
-          </div>
-          <div class="trending-item" style="cursor: default;">
-            <div class="trend-category">点赞通知</div>
-            <div class="trend-name">8</div>
-          </div>
-          <div class="trending-item" style="cursor: default;">
-            <div class="trend-category">提及通知</div>
-            <div class="trend-name">2</div>
-          </div>
-          <div class="trending-item" style="cursor: default;">
-            <div class="trend-category">转发通知</div>
-            <div class="trend-name">1</div>
-          </div>
-
-          <span style="margin-top: 2rem; margin-bottom: 1rem;">通知统计</span>
-          <div class="trending-item" style="cursor: default;">
-            <div class="trend-category">本周通知</div>
-            <div class="trend-name">32</div>
-          </div>
-          <div class="trending-item" style="cursor: default;">
-            <div class="trend-category">本月通知</div>
-            <div class="trend-name">128</div>
-          </div>
-        </div>
-
-        <div id="messages-right" v-if="activeTab === 'messages'">
-          <span>联系人</span>
-          <div class="user-item">
-            <div class="user-info">
-              <div class="avatar" style="background-color: #794bc4;">D</div>
-              <div class="user-details">
-                <div class="user-name">David Park</div>
-                <div class="user-handle">@davidp</div>
-              </div>
-            </div>
-          </div>
-          <div class="user-item">
-            <div class="user-info">
-              <div class="avatar" style="background-color: #10ac84;">J</div>
-              <div class="user-details">
-                <div class="user-name">John Smith</div>
-                <div class="user-handle">@johns</div>
-              </div>
-            </div>
-          </div>
-          <div class="user-item">
-            <div class="user-info">
-              <div class="avatar" style="background-color: #ff758f;">A</div>
-              <div class="user-details">
-                <div class="user-name">Anna Chen</div>
-                <div class="user-handle">@annac</div>
-              </div>
-            </div>
-          </div>
-          <div class="user-item">
-            <div class="user-info">
-              <div class="avatar" style="background-color: #38b000;">M</div>
-              <div class="user-details">
-                <div class="user-name">Michael Wang</div>
-                <div class="user-handle">@michaelw</div>
-              </div>
-            </div>
+          <div class="input-container">
+            <textarea class="weibo-input" placeholder="输入消息..."></textarea>
+            <button class="send-btn">
+              <span>➤</span>
+            </button>
           </div>
         </div>
       </div>
     </div>
   </div>
+  
   <script src="lib/vue.js"></script>
-  <script>
-    new Vue({
-      el: '#app',
-      data: {
-        activeTab: 'notifications', // 默认显示通知标签
-        activeConversation: 'Sarah Liu' // 默认显示与Sarah Liu的对话
-      },
-      methods: {
-        // 可以添加更多功能方法
-      }
-    });
-  </script>
+  <script src="js/m-n.js"></script>
 </body>
 
 </html>
