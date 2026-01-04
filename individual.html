@@ -21,6 +21,11 @@
                         
                     </div>
                     
+                     <div class="action-buttons">
+                        <button class="btn btn-primary" onclick="followUser()">关注</button>
+                        <button class="btn btn-secondary" onclick="sendMessage()" id="messageBtn" style="display: none;">私信</button>
+                    </div>
+
                     <div class="user-info">
                         <div class="user-name">User123</div>
                         <div class="user-handle">@user123</div>
@@ -44,6 +49,9 @@
                             <div class="stat-label">获赞</div>
                         </div>
                     </div>
+                    
+                    <!-- 添加关注和私信按钮 -->
+                   
                 </div>
             </div>
 
@@ -52,7 +60,6 @@
                     <div class="tab active" onclick="switchTab('posts')">帖子</div>
                     <div class="tab" onclick="switchTab('replies')">回复</div>
                 </div>
-                
                 <div class="right-content">
                     <div id="posts" class="content-section active">
                         <div class="post">

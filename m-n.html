@@ -54,13 +54,7 @@
               <div class="avatar" style="background-color: #ff758f;">张</div>
             </div>
             
-            <div class="conversation-info">
-              <div class="conversation-header">
-                <div class="conversation-name">张三</div>
-                <div class="conversation-time">今天 14:30</div>
-              </div>
-              <div class="conversation-last-message">你好！最近在忙什么？</div>
-            </div>
+            
           </div>
           <!-- 李四 -->
           <div class="weibo-conversation-item" :class="{ 'active': activeConversation === '李四' }" @click="selectConversation('李四')">
@@ -68,13 +62,7 @@
               <div class="avatar" style="background-color: #10ac84;">李</div>
             </div>
             
-            <div class="conversation-info">
-              <div class="conversation-header">
-                <div class="conversation-name">李四</div>
-                <div class="conversation-time">今天 10:15</div>
-              </div>
-              <div class="conversation-last-message">感谢分享的文章，非常有帮助！</div>
-            </div>
+  
           </div>
           <!-- 王五 -->
           <div class="weibo-conversation-item" :class="{ 'active': activeConversation === '王五' }" @click="selectConversation('王五')">
@@ -137,43 +125,31 @@
         <div class="message-content">
           <!-- 张三的对话 -->
           <template v-if="activeConversation === '张三'">
-            
-            </div>
-            
-            <div class="message-bubble user">
-              
-            </div>
-            
             <div class="message-bubble other">
-              
+              <div class="bubble-content">
+               
+                
+              </div>
             </div>
-            
-            <div class="message-bubble user">
-              
-            </div>
-            
-            <div class="message-bubble other">
-             
-            </div>
-            
-            <div class="message-bubble other">
-              
-            </div>
+
+
+        
           </template>
           
           <!-- 李四的对话 -->
           <template v-else-if="activeConversation === '李四'">
             <div class="message-bubble other">
               <div class="bubble-content">
-                你好！感谢你分享的文章，非常有帮助！
-                <span class="bubble-time">今天 10:15</span>
+               
+                
               </div>
             </div>
             
             <div class="message-bubble user">
               <div class="bubble-content">
-                不客气！很高兴对你有帮助
-                <span class="bubble-time">今天 10:18</span>
+               
+
+                
               </div>
             </div>
           </template>
@@ -182,15 +158,22 @@
           <template v-else-if="activeConversation === '王五'">
             <div class="message-bubble other">
               <div class="bubble-content">
-                你好！周末有空一起去打球吗？
-                <span class="bubble-time">昨天 18:45</span>
+               
+               
               </div>
             </div>
             
             <div class="message-bubble user">
               <div class="bubble-content">
-                抱歉，周末我要复习功课，下次吧
-                <span class="bubble-time">昨天 19:00</span>
+               
+                
+              </div>
+            </div>
+
+            <div class="message-bubble user">
+              <div class="bubble-content">
+              
+               
               </div>
             </div>
           </template>
@@ -199,15 +182,15 @@
           <template v-else-if="activeConversation === '赵六'">
             <div class="message-bubble other">
               <div class="bubble-content">
-                你好！关于项目的最新进展，我们需要讨论一下
-                <span class="bubble-time">昨天 09:20</span>
+               
+                
               </div>
             </div>
             
             <div class="message-bubble user">
               <div class="bubble-content">
-                好的，今天下午3点可以吗？
-                <span class="bubble-time">昨天 09:30</span>
+                
+              
               </div>
             </div>
           </template>
@@ -216,17 +199,11 @@
           <template v-else-if="activeConversation === '孙七'">
             <div class="message-bubble other">
               <div class="bubble-content">
-                你好！你看到最新的新闻了吗？
+                
                 <span class="bubble-time">2天前</span>
               </div>
             </div>
             
-            <div class="message-bubble user">
-              <div class="bubble-content">
-                还没有，是什么新闻？
-                <span class="bubble-time">2天前</span>
-              </div>
-            </div>
           </template>
         </div>
         

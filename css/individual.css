@@ -1,7 +1,16 @@
   *{
             margin: 0;
             padding: 0;
+            /* 全局隐藏滚动条 */
+            -ms-overflow-style: none;  /* IE和Edge */
+            scrollbar-width: none;  /* Firefox */
         }
+        
+        /* Chrome、Safari和Opera */
+        *::-webkit-scrollbar {
+            display: none;
+        }
+        
         #app {
             width: 100%;
             max-width: 1400px;
@@ -96,13 +105,15 @@
             font-size: 0.875rem;
         }
         .action-buttons {
+            margin-top: 20px;
             display: flex;
-            gap: 1rem;
+            gap: 5rem;
             justify-content: center;
         }
         .btn {
+            width: 150px;
             padding: 0.75rem 1.5rem;
-            border-radius: 50px;
+            border-radius: 20px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;

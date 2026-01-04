@@ -1,4 +1,4 @@
- new Vue({
+  new Vue({
       el: '#app',
       data: {
         activeMessageType: '私信',
