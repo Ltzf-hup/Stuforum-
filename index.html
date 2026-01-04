@@ -69,35 +69,12 @@
       <div class="nav-links">
         <a href="index.html" class="nav-link">首页</a>
         <a href="explore.html" class="nav-link">探索</a>
-        <a href="m-n.html" class="nav-link">消息/通知</a>
+        <a href="m-n.html" class="nav-link">消息</a>
         <a href="profile.html" class="nav-link">个人资料</a>
       </div>
     </div>
 
     <div id="body">
-      <div id="left-body">
-        <span>热门话题</span>
-        <div class="trending-item">
-          <div class="trend-category">编程</div>
-          <div class="trend-name">#Python学习</div>
-          <div class="trend-count">12.3k讨论</div>
-        </div>
-        <div class="trending-item">
-          <div class="trend-category">学习</div>
-          <div class="trend-name">#期末复习</div>
-          <div class="trend-count">8.9k讨论</div>
-        </div>
-        <div class="trending-item">
-          <div class="trend-category">校园生活</div>
-          <div class="trend-name">#校园活动</div>
-          <div class="trend-count">5.6k讨论</div>
-        </div>
-        <div class="trending-item">
-          <div class="trend-category">就业</div>
-          <div class="trend-name">#实习经验</div>
-          <div class="trend-count">3.4k讨论</div>
-        </div>
-      </div>
 
       <div id="middle-body">
         <div id="middle-body-text">
@@ -159,44 +136,13 @@
                   <span>💬</span>
                   <span class="action-count">{{ lists.replyCount || 0 }}</span>
                 </div>
-                <div class="post-action">
-                  <span>🔄</span>
-                  <span class="action-count">{{ lists.repostCount || 0 }}</span>
-                </div>
                 <div class="post-action" @click="toggleLike(lists)">
                   <span :class="{ 'liked': lists.isLiked }">❤️</span>
                   <span class="action-count">{{ lists.likeCount || 0 }}</span>
                 </div>
-                <div class="post-action">
-                  <span>📤</span>
-                </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
-
-      <div id="right-body">
-        <span>推荐关注</span>
-        <div class="user-item">
-          <div class="user-info">
-            <div class="avatar" :style="getAvatarColorStyle('Sarah Liu')">S</div>
-            <div class="user-details">
-              <div class="user-name">Sarah Liu</div>
-              <div class="user-handle">@sarahliu</div>
-            </div>
-          </div>
-          <button class="follow-btn" @click="toggleFollow(1)">关注</button>
-        </div>
-        <div class="user-item">
-          <div class="user-info">
-            <div class="avatar" :style="getAvatarColorStyle('David Park')">D</div>
-            <div class="user-details">
-              <div class="user-name">David Park</div>
-              <div class="user-handle">@davidp</div>
-            </div>
-          </div>
-          <button class="follow-btn" @click="toggleFollow(2)">关注</button>
         </div>
       </div>
     </div>

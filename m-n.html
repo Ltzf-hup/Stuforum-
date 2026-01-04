@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>消息</title>
+  <link rel="stylesheet" href="css/index.css">
+  <link rel="stylesheet" href="css/m-n.css">
+</head>
+
+<body>
+  <div id="app">
+    <div id="header">
+      <div class="logo">
+        <span class="logo-icon">🎓</span>
+        <span>StuForum</span>
+      </div>
+      <div class="nav-links">
+        <a href="index.html" class="nav-link">首页</a>
+        <a href="explore.html" class="nav-link">探索</a>
+        <a href="weibo-message.html" class="nav-link">消息</a>
+        <a href="profile.html" class="nav-link">个人资料</a>
+      </div>
+    </div>
+
+    <div class="weibo-message-container">
+      <!-- 左侧边栏 - 消息类型 -->
+      <div class="message-type-sidebar">
+        <div class="message-type-item active">
+          <span class="message-type-icon">💬</span>
+          <span>私信</span>
+        </div>
+        <div class="message-type-item">
+          <span class="message-type-icon">🔔</span>
+          <span>通知</span>
+        </div>
+        <div class="message-type-item">
+          <span class="message-type-icon">💌</span>
+          <span>评论</span>
+        </div>
+      </div>
+
+      <!-- 中间边栏 - 会话列表 -->
+      <div class="conversation-sidebar">
+        <div class="sidebar-header">私信</div>
+        <div class="search-bar">
+          <input type="text" class="search-input" placeholder="搜索私信">
+        </div>
+        <!-- 张三 -->
+        <div class="weibo-conversation-list">
+          <div class="weibo-conversation-item" :class="{ 'active': activeConversation === '张三' }" @click="selectConversation('张三')">
+            <div class="conversation-avatar">
+              <div class="avatar" style="background-color: #ff758f;">张</div>
+            </div>
+            
+            <div class="conversation-info">
+              <div class="conversation-header">
+                <div class="conversation-name">张三</div>
+                <div class="conversation-time">今天 14:30</div>
+              </div>
+              <div class="conversation-last-message">你好！最近在忙什么？</div>
+            </div>
+          </div>
+          <!-- 李四 -->
+          <div class="weibo-conversation-item" :class="{ 'active': activeConversation === '李四' }" @click="selectConversation('李四')">
+            <div class="conversation-avatar">
+              <div class="avatar" style="background-color: #10ac84;">李</div>
+            </div>
+            
+            <div class="conversation-info">
+              <div class="conversation-header">
+                <div class="conversation-name">李四</div>
+                <div class="conversation-time">今天 10:15</div>
+              </div>
+              <div class="conversation-last-message">感谢分享的文章，非常有帮助！</div>
+            </div>
+          </div>
+          <!-- 王五 -->
+          <div class="weibo-conversation-item" :class="{ 'active': activeConversation === '王五' }" @click="selectConversation('王五')">
+            <div class="conversation-avatar">
+              <div class="avatar" style="background-color: #794bc4;">王</div>
+            </div>
+            <div class="conversation-info">
+              <div class="conversation-header">
+                <div class="conversation-name">王五</div>
+                <div class="conversation-time">昨天 18:45</div>
+              </div>
+              <div class="conversation-last-message">周末有空一起去打球吗？</div>
+            </div>
+          </div>
+          <!-- 赵六 -->
+          <div class="weibo-conversation-item" :class="{ 'active': activeConversation === '赵六' }" @click="selectConversation('赵六')">
+            <div class="conversation-avatar">
+              <div class="avatar" style="background-color: #ff9800;">赵</div>
+            </div>
+            <div class="conversation-info">
+              <div class="conversation-header">
+                <div class="conversation-name">赵六</div>
+                <div class="conversation-time">昨天 09:20</div>
+              </div>
+              <div class="conversation-last-message">关于项目的最新进展...</div>
+            </div>
+          </div>
+          <!-- 孙七 -->
+          <div class="weibo-conversation-item" :class="{ 'active': activeConversation === '孙七' }" @click="selectConversation('孙七')">
+            <div class="conversation-avatar">
+              <div class="avatar" style="background-color: #3f51b5;">孙</div>
+            </div>
+            <div class="conversation-info">
+              <div class="conversation-header">
+                <div class="conversation-name">孙七</div>
+                <div class="conversation-time">2天前</div>
+              </div>
+              <div class="conversation-last-message">你看到最新的新闻了吗？</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 主内容区 - 消息详情 -->
+      <div class="message-detail">
+        <div class="message-detail-header">
+          <div class="detail-avatar">
+            <div class="avatar" style="background-color: #ff758f;" v-if="activeConversation === '张三'">张</div>
+            <div class="avatar" style="background-color: #10ac84;" v-else-if="activeConversation === '李四'">李</div>
+            <div class="avatar" style="background-color: #794bc4;" v-else-if="activeConversation === '王五'">王</div>
+            <div class="avatar" style="background-color: #ff9800;" v-else-if="activeConversation === '赵六'">赵</div>
+            <div class="avatar" style="background-color: #3f51b5;" v-else-if="activeConversation === '孙七'">孙</div>
+          </div>
+          <div class="detail-info">
+            <div class="detail-name">{{ activeConversation }}</div>
+            <div class="detail-status">在线</div>
+          </div>
+        </div>
+        
+        <div class="message-content">
+          <!-- 张三的对话 -->
+          <template v-if="activeConversation === '张三'">
+            
+            </div>
+            
+            <div class="message-bubble user">
+              
+            </div>
+            
+            <div class="message-bubble other">
+              
+            </div>
+            
+            <div class="message-bubble user">
+              
+            </div>
+            
+            <div class="message-bubble other">
+             
+            </div>
+            
+            <div class="message-bubble other">
+              
+            </div>
+          </template>
+          
+          <!-- 李四的对话 -->
+          <template v-else-if="activeConversation === '李四'">
+            <div class="message-bubble other">
+              <div class="bubble-content">
+                你好！感谢你分享的文章，非常有帮助！
+                <span class="bubble-time">今天 10:15</span>
+              </div>
+            </div>
+            
+            <div class="message-bubble user">
+              <div class="bubble-content">
+                不客气！很高兴对你有帮助
+                <span class="bubble-time">今天 10:18</span>
+              </div>
+            </div>
+          </template>
+          
+          <!-- 王五的对话 -->
+          <template v-else-if="activeConversation === '王五'">
+            <div class="message-bubble other">
+              <div class="bubble-content">
+                你好！周末有空一起去打球吗？
+                <span class="bubble-time">昨天 18:45</span>
+              </div>
+            </div>
+            
+            <div class="message-bubble user">
+              <div class="bubble-content">
+                抱歉，周末我要复习功课，下次吧
+                <span class="bubble-time">昨天 19:00</span>
+              </div>
+            </div>
+          </template>
+          
+          <!-- 赵六的对话 -->
+          <template v-else-if="activeConversation === '赵六'">
+            <div class="message-bubble other">
+              <div class="bubble-content">
+                你好！关于项目的最新进展，我们需要讨论一下
+                <span class="bubble-time">昨天 09:20</span>
+              </div>
+            </div>
+            
+            <div class="message-bubble user">
+              <div class="bubble-content">
+                好的，今天下午3点可以吗？
+                <span class="bubble-time">昨天 09:30</span>
+              </div>
+            </div>
+          </template>
+          
+          <!-- 孙七的对话 -->
+          <template v-else-if="activeConversation === '孙七'">
+            <div class="message-bubble other">
+              <div class="bubble-content">
+                你好！你看到最新的新闻了吗？
+                <span class="bubble-time">2天前</span>
+              </div>
+            </div>
+            
+            <div class="message-bubble user">
+              <div class="bubble-content">
+                还没有，是什么新闻？
+                <span class="bubble-time">2天前</span>
+              </div>
+            </div>
+          </template>
+        </div>
+        
+        <div class="weibo-message-input-area">
+          <div class="input-toolbar">
+            <span style="cursor: pointer;">📷</span>
+            <span style="cursor: pointer;">🎤</span>
+            <span style="cursor: pointer;">📝</span>
+            <span style="cursor: pointer;">📍</span>
+          </div>
+          <div class="input-container">
+            <textarea class="weibo-input" placeholder="输入消息..."></textarea>
+            <button class="send-btn">
+              <span>➤</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script src="lib/vue.js"></script>
+  <script src="js/m-n.js"></script>
+</body>
+
+</html>

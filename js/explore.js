@@ -8,7 +8,7 @@ let vm = new Vue({
         getExplore() {
             // 使用箭头函数回调
             $.ajax({
-                url: "http://10.11.192.233:8080/explore",
+                url: "http://10.11.192.233:8080/StuForum_war_exploded/forum",
                 type: "GET",
                 dataType: "json",
                 success: (data) => {
@@ -28,7 +28,7 @@ let vm = new Vue({
             }
             // 执行搜索操作
             $.ajax({
-                url: "http://10.11.192.233:8080/explore/search",
+                url: "http://10.11.192.233:8080/StuForum_war_exploded/forum/search",
                 type: "GET",
                 data: {
                     query: this.searchQuery
@@ -43,6 +43,33 @@ let vm = new Vue({
                     // 搜索失败时可以显示提示或保持原有列表
                 }
             });
+        },
+        // 添加时间格式化方法
+        formatTime(timestamp) {
+            if (!timestamp) return '未知时间';
+
+            const date = new Date(timestamp);
+            const now = new Date();
+
+            // 计算时间差（秒）
+            const diff = Math.floor((now - date) / 1000);
+
+            if (diff < 60) {
+                return '刚刚';
+            } else if (diff < 3600) {
+                return Math.floor(diff / 60) + '分钟前';
+            } else if (diff < 86400) {
+                return Math.floor(diff / 3600) + '小时前';
+            } else if (diff < 2592000) {
+                return Math.floor(diff / 86400) + '天前';
+            } else {
+                // 超过一个月，显示具体日期
+                return date.getFullYear() + '-' +
+                    String(date.getMonth() + 1).padStart(2, '0') + '-' +
+                    String(date.getDate()).padStart(2, '0') + ' ' +
+                    String(date.getHours()).padStart(2, '0') + ':' +
+                    String(date.getMinutes()).padStart(2, '0');
+            }
         }
     },
     mounted() {
@@ -58,4 +85,4 @@ let vm = new Vue({
             }
         });
     }
-})
+});

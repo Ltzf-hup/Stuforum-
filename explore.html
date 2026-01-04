@@ -18,7 +18,7 @@
       <div class="nav-links">
         <a href="index.html" class="nav-link">首页</a>
         <a href="explore.html" class="nav-link">探索</a>
-        <a href="m-n.html" class="nav-link">消息/通知</a>
+        <a href="m-n.html" class="nav-link">消息</a>
         <a href="profile.html" class="nav-link">个人资料</a>
       </div>
     </div>
@@ -66,20 +66,25 @@
           暂无内容
         </div>
 
-        <div v-else class="posts-container" v-for="(item, index) in list" :key="item.id">
-          <div class="post">
+        <div v-else class="posts-container">
+          <div class="post" v-for="(item, index) in list" :key="item.id + '-' + index">
             <div class="post-avatar">
-              <img :src="item.user.image" alt="用户头像" class="avatar"
+              <img :src="item.avatarUrl" alt="用户头像" class="avatar"
                 style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;">
             </div>
             <div class="post-content">
               <div class="post-header-info">
-                <span class="post-user">{{item.user.uname || '未知用户'}}</span>
-                <span class="post-handle">@{{item.user.uname || 'unknown'}}</span>
-                <span class="post-time">{{item.postedTime || '未知时间'}}</span>
+                <span class="post-user">{{item.uname || '未知用户'}}</span>
+                <span class="post-handle">@{{item.uname || 'unknown'}}</span>
+                <span class="post-time">{{formatTime(item.postedTime) || '未知时间'}}</span>
+                <span class="post-location" v-if="item.location">{{item.location}}</span>
               </div>
               <div class="post-text">
                 {{item.txt || ''}}
+              </div>
+              <!-- 显示帖子图片 -->
+              <div class="post-image" v-if="item.firstImageUrl">
+                <img :src="item.firstImageUrl" alt="帖子图片" style="max-width: 100%; border-radius: 8px; margin-top: 8px;">
               </div>
               <div class="post-actions-bar">
                 <div class="post-action">
@@ -87,7 +92,7 @@
                   <span class="action-count">{{item.replyCount || 0}}</span>
                 </div>
                 <div class="post-action">
-                  <span>🔄</span>
+                  <span>👁️</span>
                   <span class="action-count">{{item.viewCount || 0}}</span>
                 </div>
                 <div class="post-action">
