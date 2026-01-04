@@ -4,6 +4,14 @@
   box-sizing: border-box;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   text-decoration: none;
+  /* 全局隐藏滚动条 */
+  -ms-overflow-style: none;  /* IE和Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+/* Chrome、Safari和Opera */
+*::-webkit-scrollbar {
+  display: none;
 }
 
 /* 渐变背景 */
@@ -212,6 +220,14 @@ body {
   border-radius: 12px;
   background-color: white;
   transition: all 0.3s ease;
+  /* 隐藏文本域滚动条 */
+  overflow-y: auto;
+  -ms-overflow-style: none;  /* IE和Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.post-input::-webkit-scrollbar {
+  display: none;  /* Chrome、Safari和Opera */
 }
 
 .post-input:focus {
