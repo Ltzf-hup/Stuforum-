@@ -100,7 +100,7 @@
           <!-- 帖子列表 -->
           <div class="post" v-for="lists in list">
             <div class="post-avatar">
-              <a href="individual.html">
+              <a :href="'individual.html?uname=' + encodeURIComponent(lists.uname)" :key="lists.uname">
                 <div class="avatar" :style="getAvatarColorStyle(lists.user?.username || lists.uname)">
                   <!-- 如果有头像数据，显示图片 -->
                   <img v-if="lists.avatarUrl" :src="lists.avatarUrl"

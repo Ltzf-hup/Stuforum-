@@ -5,7 +5,8 @@ new Vue({
         isChecking: true,
         showImageModal: false, // 图片预览模态框状态
         selectedImage: '', // 当前选中的图片
-        followStatus: {} // 关注状态存储
+        followStatus: {}, // 关注状态存储
+        uname: " ",
     },
     computed: {
         // 当前用户的头像样式

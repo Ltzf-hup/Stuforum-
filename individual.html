@@ -19,19 +19,19 @@
                     <!-- 背景封面区域 -->
                 </div>
                 <div class="left-middle">
-                    <div class="tx" onclick="triggerFileInput()">
-
+                    <div class="tx">
+                        <img :src="avatarUrl" alt="">
                     </div>
 
                     <div class="action-buttons">
-                        <button class="btn btn-primary" onclick="followUser()">关注</button>
-                        <button class="btn btn-secondary" onclick="sendMessage()" id="messageBtn"
+                        <button class="btn btn-primary" @click="followUser">关注</button>
+                        <button class="btn btn-secondary" @click="sendMessage" id="messageBtn"
                             style="display: none;">私信</button>
                     </div>
 
                     <div class="user-info">
-                        <div class="user-name">User123</div>
-                        <div class="user-handle">@user123</div>
+                        <div class="user-name">{{uname}}</div>
+                        <div class="user-handle">@{{uname}}</div>
                     </div>
 
                     <div class="stats">
@@ -60,20 +60,20 @@
 
             <div class="right">
                 <div class="right-top">
-                    <div class="tab active" onclick="switchTab('posts')">帖子</div>
-                    <div class="tab" onclick="switchTab('replies')">回复</div>
+                    <div class="tab active" @click="switchTab('posts')">帖子</div>
+                    <div class="tab" @click="switchTab('replies')">回复</div>
                 </div>
 
                 <div class="right-content">
                     <div id="posts" class="content-section active">
-                        <div class="post">
-                            <div class="post-header-info">
-                                <span class="post-user">User123</span>
-                                <span class="post-handle">@user123 ·</span>
-                                <span class="post-time">3天前</span>
+                        <div class="post" v-for="item in list">
+                            <div class=" post-header-info">
+                                <span class="post-user">{{item.uname}}</span>
+                                <span class="post-handle">@{{item.uname}} ·</span>
+                                <span class="post-time">{{formatTime(item.time)}}</span>
                             </div>
                             <div class="post-text">
-                                分享一下我最近学习Python的心得体会，希望对大家有所帮助！#Python学习 #编程
+                                {{item.txt}}
                             </div>
                             <div class="post-actions-bar">
                                 <div class="post-action">
@@ -94,61 +94,6 @@
                             </div>
                         </div>
 
-                        <div class="post">
-                            <div class="post-header-info">
-                                <span class="post-user">User123</span>
-                                <span class="post-handle">@user123 ·</span>
-                                <span class="post-time">1周前</span>
-                            </div>
-                            <div class="post-text">
-                                有没有同学推荐一些好的算法学习资源？#算法 #学习资源
-                            </div>
-                            <div class="post-actions-bar">
-                                <div class="post-action">
-                                    <span>💬</span>
-                                    <span class="action-count">18</span>
-                                </div>
-                                <div class="post-action">
-                                    <span>🔄</span>
-                                    <span class="action-count">5</span>
-                                </div>
-                                <div class="post-action">
-                                    <span>❤️</span>
-                                    <span class="action-count">34</span>
-                                </div>
-                                <div class="post-action">
-                                    <span>📤</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="post">
-                            <div class="post-header-info">
-                                <span class="post-user">User123</span>
-                                <span class="post-handle">@user123 ·</span>
-                                <span class="post-time">1周前</span>
-                            </div>
-                            <div class="post-text">
-                                有没有同学推荐一些好的算法学习资源？#算法 #学习资源
-                            </div>
-                            <div class="post-actions-bar">
-                                <div class="post-action">
-                                    <span>💬</span>
-                                    <span class="action-count">18</span>
-                                </div>
-                                <div class="post-action">
-                                    <span>🔄</span>
-                                    <span class="action-count">5</span>
-                                </div>
-                                <div class="post-action">
-                                    <span>❤️</span>
-                                    <span class="action-count">34</span>
-                                </div>
-                                <div class="post-action">
-                                    <span>📤</span>
-                                </div>
-                            </div>
-                        </div>
                     </div>
 
 
@@ -184,6 +129,7 @@
             </div>
         </div>
     </div>
+    <script src="lib/vue.js"></script>
     <script src="js/individual.js"></script>
 </body>
 
