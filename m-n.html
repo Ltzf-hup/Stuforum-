@@ -47,7 +47,7 @@
         <div class="sidebar-header">私信</div>
         <div class="weibo-conversation-list"><!-- 列表开始 -->
 
-          <div class="weibo-conversation-item" :class="{ 'active': activeConversation === '张三' }"
+          <div class=" weibo-conversation-item" :class="{ 'active': activeConversation === '张三' }"
             @click="selectConversation('张三')">
             <!-- <div class="conversation-avatar">
               <div class="avatar">张</div>
@@ -55,8 +55,8 @@
 
             <div class="conversation-info">
               <div class="conversation-header">
-                <div class="conversation-name">用户名</div>
-                <div class="conversation-time">发送信息的时间</div>
+                <div class="conversation-name">张三</div>
+                <div class="conversation-time"></div>
               </div>
               <div class="conversation-last-message">这里用来显示最新信息</div>
             </div>
@@ -70,49 +70,48 @@
       <div class="message-detail">
         <div class="message-detail-header">
           <div class="detail-info">
-            <div class="detail-name">{{ activeConversation }}</div>
-            <div class="detail-status">在线</div>
+            <div class="detail-name">张三</div>
+            <!-- <div class="detail-status">在线</div> -->
           </div>
         </div>
 
         <div class="message-content">
           <!-- 张三的对话 -->
-          <template v-if="activeConversation === '张三'">
+          <template v-if="activeConversation ==='张三'">
+            <div v-for="message in messages" :key="message.id">
+              <!-- 对方的消息（显示在左边） -->
+              <div v-if="!message.isSelf" class="message-bubble other">
+                <div class="avatar">{{ message.avatar }}</div>
+                <div class="bubble-content">
+                  {{ message.content }}
+                  <span class="bubble-time">{{ message.time }}</span>
+                </div>
+              </div>
+
+              <!-- 自己的消息（显示在右边） -->
+              <div v-else class="message-bubble user">
+                <div class="bubble-content">
+                  {{ message.content }}
+                  <span class="bubble-time">{{ message.time }}</span>
+                </div>
+                <div class="avatar">{{ message.avatar }}</div>
+              </div>
+            </div>
+          </template>
+
         </div>
-        <div class="message-bubble other">
-          <div class="bubble-content">
-            你好！感谢你分享的文章，非常有帮助！
-            <span class="bubble-time">今天 10:15</span>
+
+        <div class="weibo-message-input-area">
+          <div class="input-container">
+            <textarea class="weibo-input" id="message-input" v-model="inputMessage" @keyup.enter="sendMessage"
+              placeholder="输入消息..."></textarea>
+            <button class="send-btn" id="sendbtn" @click="sendMessage">
+              <span>➤</span>
+            </button>
           </div>
-        </div>
-
-        <div class="message-bubble user">
-          <div class="bubble-content">
-            不客气！很高兴对你有帮助
-            <span class="bubble-time">今天 10:18</span>
-          </div>
-        </div>
-        <div class="message-bubble user">
-
-        </div>
-
-        <div class="message-bubble other">
-
-        </div>
-        </template>
-
-      </div>
-
-      <div class="weibo-message-input-area">
-        <div class="input-container">
-          <textarea class="weibo-input" placeholder="输入消息..."></textarea>
-          <button class="send-btn">
-            <span>➤</span>
-          </button>
         </div>
       </div>
     </div>
-  </div>
   </div>
 
   <script src="lib/vue.js"></script>
