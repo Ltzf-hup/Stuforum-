@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>个人资料 - StuForum</title>
-  <link rel="stylesheet" href="css/index.css">
+  <link rel="stylesheet" href="css/common.css">
   <link rel="stylesheet" href="css/profile.css">
 </head>
 
@@ -358,6 +358,11 @@
   </div>
   <script src="lib/vue.js"></script>
   <script src="js/profile.js"></script>
+  
+  <!-- 底部状态显示 -->
+  <div class="bottom-status" v-if="message" :class="messageType">
+    {{ message }}
+  </div>
 </body>
 
 </html>

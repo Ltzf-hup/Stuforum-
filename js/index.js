@@ -378,4 +378,84 @@ new Vue({
         this.getAll();
     }
 });
+const { createEditor, createToolbar } = window.wangEditor
 
+const editorConfig = {
+    //相当于文本框中的 placeholder
+    placeholder: '分享你的想法...',
+    //设置为只读模式
+    readOnly: false,
+    // 如果有需求，只读状态可通过 editor.enable() 和 editor.disable() 切换
+    // 自动获取焦点,进入网页的时候自动获取焦点
+    autoFocus: true,
+    //scroll 滚动条，默认是true
+    scroll: true,
+
+    onChange(editor) {
+        const html = editor.getHtml()
+        console.log('editor content', html)
+        // 也可以同步到 <textarea>
+        document.getElementById('ww').value = html
+    },
+}
+
+const editor = createEditor({
+    selector: '#editor-container',
+    html: '<p><br></p>',
+    config: editorConfig,
+    mode: 'default', // or 'simple'
+})
+
+const toolbarConfig = {
+}
+//查询工具栏的所有key值
+console.log(editor.getAllMenuKeys())
+toolbarConfig.toolbarKeys = [
+    // 菜单 key
+    // 'headerSelect',
+
+    // 分割线
+    // '|',
+
+    // 菜单 key
+    // 'bold',
+    // 'italic',
+    'insertImage',
+    'uploadImage'
+    // 菜单组，包含多个菜单
+    // {
+    //   key: 'group-more-style', // 必填，要以 group 开头
+    //   title: '更多样式', // 必填
+    //   iconSvg: '<svg>....</svg>', // 可选
+    //   menuKeys: ['through', 'code', 'clearStyle'], // 下级菜单 key ，必填
+    // },
+    // 继续配置其他菜单...
+]
+toolbarConfig.modalAppendToBody = true
+
+// 创建 toolbar 和 editor
+
+// 可监听 `modalOrPanelShow` 和 `modalOrPanelHide` 自定义事件来设置样式、蒙层
+editor.on('modalOrPanelShow', modalOrPanel => {
+    if (modalOrPanel.type !== 'modal') return
+    const { $elem } = modalOrPanel // modal element
+
+    // 设置 modal 样式（定位、z-index）,居中显示
+    $elem.css({
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        zIndex: 1000,
+    })
+    // 显示蒙层
+})
+editor.on('modalOrPanelHide', () => {
+    // 隐藏蒙层
+})
+const toolbar = createToolbar({
+    editor,
+    selector: '#toolbar-container',
+    config: toolbarConfig,
+    mode: 'default', // or 'simple'
+})

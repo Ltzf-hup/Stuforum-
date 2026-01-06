@@ -91,6 +91,9 @@ const profileVm = new Vue({
             this.showMessage('已取消编辑', 'success');
         },
         // 触发文件输入框
+        triggerFileInput() {
+            document.getElementById('avatarInput').click();
+        },
 
         // 保存资料
         async saveProfile() {
@@ -201,40 +204,28 @@ const profileVm = new Vue({
                     break;
             }
         },
-        triggerFileInput() {
-            document.getElementById('avatarInput').click();
-        },
         // 处理头像文件选择
         handleAvatarChange(e) {
             const file = e.target.files[0];
             console.log(file);
             if (file) {
-                // 压缩图片
-                const img = new Image();
-                img.src = URL.createObjectURL(file);
+                // 使用压缩图片方法
+                this.compressImage(file)
+                    .then(base64 => {
+                        // 检查长度
+                        if (base64.length > 10000) {
+                            this.showMessage('图片太大，数据库可能存不下！', 'error');
+                            return;
+                        }
 
-                img.onload = () => {
-                    const canvas = document.createElement('canvas');
-                    canvas.width = 150;  // 缩小尺寸
-                    canvas.height = 150;
-
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, 150, 150);
-
-                    // 获取base64，低质量
-                    const base64 = canvas.toDataURL('image/jpeg', 0.5);
-
-                    // 检查长度
-                    if (base64.length > 10000) {
-                        alert('图片太大，数据库可能存不下！');
-                        return;
-                    }
-
-                    // 更新头像预览
-                    this.list.avatarUrl = base64;
-                    // 保存到localStorage
-                    this.saveUserData();
-                };
+                        // 只更新头像预览，不立即保存到localStorage
+                        this.list.avatarUrl = base64;
+                        this.showMessage('头像已更新，点击保存按钮确认更改', 'info');
+                    })
+                    .catch(error => {
+                        console.error('头像处理失败:', error);
+                        this.showMessage('头像处理失败', 'error');
+                    });
             }
         },
         compressImage(file) {
@@ -244,32 +235,22 @@ const profileVm = new Vue({
 
                 img.onload = () => {
                     // 设置缩略图尺寸
-                    const MAX_SIZE = 200;
+                    const MAX_SIZE = 150;
                     let width = img.width;
                     let height = img.height;
 
-                    // 计算缩放比例
-                    if (width > height) {
-                        if (width > MAX_SIZE) {
-                            height = Math.round(height * MAX_SIZE / width);
-                            width = MAX_SIZE;
-                        }
-                    } else {
-                        if (height > MAX_SIZE) {
-                            width = Math.round(width * MAX_SIZE / height);
-                            height = MAX_SIZE;
-                        }
+                    if (width > MAX_SIZE || height > MAX_SIZE) {
+                        const ratio = Math.min(MAX_SIZE / width, MAX_SIZE / height);
+                        width = width * ratio;
+                        height = height * ratio;
                     }
 
-                    // 设置canvas尺寸
                     canvas.width = width;
                     canvas.height = height;
-
-                    // 绘制图片
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(img, 0, 0, width, height);
 
-                    // 转换为base64，低质量
+                    // 转换为base64
                     const base64 = canvas.toDataURL('image/jpeg', 0.5);
                     resolve(base64);
                 };

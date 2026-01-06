@@ -1,0 +1,84 @@
+# wangEditor 工具栏按键功能说明
+左边的是key值,右边的是功能说明
+
+## 基础文本格式
+bold - 文字加粗
+underline - 文字下划线
+italic - 文字斜体
+through - 删除线
+code - 行内代码
+sub - 下标文字
+sup - 上标文字
+clearStyle - 清除格式
+
+## 颜色与字体
+color - 文字颜色
+bgColor - 背景颜色
+fontSize - 字体大小
+fontFamily - 字体类型
+lineHeight - 行高
+
+## 段落与对齐
+indent - 增加缩进
+delIndent - 减少缩进
+justifyLeft - 左对齐
+justifyRight - 右对齐
+justifyCenter - 居中对齐
+justifyJustify - 两端对齐
+
+## 图片相关
+insertImage - 插入图片
+deleteImage - 删除图片
+editImage - 编辑图片
+viewImageLink - 查看图片链接
+imageWidth30 - 设置图片宽度为30%
+imageWidth50 - 设置图片宽度为50%
+imageWidth100 - 设置图片宽度为100%
+uploadImage - 上传图片
+
+## 其他元素
+divider - 分隔线
+emotion - 表情符号
+insertLink - 插入链接
+editLink - 编辑链接
+unLink - 取消链接
+viewLink - 查看链接
+
+## 块级元素
+codeBlock - 代码块
+blockquote - 引用块
+headerSelect - 标题选择
+header1 - 一级标题
+header2 - 二级标题
+header3 - 三级标题
+header4 - 四级标题
+header5 - 五级标题
+todo - 待办事项列表
+
+## 操作功能
+redo - 重做
+undo - 撤销
+fullScreen - 全屏
+enter - 回车（确认）
+
+## 列表
+bulletedList - 无序列表
+numberedList - 编号列表
+
+## 表格功能
+insertTable - 插入表格
+deleteTable - 删除表格
+insertTableRow - 插入表格行
+deleteTableRow - 删除表格行
+insertTableCol - 插入表格列
+deleteTableCol - 删除表格列
+tableHeader - 表格表头
+tableFullWidth - 表格全宽
+
+## 视频相关
+insertVideo - 插入视频
+uploadVideo - 上传视频
+editVideoSize - 编辑视频尺寸
+
+## 其他
+codeSelectLang - 选择代码语言

@@ -40,3 +40,126 @@
 .avatar.editing .avatar-mask {
   opacity: 1;
 }
+
+/* 底部状态显示样式 */
+.bottom-status {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 12px 24px;
+  border-radius: 50px;
+  font-weight: 600;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.bottom-status.success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.bottom-status.error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.bottom-status.info {
+  background-color: #d1ecf1;
+  color: #0c5460;
+  border: 1px solid #bee5eb;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* 文本输入框样式 */
+.editable-input,
+.readonly-input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #e9ecef;
+  border-radius: 4px;
+  font-size: 1rem;
+  line-height: 1.5;
+  transition: all 0.3s ease;
+}
+
+.editable-input {
+  background-color: #fff;
+  color: #495057;
+}
+
+.editable-input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
+}
+
+.readonly-input {
+  background-color: #f8f9fa;
+  color: #6c757d;
+  cursor: default;
+  border-color: #dee2e6;
+}
+
+/* 选择框特定样式 */
+select.editable-input,
+select.readonly-input {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236c757d' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  padding-right: 30px;
+  cursor: pointer;
+}
+
+select.readonly-input {
+  cursor: default;
+  opacity: 0.7;
+}
+
+/* 个人资料页面按钮样式 */
+#left-body .post-btn {
+  background-color: #667eea;
+  color: white;
+  border: 2px solid #667eea;
+  border-radius: 8px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: none;
+  width: 100%;
+  margin-bottom: 0.5rem;
+}
+
+#left-body .post-btn:hover {
+  background-color: #5a67d8;
+  border-color: #5a67d8;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+#left-body .post-btn.btn-cancel {
+  background-color: #6c757d !important;
+  border-color: #6c757d !important;
+  color: white !important;
+}
+
+#left-body .post-btn.btn-cancel:hover {
+  background-color: #5a6268 !important;
+  border-color: #5a6268 !important;
+}
