@@ -4,16 +4,39 @@ new Vue({
         list: {},
         uname: '',
         avatarUrl: '',
+        isSelf: true,
+        ferId: '',//当前登录用户的id
+        fedId: '',//当前用户的id
+        numOfPosts: 0,
+        isFollowed: false,//没有关注状态
+        gzNum: 0,
+        fansNum: 0,
     },
     created() {
         this.init();
     },
     methods: {
         async init() {
+            //从url中获取是被关注者的id
             const searchParams = new URLSearchParams(window.location.search);
             const uname = searchParams.get('uname');
+            const uid = searchParams.get('uid');
             this.uname = uname;
-            console.log(searchParams.get('uname')); // 输出: John
+            this.fedId = uid;
+            //本地储存的用户是关注者Id
+            const currentUser = localStorage.getItem('userData');
+            const currentUserId = JSON.parse(currentUser).uid;
+            this.ferId = currentUserId;
+            console.log(currentUserId);
+            console.log(uid);
+            //判断是否是自己
+            if (currentUserId == uid) {
+                this.isSelf = false;
+            }
+            else {
+                this.isSelf = true;
+            }
+            // console.log(searchParams.get('uname')); // 输出: John
             //encodeURIComponent，对uname进行编码，防止特殊字符导致的问题
             const url = `http://10.11.192.14:8080/StuForum_war/api/forum/Son?uname=${encodeURIComponent(uname)}`;
             const response = await fetch(url, {
@@ -26,7 +49,61 @@ new Vue({
             console.log(data);
             this.list = data;
             this.avatarUrl = this.list[0].avatarUrl;
+            this.numOfPosts = this.list.length;
+            // 初始化时检查关注状态
+            await this.checkFollowStatus();
+            //获取关注者数量
+            await this.getGzNum();
+            //获取粉丝数量
+            await this.getFansNum();
+        },
+        //获取关注者数量
+        async getGzNum() {
+            const url = `http://10.11.192.14:8080/StuForum_war/api/concernedGzNum?fedId=${this.fedId}`;
+            const response = await fetch(url, {
+                method: 'get',
+                headers: {
+                    'Accept': 'application/json'
+                },
+            });
+            const data = await response.json();
+            console.log(data);
+            this.gzNum = data;
+        },
+        //获取粉丝数量
+        async getFansNum() {
+            const url = `http://10.11.192.14:8080/StuForum_war/api/concernedFansNum?fedId=${this.fedId}`;
+            const response = await fetch(url, {
+                method: 'get',
+                headers: {
+                    'Accept': 'application/json'
+                },
+            });
+            const data = await response.json();
+            console.log(data);
+            this.fansNum = data;
+        },
+        // 更新关注按钮状态
+        updateFollowButton() {
+            // 等待DOM渲染完成
+            this.$nextTick(() => {
+                const followBtn = document.querySelector('.follow-btn'); // 给关注按钮加个class
+                const messageBtn = document.getElementById('messageBtn');
 
+                if (!followBtn) return;
+
+                if (this.isFollowing) {
+                    followBtn.textContent = '已关注';
+                    followBtn.classList.remove('btn-primary');
+                    followBtn.classList.add('btn-secondary');
+                    messageBtn.style.display = 'block';
+                } else {
+                    followBtn.textContent = '关注';
+                    followBtn.classList.remove('btn-secondary');
+                    followBtn.classList.add('btn-primary');
+                    messageBtn.style.display = 'none';
+                }
+            });
         },
         switchTab(tabName) {
             // 隐藏所有内容区域
@@ -45,27 +122,81 @@ new Vue({
             document.getElementById(tabName).classList.add('active');
             event.target.classList.add('active');
         },
-        followUser() {
-            let followBtn = event.target;
-            let messageBtn = document.getElementById('messageBtn');
+        // 关注用户
+        async followInsert() {
 
-            // 检查是否已关注
-            if (followBtn.textContent === '关注') {
-                // 切换到已关注状态
-                followBtn.textContent = '已关注';
-                followBtn.classList.remove('btn-primary');
-                followBtn.classList.add('btn-secondary');
+            const url = `http://10.11.192.14:8080/StuForum_war//api/concernedInsert?ferId=${this.ferId}&fedId=${this.fedId}`;
+            const response = await fetch(url, {
+                method: 'post',
+                headers: {
+                    'Accept': "text/html"
+                },
+            });
+            const data = await response.text();
+            console.log(data);
+        },
+        //取消关注
+        async followDelete() {
+            const url = `http://10.11.192.14:8080/StuForum_war/api/ConcernedDeleteServlet?ferId=${this.ferId}&fedId=${this.fedId}`;
+            const response = await fetch(url, {
+                method: 'post',
+                headers: {
+                    'Accept': "text/html"
+                },
+            });
+            const data = await response.text();
+            console.log(data);
+        },
+        // 检查是否已关注
+        async checkFollowStatus() {
+            const url = `http://10.11.192.14:8080/StuForum_war/api/ConcernedIfGz?ferId=${this.ferId}&fedId=${this.fedId}`;
+            const response = await fetch(url, {
+                method: 'get',
+                headers: {
+                    'Accept': "text/html"
+                },
+            });
+            const data = await response.text();
+            console.log(data);
+            // 更新关注状态
+            this.isFollowing = data.trim() === '1';
 
-                // 显示私信按钮
-                messageBtn.style.display = 'block';
-            } else {
-                // 切换到关注状态
-                followBtn.textContent = '关注';
-                followBtn.classList.remove('btn-secondary');
-                followBtn.classList.add('btn-primary');
+            // 根据状态更新按钮
+            this.updateFollowButton();
+        },
+        //点击关注按钮
+        async followUser() {
+            const followBtn = event.target;
+            const messageBtn = document.getElementById('messageBtn');
 
-                // 隐藏私信按钮
-                messageBtn.style.display = 'none';
+            try {
+                if (followBtn.textContent === '关注') {
+                    // 执行关注
+                    await this.followInsert();
+
+                    // 更新状态
+                    followBtn.textContent = '已关注';
+                    followBtn.classList.remove('btn-primary');
+                    followBtn.classList.add('btn-secondary');
+                    this.isFollowing = true;
+
+                    // 显示私信按钮
+                    if (messageBtn) messageBtn.style.display = 'block';
+                } else {
+                    // 执行取消关注
+                    await this.followDelete();
+
+                    // 更新状态
+                    followBtn.textContent = '关注';
+                    followBtn.classList.remove('btn-secondary');
+                    followBtn.classList.add('btn-primary');
+                    this.isFollowing = false;
+
+                    // 隐藏私信按钮
+                    if (messageBtn) messageBtn.style.display = 'none';
+                }
+            } catch (error) {
+                console.error('关注操作失败:', error);
             }
         },
         sendMessage() {
@@ -73,6 +204,7 @@ new Vue({
             // 例如：打开一个新窗口或显示一个弹窗
             location.href = 'm-n.html';
         },
+        //时间格式化
         formatTime(dateString) {
             if (!dateString) return '刚刚';
 
@@ -96,6 +228,10 @@ new Vue({
                 day: 'numeric'
             });
         },
-    },
+    }, // 添加一个mounted钩子，确保DOM渲染后执行
+    mounted() {
+        // 如果DOM已存在，立即更新按钮
+        this.updateFollowButton();
+    }
 })
 

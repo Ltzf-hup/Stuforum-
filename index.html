@@ -80,7 +80,7 @@
         <div id="middle-body-text">
           <div class="post-header">
             <div class="avatar" :style="currentUserAvatarStyle">你</div>
-            <textarea class="post-input" placeholder="分享你的想法..."></textarea>
+            <textarea class="post-input" placeholder="分享你的想法..." @keyup.enter="publishPost"></textarea>
           </div>
           <div class="post-actions">
             <div class="action-icons">
@@ -100,7 +100,8 @@
           <!-- 帖子列表 -->
           <div class="post" v-for="lists in list">
             <div class="post-avatar">
-              <a :href="'individual.html?uname=' + encodeURIComponent(lists.uname)" :key="lists.uname">
+              <a :href="'individual.html?uname=' + encodeURIComponent(lists.uname)+'&uid='+lists.uid"
+                :key="lists.uname">
                 <div class="avatar" :style="getAvatarColorStyle(lists.user?.username || lists.uname)">
                   <!-- 如果有头像数据，显示图片 -->
                   <img v-if="lists.avatarUrl" :src="lists.avatarUrl"

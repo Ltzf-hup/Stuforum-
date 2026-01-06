@@ -23,12 +23,13 @@
                         <img :src="avatarUrl" alt="">
                     </div>
 
-                    <div class="action-buttons">
-                        <button class="btn btn-primary" @click="followUser">关注</button>
+                    <div class="action-buttons" v-if="isSelf">
+                        <button class="btn btn-primary follow-btn" @click="followUser">关注</button>
                         <button class="btn btn-secondary" @click="sendMessage" id="messageBtn"
                             style="display: none;">私信</button>
                     </div>
-
+                    <div class="action-buttons" v-else>
+                    </div>
                     <div class="user-info">
                         <div class="user-name">{{uname}}</div>
                         <div class="user-handle">@{{uname}}</div>
@@ -36,25 +37,25 @@
 
                     <div class="stats">
                         <div class="stat-item">
-                            <div class="stat-number">12</div>
+                            <div class="stat-number">{{gzNum}}</div>
                             <div class="stat-label">关注</div>
                         </div>
                         <div class="stat-item">
-                            <div class="stat-number">45</div>
+                            <div class="stat-number">{{fansNum}}</div>
                             <div class="stat-label">粉丝</div>
                         </div>
                         <div class="stat-item">
-                            <div class="stat-number">28</div>
+                            <div class="stat-number">{{numOfPosts}}</div>
                             <div class="stat-label">帖子</div>
                         </div>
-                        <div class="stat-item">
+                        <!-- <div class="stat-item">
                             <div class="stat-number">234</div>
                             <div class="stat-label">获赞</div>
-                        </div>
+                        </div> -->
                     </div>
 
                     <!-- 添加关注和私信按钮 -->
-
+                    <img src="downlaod?img=a.jgp" alt="">
                 </div>
             </div>
 
@@ -70,7 +71,7 @@
                             <div class=" post-header-info">
                                 <span class="post-user">{{item.uname}}</span>
                                 <span class="post-handle">@{{item.uname}} ·</span>
-                                <span class="post-time">{{formatTime(item.time)}}</span>
+                                <span class="post-time">{{formatTime(item.postedTime)}}</span>
                             </div>
                             <div class="post-text">
                                 {{item.txt}}
