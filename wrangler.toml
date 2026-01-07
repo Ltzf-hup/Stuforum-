@@ -1,6 +1,3 @@
+
 name = "nose"
-account_id = "8bf663678265a71427bff8cd782af59e"
 pages_build_output_dir = "./dist"
-workers_dev = false
-route = "lztflioveqzs.dpdns.org/*"
-zone_id = "0d422b554c2b6c86cfe3587ac7f0b86d"
