@@ -103,19 +103,554 @@
   flex: 1;
 }
 
-/* 帖子图片展示区 */
+/* ========== 文本样式 ========== */
+.post-text {
+  margin-bottom: 12px;
+  line-height: 1.6;
+  color: #333;
+  font-size: 15px;
+  position: relative;
+}
+
+.text-content {
+  word-break: break-word;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+}
+
+/* 文本收起状态 */
+.post-text.collapsed {
+  max-height: 4.8em;
+  /* 大约3行高度 (1.6em * 3) */
+  overflow: hidden;
+}
+
+/* 文本展开按钮 */
+.expand-text-btn {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #f0f0f0;
+  display: flex;
+  justify-content: center;
+}
+
+.expand-text-link {
+  color: #667eea;
+  cursor: pointer;
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 12px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  background: rgba(102, 126, 234, 0.08);
+}
+
+.expand-text-link:hover {
+  background: rgba(102, 126, 234, 0.15);
+  color: #5a67d8;
+}
+
+.expand-icon {
+  transition: transform 0.3s ease;
+}
+
+.expand-icon.expanded {
+  transform: rotate(180deg);
+}
+
+/* 帖子图片位置 */
 .post-image-container {
   margin-top: 10px;
   border-radius: 8px;
   overflow: hidden;
-  max-height: 300px;
+  background-color: #f9f9f9;
+  /* 背景色防止空白 */
 }
 
 .post-image {
-  width: 100%;
+  width: 400px;
+  height: 300px;
+  text-align: center;
+  margin: 15px 0;
+}
+
+.post-image img {
+  max-width: 100%;
+  /* 不超过容器宽度 */
+  height: auto;
+  /* 自动计算高度，保持比例 */
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e8e8e8;
+  display: block;
+  margin: 10px auto;
+  transition: all 0.3s ease;
+}
+
+.post-image img:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* ========== 图片样式 ========== */
+.post-image-container {
+  margin: 12px 0;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+}
+
+/* 图片包装容器 */
+.image-wrapper {
+  position: relative;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+/* 收起时的图片大小 */
+.image-wrapper.collapsed .post-image img {
+  max-width: 100%;
+  max-height: 300px;
+  object-fit: cover;
+  cursor: zoom-in;
+}
+
+.image-wrapper.collapsed::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: linear-gradient(to top,
+      rgba(248, 249, 250, 0.95) 0%,
+      rgba(248, 249, 250, 0.6) 50%,
+      transparent 100%);
+  pointer-events: none;
+}
+
+/* 图片内容 */
+.post-image {
+  text-align: center;
+  padding: 10px;
+}
+
+/* 展开时的图片大小控制 */
+.image-wrapper:not(.collapsed) .post-image img {
+  /* 根据容器宽度自适应，但不超过90%容器宽度 */
+  max-width: min(90%, 800px);
+
+  /* 限制最大高度，但确保不会太小 */
+  max-height: min(80vh, 700px);
+
+  /* 最小尺寸确保小图片清晰 */
+  min-width: 200px;
+  min-height: 150px;
+
+  /* 布局设置 */
+  width: auto;
   height: auto;
   display: block;
-  object-fit: cover;
+  margin: 15px auto;
+
+  /* 视觉效果 */
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  border: 1px solid #e0e0e0;
+
+  /* 鼠标交互 */
+  cursor: zoom-out;
+}
+
+/* 确保图片不会过大 */
+.post-image img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e8e8e8;
+  display: block;
+  margin: 0 auto;
+  transition: all 0.3s ease;
+  background: white;
+  object-fit: contain;
+}
+
+/* 图片遮罩层 */
+.image-mask {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: linear-gradient(to top,
+      rgba(248, 249, 250, 0.9) 0%,
+      transparent 100%);
+  pointer-events: none;
+}
+
+/* 图片展开按钮 */
+.expand-image-btn {
+  text-align: center;
+  padding: 12px 0;
+  background: linear-gradient(to top,
+      rgb(73, 137, 201) 0%,
+      rgba(248, 249, 250, 0.8) 100%);
+  margin-top: -40px;
+  position: relative;
+  z-index: 2;
+}
+
+.expand-btn {
+  background: white;
+  border: 1px solid #667eea;
+  border-radius: 20px;
+  padding: 8px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #667eea;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 10px rgba(102, 126, 234, 0.2);
+}
+
+.expand-btn:hover {
+  background: #667eea;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+/* ========== 动画效果 ========== */
+.image-wrapper {
+  animation: fadeInUp 0.5s ease;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 平滑展开动画 */
+.image-wrapper:not(.collapsed) {
+  animation: expandHeight 0.5s ease;
+}
+
+@keyframes expandHeight {
+  from {
+    max-height: 350px;
+  }
+
+  to {
+    max-height: 1000px;
+  }
+}
+
+/* ========== 响应式调整 ========== */
+@media (max-width: 768px) {
+  .image-wrapper.collapsed {
+    max-height: 250px;
+  }
+
+  .post-image img {
+    max-width: 95%;
+  }
+
+  .expand-btn {
+    padding: 6px 16px;
+    font-size: 13px;
+  }
+}
+
+/* 小屏幕设备 */
+@media (max-width: 480px) {
+  .image-wrapper.collapsed {
+    max-height: 200px;
+  }
+
+  .post-text.collapsed {
+    max-height: 4em;
+    /* 约2.5行 */
+  }
+}
+
+/* 加载状态 */
+.post-image-container {
+  margin-top: 12px;
+}
+
+.post-image-container img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 4px 0;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.post-image-container img:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* 图片网格布局 - 微信9宫格样式 */
+.image-grid {
+  display: grid;
+  gap: 4px;
+  margin-top: 12px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.grid-1 {
+  grid-template-columns: 1fr;
+}
+
+.grid-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.grid-3,
+.grid-4,
+.grid-5,
+.grid-6,
+.grid-7,
+.grid-8,
+.grid-9 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.image-item {
+  position: relative;
+  width: 100%;
+  padding-bottom: 100%;
+  overflow: hidden;
+  border-radius: 4px;
+  cursor: pointer;
+  background: #f5f5f5;
+}
+
+.image-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* 强制统一图片大小 */
+.image-wrapper img {
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 100%;
+  min-height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover !important;
+  object-position: center;
+  flex-shrink: 0;
+}
+
+.image-item:hover img {
+  transform: scale(1.05);
+}
+
+.image-count {
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 10px;
+  font-size: 12px;
+}
+
+.image-item:hover .image-count {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 微信风格图片预览样式 */
+.clickable-image {
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.clickable-image:hover {
+    opacity: 0.8;
+}
+
+#image-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* 新的图片预览模态框样式 */
+.image-preview-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+}
+
+.preview-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 10001;
+}
+
+.preview-count {
+    color: white;
+    font-size: 16px;
+}
+
+.preview-close {
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    transition: background 0.2s;
+}
+
+.preview-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.preview-content {
+    flex: 1;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    margin-top: 50px;
+}
+
+.preview-wrapper {
+    display: flex;
+    height: 100%;
+    transition: transform 0.3s ease;
+}
+
+.preview-item {
+    min-width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.preview-item img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.preview-indicator {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 10001;
+}
+
+.preview-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.4);
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.preview-dot.active {
+    background: white;
+    transform: scale(1.2);
+}
+
+/* 预览左右箭头 */
+.preview-arrow {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 10002;
+    transition: all 0.3s ease;
+}
+
+.preview-arrow:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.preview-arrow:active {
+    transform: translateY(-50%) scale(0.95);
+}
+
+.preview-arrow-left {
+    left: 20px;
+}
+
+.preview-arrow-right {
+    right: 20px;
+}
+
+.image-preview-counter {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    font-size: 14px;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 6px 16px;
+    border-radius: 20px;
+    z-index: 10001;
 }
 
 /* 加载状态 */
@@ -139,4 +674,100 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+/* 添加富文本编辑器的样式 */
+/* 添加富文本编辑器的样式 */
+#editor—wrapper {
+  border: 1px solid #ccc;
+  z-index: 100;
+}
+
+#toolbar-container {
+  border-bottom: 1px solid #ccc;
+}
+
+#editor-container {
+  flex: 1;
+  border: 2px solid #e9ecef;
+  resize: none;
+  outline: none;
+  font-size: 1.25rem;
+  padding: 1rem;
+  min-height: 100px;
+  line-height: 1.5;
+  border-radius: 12px;
+  background-color: white;
+  transition: all 0.3s ease;
+  overflow-y: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+#editor-container img {
+  max-width: 200px;
+  height: 200px;
+}
+
+#editor-container .w-e-editor {
+  height: 300px;
+  overflow-y: auto;
+  min-height: 200px;
+}
+
+#editor-container .w-e-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  background-color: #f8f9fa;
+  padding: 5px;
+  border-bottom: 1px solid #ddd;
+}
+
+#editor-container .w-e-menu {
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #333;
+  transition: all 0.2s;
+}
+
+#editor-container .w-e-menu:hover {
+  background-color: #e9ecef;
+  border-radius: 4px;
+}
+
+#editor-container .w-e-text-container {
+  padding: 10px;
+  min-height: 150px;
+}
+
+#editor-container .w-e-text {
+  outline: none;
+  min-height: 120px;
+}
+
+#toolbar-container {
+  margin-bottom: 1rem;
+}
+
+#toolbar-container .w-e-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  background-color: #f8f9fa;
+  padding: 5px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+#toolbar-container .w-e-menu {
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #333;
+  transition: all 0.2s;
+}
+
+#toolbar-container .w-e-menu:hover {
+  background-color: #e9ecef;
+  border-radius: 4px;
 }

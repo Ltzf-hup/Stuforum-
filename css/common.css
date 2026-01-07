@@ -17,16 +17,16 @@
   display: none;
 }
 
-/* 基本背景和布局 */
-body {
+/* 基本背景和布局 - 只在首页使用 */
+body.forum-body {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: #333;
   min-height: 100vh;
   overflow-x: hidden;
 }
 
-/* 主容器 */
-#app {
+/* 主容器 - 只在首页使用 */
+body.forum-body #app {
   width: 100%;
   max-width: 1400px;
   margin: 0 auto;
@@ -37,8 +37,8 @@ body {
   border-radius: 0 0 10px 10px;
 }
 
-/* 头部导航 */
-#header {
+/* 头部导航 - 只在首页使用 */
+body.forum-body #header {
   background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
   color: white;
   padding: 1rem 2rem;
@@ -52,7 +52,7 @@ body {
   box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
 }
 
-.logo {
+body.forum-body .logo {
   font-size: 1.75rem;
   font-weight: 800;
   color: white;
@@ -61,7 +61,7 @@ body {
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
-.logo-icon {
+body.forum-body .logo-icon {
   margin-right: 10px;
   font-size: 2rem;
   animation: pulse 2s infinite;
@@ -79,12 +79,12 @@ body {
   }
 }
 
-.nav-links {
+body.forum-body .nav-links {
   display: flex;
   gap: 1.5rem;
 }
 
-.nav-link {
+body.forum-body .nav-link {
   color: rgba(255, 255, 255, 0.9);
   font-weight: 600;
   padding: 0.75rem 1.5rem;
@@ -93,26 +93,26 @@ body {
   backdrop-filter: blur(10px);
 }
 
-.nav-link:hover {
+body.forum-body .nav-link:hover {
   background-color: rgba(255, 255, 255, 0.2);
   color: white;
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
 }
 
-.nav-link.active {
+body.forum-body .nav-link.active {
   background-color: rgba(255, 255, 255, 0.3);
   color: white;
 }
 
-/* 主体内容区域 - 关键布局 */
-#body {
+/* 主体内容区域 - 关键布局 - 只在首页使用 */
+body.forum-body #body {
   display: flex;
   min-height: calc(100vh - 70px);
 }
 
-/* 左侧边栏 */
-#left-body {
+/* 左侧边栏 - 只在首页使用 */
+body.forum-body #left-body {
   width: 300px;
   background-color: #fff;
   padding: 1.5rem;
@@ -123,8 +123,8 @@ body {
   z-index: 50;
 }
 
-/* 中间内容区域 - 可滚动 */
-#middle-body {
+/* 中间内容区域 - 可滚动 - 只在首页使用 */
+body.forum-body #middle-body {
   flex: 1;
   background-color: #fff;
   border-right: 1px solid #e9ecef;
@@ -134,8 +134,8 @@ body {
   overflow-y: auto;
 }
 
-/* 右侧边栏 - 固定定位 */
-#right-body {
+/* 右侧边栏 - 固定定位 - 只在首页使用 */
+body.forum-body #right-body {
   width: 300px;
   background-color: #fff;
   padding: 1.5rem;
@@ -146,9 +146,9 @@ body {
   z-index: 50;
 }
 
-/* 侧边栏通用样式 */
-#left-body span,
-#right-body span {
+/* 侧边栏通用样式 - 只在首页使用 */
+body.forum-body #left-body span,
+body.forum-body #right-body span {
   font-size: 1.25rem;
   font-weight: 700;
   margin-bottom: 1.5rem;
@@ -158,8 +158,8 @@ body {
   border-bottom: 2px solid #667eea;
 }
 
-/* 热门话题 */
-.trending-item {
+/* 热门话题 - 只在首页使用 */
+body.forum-body .trending-item {
   padding: 1rem;
   border-bottom: 1px solid #f1f3f5;
   cursor: pointer;
@@ -168,33 +168,33 @@ body {
   margin-bottom: 0.5rem;
 }
 
-.trending-item:hover {
+body.forum-body .trending-item:hover {
   background-color: #f8f9fa;
   transform: translateX(5px);
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
 }
 
-.trend-category {
+body.forum-body .trend-category {
   color: #868e96;
   font-size: 0.875rem;
   margin-bottom: 0.25rem;
   font-weight: 500;
 }
 
-.trend-name {
+body.forum-body .trend-name {
   font-weight: 600;
   margin-bottom: 0.25rem;
   color: #667eea;
   font-size: 1.05rem;
 }
 
-.trend-count {
+body.forum-body .trend-count {
   color: #868e96;
   font-size: 0.875rem;
 }
 
-/* 推荐关注用户 */
-.user-item {
+/* 推荐关注用户 - 只在首页使用 */
+body.forum-body .user-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -206,28 +206,28 @@ body {
   margin-bottom: 0.5rem;
 }
 
-.user-item:hover {
+body.forum-body .user-item:hover {
   background-color: #f8f9fa;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
 }
 
-.user-info {
+body.forum-body .user-info {
   display: flex;
   align-items: center;
   gap: 0.75rem;
 }
 
-.user-details {
+body.forum-body .user-details {
   display: flex;
   flex-direction: column;
 }
 
-.user-name {
+body.forum-body .user-name {
   font-weight: 700;
   color: #495057;
 }
 
-.user-handle {
+body.forum-body .user-handle {
   color: #868e96;
   font-size: 0.875rem;
 }
