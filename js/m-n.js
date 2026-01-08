@@ -20,7 +20,7 @@ new Vue({
       this.currentUser.name = userData.uname;
       this.currentUser.avatar = userData.avatarUrl || 'Z';
     }
-    this.socket = new WebSocket(`ws://10.11.192.14:8080/StuForum_war/chat/${this.currentUser.name}`);
+    this.socket = new WebSocket(`wss://10.11.192.14:8080/StuForum_war/chat/${this.currentUser.name}`);
     this.socket.onopen = function () {
       console.log('连接成功');
     }
