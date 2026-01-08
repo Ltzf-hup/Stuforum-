@@ -563,8 +563,11 @@ new Vue({
         }
         console.log(this.$options.editor.getAllMenuKeys())
         toolbarConfig.toolbarKeys = [
-            'insertImage',
-            'uploadImage'
+            'uploadImage',
+            'color',
+            'bgcolor',
+            'fontSize',
+            'fontFamily',
         ]
         this.$options.toolbar = createToolbar({
             editor: this.$options.editor,
