@@ -20,7 +20,7 @@ new Vue({
       this.currentUser.name = userData.uname;
       this.currentUser.avatar = userData.avatarUrl || 'Z';
     }
-    const wsUrl = `wss://lztflioveqzs.dpdns.org/StuForum_war/chat/${this.currentUser.name}`;
+    const wsUrl = `wss://ws.lztflioveqzs.dpdns.org/StuForum_war/chat/${this.currentUser.name}`;
     console.log('WebSocket连接地址:', wsUrl);
 
     this.socket = new WebSocket(wsUrl);
