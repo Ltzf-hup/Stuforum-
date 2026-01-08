@@ -1,9 +1,8 @@
-
 new Vue({
   el: '#app',
   data: {
     activeMessageType: '私信',
-    activeConversation: '张三',
+    activeConversation: '',
     socket: null,
     messages: [], // 存储所有消息
     inputMessage: '', // 绑定输入框
@@ -12,11 +11,14 @@ new Vue({
       name: '张三',   // 用户名
       avatar: 'Z'     // 头像标识
     },
+    list: [], // 存储所有已关注用户
+    name: this.activeConversation || '张三'
   },
   created() {
+    // 初始化时获取关注列表
     let userData = JSON.parse(localStorage.getItem('userData'));
     if (userData) {
-      this.currentUser.id = userData.id;
+      this.currentUser.id = userData.uid;
       this.currentUser.name = userData.uname;
       this.currentUser.avatar = userData.avatarUrl || 'Z';
     }
@@ -24,6 +26,8 @@ new Vue({
     console.log('WebSocket连接地址:', wsUrl);
 
     this.socket = new WebSocket(wsUrl);
+
+
     this.socket.onopen = function () {
       console.log('连接成功');
     }
@@ -38,6 +42,10 @@ new Vue({
       console.log('收到原始消息:', message);
       this.handleIncomingMessage(message);
     };
+    console.log('关注列表:', this.currentUser.id);
+    // 初始化时获取关注列表
+    this.getConcernedList();
+
   },
   methods: {
     selectMessageType(type) {
@@ -54,7 +62,8 @@ new Vue({
 
       if (colonIndex === -1) {
         console.log('消息格式不含冒号，直接显示为对方消息');
-        this.addMessage('对方', rawMessage, false);
+        // 这里需要确定消息的发送者，假设为当前选中的会话
+        this.addMessage(this.activeConversation, rawMessage, false);
         return;
       }
 
@@ -64,8 +73,6 @@ new Vue({
       console.log('发送者:', sender, '当前用户:', this.currentUser.name);
 
       // 判断是否是自己发的消息
-      // 1. 如果发送者名字完全匹配
-      // 2. 或者发送者包含当前用户名的关键词（如果服务器格式不同）
       const isSelf = sender === this.currentUser.name;
 
       console.log('是否是自己发的:', isSelf);
@@ -79,12 +86,18 @@ new Vue({
         return;
       }
 
+      if (!this.activeConversation) {
+        alert("请先选择一个会话");
+        return;
+      }
+
       const messageContent = this.inputMessage.trim();
 
       // 发送消息
       this.socket.send(messageContent);
 
-      // 注意：这里不再手动添加消息，让WebSocket处理
+      // 手动添加消息到当前会话
+      this.addMessage(this.currentUser.name, messageContent, true);
 
       // 清空输入框
       this.inputMessage = '';
@@ -94,6 +107,7 @@ new Vue({
       this.messages.push({
         id: Date.now(),
         sender: sender,
+        receiver: isSelf ? this.activeConversation : this.currentUser.name, // 添加接收者标识
         content: content,
         time: this.getCurrentTime(),
         isSelf: isSelf, // 这个值决定左右显示
@@ -123,6 +137,17 @@ new Vue({
       const now = new Date();
       return `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
     },
+    //获取数据库中的关注列表
+    getConcernedList() {
+      fetch(`http://10.11.192.14:8080/StuForum_war/api/user/SocketConcernedServlet?mid=${this.currentUser.id}`)
+        .then(response => response.json())
+        .then(data => {
+          console.log('关注列表:', data);
+          this.list = data;
+        })
+        .catch(error => console.error('获取关注列表失败:', error));
+    }
   },
+
 
 });
