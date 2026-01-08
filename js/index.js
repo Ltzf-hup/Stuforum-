@@ -565,7 +565,7 @@ new Vue({
         toolbarConfig.toolbarKeys = [
             'uploadImage',
             'color',
-            'bgcolor',
+            'bgColor',
             'fontSize',
             'fontFamily',
         ]
