@@ -20,8 +20,14 @@ new Vue({
       this.currentUser.name = userData.uname;
       this.currentUser.avatar = userData.avatarUrl || 'Z';
     }
-    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    this.socket = new WebSocket(`${protocol}//10.11.192.14:8080/StuForum_war/chat/${this.currentUser.name}`);
+    const isHttps = window.location.protocol === 'https:';
+    const protocol = isHttps ? 'wss:' : 'ws:';
+    const port = isHttps ? '8443' : '8080';  // 关键：HTTPS用8443
+
+    const wsUrl = `${protocol}//10.11.192.14:${port}/StuForum_war/chat/${this.currentUser.name}`;
+    console.log('WebSocket连接地址:', wsUrl);
+
+    this.socket = new WebSocket(wsUrl);
     this.socket.onopen = function () {
       console.log('连接成功');
     }
