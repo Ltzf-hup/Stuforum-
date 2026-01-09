@@ -73,12 +73,23 @@ new Vue({
       console.log('发送者:', sender, '当前用户:', this.currentUser.name);
 
       // 判断是否是自己发的消息
+      // 当发送者是当前用户，并且不是从WebSocket接收到的自己发送的消息时
+      // 避免重复显示自己发送的消息
       const isSelf = sender === this.currentUser.name;
 
-      console.log('是否是自己发的:', isSelf);
+      // 检查是否已经有相同内容和时间的消息，避免重复添加
+      const isDuplicate = this.messages.some(msg =>
+        msg.content === content &&
+        msg.sender === sender &&
+        Math.abs(Date.now() - msg.id) < 1000 // 1秒内的相同消息视为重复
+      );
 
-      // 添加到消息列表
-      this.addMessage(sender, content, isSelf);
+      console.log('是否是自己发的:', isSelf, '是否是重复消息:', isDuplicate);
+
+      // 添加到消息列表，跳过重复消息
+      if (!isDuplicate) {
+        this.addMessage(sender, content, isSelf);
+      }
     },
     sendMessage() {
       if (this.inputMessage.trim() === '') {
@@ -93,26 +104,29 @@ new Vue({
 
       const messageContent = this.inputMessage.trim();
 
-      // 发送消息
+      // 发送消息，让WebSocket服务器处理后再返回
       this.socket.send(messageContent);
-
-      // 手动添加消息到当前会话
-      this.addMessage(this.currentUser.name, messageContent, true);
 
       // 清空输入框
       this.inputMessage = '';
     },
     // 添加消息
     addMessage(sender, content, isSelf) {
-      this.messages.push({
+      const message = {
         id: Date.now(),
         sender: sender,
-        receiver: isSelf ? this.activeConversation : this.currentUser.name, // 添加接收者标识
+        receiver: isSelf ? this.activeConversation : this.currentUser.name,
         content: content,
         time: this.getCurrentTime(),
-        isSelf: isSelf, // 这个值决定左右显示
-        avatar: this.getAvatar(sender, isSelf)
-      });
+        isSelf: isSelf,
+        avatar: this.getAvatar(sender, isSelf),
+        conversationId: isSelf ? this.activeConversation : sender // 添加会话标识
+      };
+
+      console.log('添加消息:', message);
+
+      this.messages.push(message);
+
       // 滚动到最底部
       this.$nextTick(() => {
         this.scrollToBottom();
