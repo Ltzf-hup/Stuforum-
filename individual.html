@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -53,9 +54,6 @@
                             <div class="stat-label">获赞</div>
                         </div> -->
                     </div>
-
-                    <!-- 添加关注和私信按钮 -->
-                    <img src="downlaod?img=a.jgp" alt="">
                 </div>
             </div>
 
@@ -73,62 +71,45 @@
                                 <span class="post-handle">@{{item.uname}} ·</span>
                                 <span class="post-time">{{formatTime(item.postedTime)}}</span>
                             </div>
-                            <div class="post-text">
-                                {{item.txt}}
-                            </div>
-                            <div class="post-actions-bar">
-                                <div class="post-action">
-                                    <span>💬</span>
-                                    <span class="action-count">12</span>
-                                </div>
-                                <div class="post-action">
-                                    <span>🔄</span>
-                                    <span class="action-count">8</span>
-                                </div>
-                                <div class="post-action">
-                                    <span>❤️</span>
-                                    <span class="action-count">56</span>
-                                </div>
-                                <div class="post-action">
-                                    <span>📤</span>
-                                </div>
-                            </div>
-                        </div>
 
-                    </div>
-
-
-                    <div id="replies" class="content-section">
-                        <div class="post">
-                            <div class="post-header-info">
-                                <span class="post-user">User123</span>
-                                <span class="post-handle">@user123 ·</span>
-                                <span class="post-time">5天前</span>
-                            </div>
-                            <div class="post-text">
-                                回复 Sarah Liu：非常感谢你的分享，对我很有帮助！
-                            </div>
-                            <div class="post-actions-bar">
-                                <div class="post-action">
-                                    <span>💬</span>
-                                    <span class="action-count">3</span>
-                                </div>
-                                <div class="post-action">
-                                    <span>❤️</span>
-                                    <span class="action-count">12</span>
-                                </div>
-                            </div>
+                            <div class="post-text" v-html="decodeHtml(item.txt)"></div>
                         </div>
                     </div>
 
-                    <div id="media" class="content-section">
-                        <div style="text-align: center; padding: 2rem; color: #6c757d;">
-                            暂无媒体内容
+                </div>
+
+
+                <div id="replies" class="content-section">
+                    <div class="post">
+                        <div class="post-header-info">
+                            <span class="post-user">User123</span>
+                            <span class="post-handle">@user123 ·</span>
+                            <span class="post-time">5天前</span>
                         </div>
+                        <div class="post-text">
+                            回复 Sarah Liu：非常感谢你的分享，对我很有帮助！
+                        </div>
+                        <div class="post-actions-bar">
+                            <div class="post-action">
+                                <span>💬</span>
+                                <span class="action-count">3</span>
+                            </div>
+                            <div class="post-action">
+                                <span>❤️</span>
+                                <span class="action-count">12</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="media" class="content-section">
+                    <div style="text-align: center; padding: 2rem; color: #6c757d;">
+                        暂无媒体内容
                     </div>
                 </div>
             </div>
         </div>
+    </div>
     </div>
     <script src="lib/vue.js"></script>
     <script src="https://unpkg.com/@wangeditor/editor@latest/dist/index.js"></script>

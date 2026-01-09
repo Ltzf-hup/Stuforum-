@@ -1,7 +1,7 @@
 new Vue({
     el: '#app',
     data: {
-        list: {},
+        list: [],
         uname: '',
         avatarUrl: '',
         isSelf: true,
@@ -50,6 +50,7 @@ new Vue({
             this.list = data;
             this.avatarUrl = this.list[0].avatarUrl;
             this.numOfPosts = this.list.length;
+            console.log("返回的" + data[0].txt);
             // 初始化时检查关注状态
             await this.checkFollowStatus();
             //获取关注者数量
@@ -228,10 +229,20 @@ new Vue({
                 day: 'numeric'
             });
         },
+        // 在 individual.js 的 methods 中添加
+        decodeHtml(html) {
+            // 如果输入为空，返回空字符串
+            if (!html) return '';
+
+            // 创建一个临时元素用于解码
+            const temp = document.createElement('textarea');
+            temp.innerHTML = html;
+            return temp.value;
+        }
+
     }, // 添加一个mounted钩子，确保DOM渲染后执行
     mounted() {
         // 如果DOM已存在，立即更新按钮
         this.updateFollowButton();
     }
 })
-

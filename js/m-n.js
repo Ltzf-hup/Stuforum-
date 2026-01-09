@@ -3,6 +3,7 @@ new Vue({
   data: {
     activeMessageType: '私信',
     activeConversation: '',
+    id: '',
     socket: null,
     messages: [], // 存储所有消息
     inputMessage: '', // 绑定输入框
@@ -15,45 +16,53 @@ new Vue({
     name: this.activeConversation || '张三'
   },
   created() {
-    // 初始化时获取关注列表
-    let userData = JSON.parse(localStorage.getItem('userData'));
-    if (userData) {
-      this.currentUser.id = userData.uid;
-      this.currentUser.name = userData.uname;
-      this.currentUser.avatar = userData.avatarUrl || 'Z';
-    }
-    const wsUrl = `wss://ws.lztflioveqzs.dpdns.org/StuForum_war/chat/${this.currentUser.name}`;
-    console.log('WebSocket连接地址:', wsUrl);
-
-    this.socket = new WebSocket(wsUrl);
-
-
-    this.socket.onopen = function () {
-      console.log('连接成功');
-    }
-    this.socket.onclose = function () {
-      console.log('连接关闭');
-    }
-    this.socket.onerror = function () {
-      console.log('连接错误');
-    }
-    this.socket.onmessage = (event) => {
-      const message = event.data;
-      console.log('收到原始消息:', message);
-      this.handleIncomingMessage(message);
-    };
     console.log('关注列表:', this.currentUser.id);
     // 初始化时获取关注列表
     this.getConcernedList();
-
   },
   methods: {
+    conn() {
+      let userData = JSON.parse(localStorage.getItem('userData'));
+      if (userData) {
+        this.currentUser.id = userData.uid;
+        this.currentUser.name = userData.uname;
+        this.currentUser.avatar = userData.avatarUrl || 'Z';
+      }
+      const wsUrl = `wss://ws.lztflioveqzs.dpdns.org/StuForum_war/chat/${this.currentUser.name}/${this.currentUser.id}/${this.id}`;
+      console.log('WebSocket连接地址:', wsUrl);
+      console.log('关注列表:', this.id);
+      this.socket = new WebSocket(wsUrl);
+
+
+      this.socket.onopen = function () {
+        console.log('连接成功');
+      }
+      this.socket.onclose = function () {
+        console.log('连接关闭');
+      }
+      this.socket.onerror = function () {
+        console.log('连接错误');
+      }
+      this.socket.onmessage = (event) => {
+        const message = event.data;
+        console.log('收到原始消息:', message);
+        this.handleIncomingMessage(message);
+      };
+    },
+    selectConversation(name, id) {
+      if (this.socket && this.socket.readyState === WebSocket.OPEN) {
+        this.socket.close(); // 先关闭旧连接
+      }
+      this.activeConversation = name;
+      this.id = id;
+      console.log('当前选中会话的ID:', id);
+      //连接WebSocket
+      this.conn()
+    },
     selectMessageType(type) {
       this.activeMessageType = type;
     },
-    selectConversation(name) {
-      this.activeConversation = name;
-    },
+
     //这里是处理收到的是谁的消息，判断是否是当前用户自己发的
     handleIncomingMessage(rawMessage) {
       console.log('收到消息:', rawMessage);

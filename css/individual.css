@@ -81,6 +81,7 @@
   .user-info {
       margin-top: 1.5rem;
       text-align: center;
+      margin: 0 auto;
   }
 
   .user-name {

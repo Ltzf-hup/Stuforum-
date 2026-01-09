@@ -48,7 +48,7 @@
         <div class="weibo-conversation-list"><!-- 列表开始 -->
 
           <div class=" weibo-conversation-item" v-for="item in list" :key="item.id"
-            :class="{ 'active': activeConversation === item.uname }" @click="selectConversation(item.uname)">
+            :class="{ 'active': activeConversation === item.uname }" @click="selectConversation(item.uname, )">
             <div class="conversation-avatar">
               <div class="avatar">
                 <img :src="item.avatarUrl" alt="用户头像">
