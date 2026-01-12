@@ -161,7 +161,8 @@ new Vue({
                 formData.append('uid', userId);
                 formData.append('txt', this.txt);
                 formData.append('image_file', this.imageUrl);
-                const response = await fetch('http://10.11.192.14:8080/StuForum_war/api/forum/insert', {
+                // const response = await fetch('http://10.11.192.14:8080/StuForum_war/api/forum/insert', { // 学校IP
+                const response = await fetch('http://192.168.86.1:8080/StuForum_war/api/forum/insert', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'

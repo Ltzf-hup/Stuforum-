@@ -287,7 +287,8 @@ new Vue({
         return;
       }
 
-      const apiUrl = `http://10.11.192.14:8080/StuForum_war/api/user/SocketConcernedServlet?mid=${userId}`;
+      // const apiUrl = `http://10.11.192.14:8080/StuForum_war/api/user/SocketConcernedServlet?mid=${userId}`; // 学校IP
+      const apiUrl = `http://192.168.86.1:8080/StuForum_war/api/user/SocketConcernedServlet?mid=${userId}`; // 本地IP
       console.log('获取关注列表API:', apiUrl);
 
       fetch(apiUrl)
