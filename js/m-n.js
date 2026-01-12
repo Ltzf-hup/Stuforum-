@@ -12,94 +12,140 @@ new Vue({
       name: '张三',   // 用户名
       avatar: 'Z'     // 头像标识
     },
-    list: [], // 存储所有已关注用户
+    conversationList: [], // 存储所有会话（包括关注和未关注用户）
+    concernedUsers: [], // 存储已关注用户
+    loadingList: false, // 会话列表加载状态
     name: this.activeConversation || '张三'
   },
   created() {
-    console.log('关注列表:', this.currentUser.id);
-    // 初始化时获取关注列表
+    // 先从localStorage获取用户信息
+    let userData = JSON.parse(localStorage.getItem('userData'));
+    if (userData) {
+      this.currentUser.id = userData.uid;
+      this.currentUser.name = userData.uname;
+      // 确保头像正确初始化
+      this.currentUser.avatar = userData.avatarUrl || userData.uname.charAt(0).toUpperCase() || 'U';
+      console.log('当前用户信息:', this.currentUser);
+    }
+    // 然后获取关注列表
     this.getConcernedList();
   },
   methods: {
     conn() {
+      // 确保用户信息正确
       let userData = JSON.parse(localStorage.getItem('userData'));
       if (userData) {
         this.currentUser.id = userData.uid;
         this.currentUser.name = userData.uname;
-        this.currentUser.avatar = userData.avatarUrl || 'Z';
+        // 确保头像正确初始化
+        this.currentUser.avatar = userData.avatarUrl || userData.uname.charAt(0).toUpperCase() || 'U';
       }
-      const wsUrl = `wss://ws.lztflioveqzs.dpdns.org/StuForum_war/chat/${this.currentUser.name}/${this.currentUser.id}/${this.id}`;
+      // 使用config.js中的WebSocket配置
+      let wsBaseUrl = AppConfig.getWebSocketUrl();
+      // 确保当前用户信息和目标用户ID有效
+      if (!this.currentUser.name || !this.currentUser.id || !this.id) {
+        console.error('WebSocket连接失败：缺少必要的用户信息', { currentUser: this.currentUser, id: this.id });
+        return;
+      }
+      // 构建完整的WebSocket URL
+      const wsUrl = `${wsBaseUrl}/${this.currentUser.name}/${this.currentUser.id}/${this.id}`;
       console.log('WebSocket连接地址:', wsUrl);
-      console.log('关注列表:', this.id);
+      console.log('当前选中用户ID:', this.id);
       this.socket = new WebSocket(wsUrl);
 
+      // 保存 Vue 实例的引用
+      const vm = this;
 
       this.socket.onopen = function () {
-        console.log('连接成功');
+        console.log('连接成功，当前会话：', vm.activeConversation);
       }
+
       this.socket.onclose = function () {
         console.log('连接关闭');
       }
+
       this.socket.onerror = function () {
         console.log('连接错误');
       }
-      this.socket.onmessage = (event) => {
+
+      this.socket.onmessage = function (event) {
         const message = event.data;
         console.log('收到原始消息:', message);
-        this.handleIncomingMessage(message);
+        vm.handleIncomingMessage(message);
       };
     },
+
     selectConversation(name, id) {
+      // 如果已经选中当前会话，不执行任何操作
+      if (this.activeConversation === name) {
+        return;
+      }
+
       if (this.socket && this.socket.readyState === WebSocket.OPEN) {
         this.socket.close(); // 先关闭旧连接
       }
       this.activeConversation = name;
       this.id = id;
-      console.log('当前选中会话的ID:', id);
-      //连接WebSocket
-      this.conn()
+      console.log('当前选中会话:', name, 'ID:', id);
+
+      // 连接WebSocket
+      this.conn();
     },
+
     selectMessageType(type) {
       this.activeMessageType = type;
     },
 
-    //这里是处理收到的是谁的消息，判断是否是当前用户自己发的
+    // 处理收到的消息
     handleIncomingMessage(rawMessage) {
       console.log('收到消息:', rawMessage);
 
+      // 处理系统消息（后端返回的确认消息）
+      if (rawMessage.includes('已发送') || rawMessage.includes('发送失败') || rawMessage.includes('系统')) {
+        console.log('系统消息:', rawMessage);
+        // 可以考虑显示在UI的某个地方，比如输入框下方
+        return;
+      }
+
+      // 处理私信格式（后端格式：发送者: 内容）
       const colonIndex = rawMessage.indexOf(':');
 
       if (colonIndex === -1) {
-        console.log('消息格式不含冒号，直接显示为对方消息');
-        // 这里需要确定消息的发送者，假设为当前选中的会话
-        this.addMessage(this.activeConversation, rawMessage, false);
+        console.log('消息格式异常:', rawMessage);
         return;
       }
 
       const sender = rawMessage.substring(0, colonIndex).trim();
       const content = rawMessage.substring(colonIndex + 1).trim();
 
-      console.log('发送者:', sender, '当前用户:', this.currentUser.name);
+      console.log('解析结果 - 发送者:', sender, '内容:', content, '当前用户:', this.currentUser.name);
 
-      // 判断是否是自己发的消息
-      // 当发送者是当前用户，并且不是从WebSocket接收到的自己发送的消息时
-      // 避免重复显示自己发送的消息
+      // 判断是否是自己发的消息（可能是后端返回的确认）
       const isSelf = sender === this.currentUser.name;
 
-      // 检查是否已经有相同内容和时间的消息，避免重复添加
-      const isDuplicate = this.messages.some(msg =>
-        msg.content === content &&
-        msg.sender === sender &&
-        Math.abs(Date.now() - msg.id) < 1000 // 1秒内的相同消息视为重复
-      );
-
-      console.log('是否是自己发的:', isSelf, '是否是重复消息:', isDuplicate);
-
-      // 添加到消息列表，跳过重复消息
-      if (!isDuplicate) {
-        this.addMessage(sender, content, isSelf);
+      // 避免重复显示自己发送的消息（因为本地已经显示过了）
+      if (isSelf) {
+        console.log('收到自己发的消息回执，跳过显示');
+        return;
       }
+
+      // 检测是否是当前会话的消息
+      if (this.activeConversation && this.activeConversation !== sender) {
+        console.log('非当前会话消息，可能需要显示通知:', rawMessage);
+        // 这里可以添加通知逻辑
+      }
+
+      // 检查发送者是否在会话列表中
+      const senderInConversation = this.conversationList.some(item => item.uname === sender);
+      if (!senderInConversation) {
+        // 添加未关注用户到会话列表（使用用户名作为ID）
+        this.addUnconcernedUserToConversation(sender, sender);
+      }
+
+      // 添加消息到聊天窗口
+      this.addMessage(sender, content, isSelf);
     },
+
     sendMessage() {
       if (this.inputMessage.trim() === '') {
         alert("请输入信息");
@@ -111,66 +157,213 @@ new Vue({
         return;
       }
 
+      if (!this.socket || this.socket.readyState !== WebSocket.OPEN) {
+        alert("连接未就绪，请稍后重试");
+        return;
+      }
+
       const messageContent = this.inputMessage.trim();
 
-      // 发送消息，让WebSocket服务器处理后再返回
-      this.socket.send(messageContent);
+      // 先在自己本地显示消息
+      console.log('发送消息，本地显示:', messageContent);
+      this.addMessage(this.currentUser.name, messageContent, true);
+
+      // 发送消息到服务器
+      console.log('通过WebSocket发送:', messageContent);
+      try {
+        this.socket.send(messageContent);
+      } catch (error) {
+        console.error('发送消息失败:', error);
+        alert('发送消息失败，请重试');
+        // 可以考虑撤销本地显示的消息
+        const lastMessage = this.messages[this.messages.length - 1];
+        if (lastMessage && lastMessage.isSelf && lastMessage.content === messageContent) {
+          this.messages.pop();
+        }
+      }
 
       // 清空输入框
       this.inputMessage = '';
     },
+
     // 添加消息
     addMessage(sender, content, isSelf) {
+      // 确保conversationId正确设置
+      const conversationId = isSelf ? this.activeConversation : sender;
+      const receiver = isSelf ? this.activeConversation : this.currentUser.name;
+
+      // 确保conversationId不为空
+      if (!conversationId || !receiver) {
+        console.error('添加消息失败：缺少会话ID或接收者信息', { sender, content, isSelf });
+        return;
+      }
+
       const message = {
         id: Date.now(),
         sender: sender,
-        receiver: isSelf ? this.activeConversation : this.currentUser.name,
+        receiver: receiver,
         content: content,
         time: this.getCurrentTime(),
         isSelf: isSelf,
         avatar: this.getAvatar(sender, isSelf),
-        conversationId: isSelf ? this.activeConversation : sender // 添加会话标识
+        conversationId: conversationId
       };
 
-      console.log('添加消息:', message);
-
+      console.log('添加消息到列表:', message);
       this.messages.push(message);
+
+      // 更新会话列表中的最新消息和时间
+      const conversationUser = isSelf ? this.activeConversation : sender;
+      const conversationIndex = this.conversationList.findIndex(item => item.uname === conversationUser);
+
+      if (conversationIndex !== -1) {
+        // 更新现有会话的最新消息
+        this.conversationList[conversationIndex].lastMessage = content;
+        this.conversationList[conversationIndex].lastMessageTime = message.time;
+
+        // 将当前会话移到列表顶部
+        if (conversationIndex > 0) {
+          const [updatedConversation] = this.conversationList.splice(conversationIndex, 1);
+          this.conversationList.unshift(updatedConversation);
+        }
+      } else {
+        // 如果会话不存在，添加到会话列表
+        if (isSelf) {
+          // 发送消息时，如果会话不存在，可能是因为用户未关注对方
+          this.addUnconcernedUserToConversation(conversationUser, conversationUser);
+          // 更新新添加的会话的最新消息
+          const newIndex = this.conversationList.findIndex(item => item.uname === conversationUser);
+          if (newIndex !== -1) {
+            this.conversationList[newIndex].lastMessage = content;
+            this.conversationList[newIndex].lastMessageTime = message.time;
+          }
+        }
+      }
 
       // 滚动到最底部
       this.$nextTick(() => {
         this.scrollToBottom();
       });
     },
-    // 获取头像（根据用户名首字母）
+
+    // 获取头像
     getAvatar(username, isSelf = false) {
       if (username === '系统') return '📢';
-      if (isSelf) return '你'; // 🔥 根据isSelf判断
+      if (isSelf) return this.currentUser.avatar;
+
+      // 检查会话列表中是否有该用户的头像URL
+      const user = this.conversationList.find(user => user.uname === username);
+      if (user && user.avatarUrl) {
+        return user.avatarUrl;
+      }
+
       return username.charAt(0).toUpperCase();
     },
+
     // 滚动到底部
     scrollToBottom() {
-      // 使用Vue的refs而不是getElementById
       const messageContainer = this.$refs.messageContainer;
       if (messageContainer) {
         messageContainer.scrollTop = messageContainer.scrollHeight;
       }
     },
+
     // 获取当前时间
     getCurrentTime() {
       const now = new Date();
       return `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
     },
-    //获取数据库中的关注列表
+
+    // 获取关注列表
     getConcernedList() {
-      fetch(`http://10.11.192.14:8080/StuForum_war/api/user/SocketConcernedServlet?mid=${this.currentUser.id}`)
-        .then(response => response.json())
+      // 添加加载状态
+      this.loadingList = true;
+
+      // 确保使用正确的用户ID
+      const userId = this.currentUser.id;
+      if (!userId) {
+        console.error('用户ID为空，无法获取关注列表');
+        this.loadingList = false;
+        return;
+      }
+
+      const apiUrl = `http://10.11.192.14:8080/StuForum_war/api/user/SocketConcernedServlet?mid=${userId}`;
+      console.log('获取关注列表API:', apiUrl);
+
+      fetch(apiUrl)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('网络请求失败: ' + response.status);
+          }
+          return response.json();
+        })
         .then(data => {
           console.log('关注列表:', data);
-          this.list = data;
+          this.concernedUsers = data;
+          // 将关注用户添加到会话列表
+          this.updateConversationList(data);
         })
-        .catch(error => console.error('获取关注列表失败:', error));
+        .catch(error => {
+          console.error('获取关注列表失败:', error);
+          alert('获取关注列表失败，请稍后重试');
+        })
+        .finally(() => {
+          this.loadingList = false;
+        });
+    },
+
+    // 更新会话列表
+    updateConversationList(newUsers) {
+      newUsers.forEach(user => {
+        // 检查会话列表中是否已存在该用户（使用用户名判断，确保一致性）
+        const existingIndex = this.conversationList.findIndex(item => item.uname === user.uname);
+        if (existingIndex === -1) {
+          // 添加到会话列表
+          this.conversationList.push({
+            ...user,
+            isConcerned: true, // 标记为已关注
+            lastMessage: '', // 初始化最新消息
+            lastMessageTime: '' // 初始化最新消息时间
+          });
+        } else {
+          // 更新现有会话
+          this.conversationList[existingIndex].isConcerned = true;
+          // 同步用户信息
+          this.conversationList[existingIndex].id = user.id;
+          this.conversationList[existingIndex].avatarUrl = user.avatarUrl;
+        }
+      });
+    },
+
+    // 添加未关注用户到会话列表
+    addUnconcernedUserToConversation(name, id) {
+      // 检查会话列表中是否已存在该用户
+      const existingIndex = this.conversationList.findIndex(item => item.uname === name);
+      if (existingIndex === -1) {
+        // 创建未关注用户的会话，使用用户名作为ID（后端需要支持这种格式）
+        this.conversationList.push({
+          id: name, // 使用用户名作为ID，确保与后端兼容
+          uname: name,
+          avatarUrl: '/image/profile/01.jpg', // 默认头像
+          isConcerned: false, // 标记为未关注
+          lastMessage: '', // 最新消息
+          lastMessageTime: '' // 最新消息时间
+        });
+      }
     }
   },
 
+  // ✅ 添加计算属性，按当前会话过滤消息
+  computed: {
+    filteredMessages() {
+      if (!this.activeConversation) return this.messages;
 
+      return this.messages.filter(msg => {
+        // 显示当前会话的消息
+        return msg.conversationId === this.activeConversation ||
+          (msg.isSelf && msg.receiver === this.activeConversation) ||
+          (!msg.isSelf && msg.sender === this.activeConversation);
+      });
+    }
+  }
 });

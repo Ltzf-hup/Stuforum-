@@ -31,14 +31,10 @@
           <span class="message-type-icon">💬</span>
           <span>私信</span>
         </div>
-        <div class="message-type-item">
+        <!-- <div class="message-type-item">
           <span class="message-type-icon">🔔</span>
           <span>通知</span>
-        </div>
-        <div class="message-type-item">
-          <span class="message-type-icon">💌</span>
-          <span>评论</span>
-        </div>
+        </div> -->
       </div>
 
       <!-- 中间边栏 - 会话列表 -->
@@ -46,24 +42,43 @@
 
         <div class="sidebar-header">私信</div>
         <div class="weibo-conversation-list"><!-- 列表开始 -->
+          <!-- 加载状态 -->
+          <div v-if="loadingList" class="loading-state">
+            <div class="loading-spinner"></div>
+            <div>加载中...</div>
+          </div>
 
-          <div class=" weibo-conversation-item" v-for="item in list" :key="item.id"
-            :class="{ 'active': activeConversation === item.uname }" @click="selectConversation(item.uname, )">
+          <!-- 会话列表为空时显示 -->
+          <div v-else-if="conversationList.length === 0" class="empty-state">
+            <div class="empty-icon">👥</div>
+            <div>暂无会话</div>
+          </div>
+
+          <!-- 会话列表 -->
+          <div v-else class=" weibo-conversation-item" v-for="item in conversationList" :key="item.id"
+            :class="{ 'active': activeConversation === item.uname }" @click="selectConversation(item.uname,item.id)">
             <div class="conversation-avatar">
               <div class="avatar">
-                <img :src="item.avatarUrl" alt="用户头像">
+                <template
+                  v-if="item.avatarUrl && (item.avatarUrl.startsWith('http') || item.avatarUrl.startsWith('/'))">
+                  {{ item.uname.charAt(0).toUpperCase() }}
+                </template>
+                <template v-else>
+                  <img :src="item.avatarUrl" alt="用户头像" style="width: 100%; height: 100%; border-radius: 50%;">
+                </template>
               </div>
             </div>
 
             <div class="conversation-info">
               <div class="conversation-header">
                 <div class="conversation-name">{{ item.uname }}</div>
-                <div class="conversation-time"></div>
+                <div class="conversation-time">{{ item.lastMessageTime }}</div>
               </div>
-              <div class="conversation-last-message">这里用来显示最新信息</div>
+              <div class="conversation-last-message">
+                {{ item.lastMessage || '暂无消息' }}
+              </div>
             </div>
           </div>
-
         </div><!-- 列表结束 -->
 
       </div>
@@ -77,13 +92,22 @@
           </div>
         </div>
 
-        <div class="message-content">
+        <div class="message-content" ref="messageContainer">
           <!-- 动态显示当前选中会话的消息 -->
           <div v-for="message in messages" :key="message.id"
             v-if="activeConversation && (message.sender === activeConversation || (message.isSelf && message.receiver === activeConversation))">
             <!-- 对方的消息（显示在左边） -->
             <div v-if="!message.isSelf" class="message-bubble other">
-              <div class="avatar">{{ message.avatar }}</div>
+              <div class="avatar">
+                <template
+                  v-if="message.avatar && (message.avatar.startsWith('http') || message.avatar.startsWith('/'))">
+                  {{ message.avatar }}
+                </template>
+                <template v-else>
+                  <img :src="message.avatar" alt="用户头像" style="width: 100%; height: 100%; border-radius: 50%;">
+
+                </template>
+              </div>
               <div class="bubble-content">
                 {{ message.content }}
                 <span class="bubble-time">{{ message.time }}</span>
@@ -96,7 +120,16 @@
                 {{ message.content }}
                 <span class="bubble-time">{{ message.time }}</span>
               </div>
-              <div class="avatar">{{ message.avatar }}</div>
+              <div class="avatar">
+                <template
+                  v-if="message.avatar && (message.avatar.startsWith('http') || message.avatar.startsWith('/'))">
+                  {{ message.avatar }}
+                </template>
+                <template v-else>
+                  <img :src="message.avatar" alt="用户头像" style="width: 100%; height: 100%; border-radius: 50%;">
+
+                </template>
+              </div>
             </div>
           </div>
 

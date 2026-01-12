@@ -139,3 +139,71 @@
             border: 1px solid #bee5eb;
         }
         
+        /* 响应式设计 */
+        @media (max-width: 480px) {
+            /* 小屏幕手机 */
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                max-width: 100%;
+            }
+            
+            .form-header {
+                padding: 15px;
+            }
+            
+            .form-header h2 {
+                font-size: 1.5rem;
+            }
+            
+            .form-content {
+                padding: 15px;
+            }
+            
+            .form-group {
+                margin-bottom: 15px;
+            }
+            
+            .form-group input {
+                padding: 10px;
+                font-size: 14px;
+            }
+            
+            .btn {
+                padding: 10px;
+                font-size: 14px;
+            }
+            
+            .mode-toggle button {
+                padding: 6px 12px;
+                font-size: 0.875rem;
+            }
+            
+            .result {
+                padding: 12px;
+                font-size: 0.875rem;
+            }
+        }
+        
+        @media (max-width: 320px) {
+            /* 超小屏幕手机 */
+            .form-header h2 {
+                font-size: 1.25rem;
+            }
+            
+            .mode-toggle {
+                padding: 4px;
+            }
+            
+            .mode-toggle button {
+                padding: 5px 10px;
+                font-size: 0.8125rem;
+            }
+            
+            .form-content {
+                padding: 12px;
+            }
+        }
+        

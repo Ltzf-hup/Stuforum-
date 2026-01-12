@@ -3,6 +3,68 @@
       height: calc(100vh - 70px);
     }
     
+    /* 响应式设计 */
+    @media (max-width: 1024px) {
+      /* 在中等屏幕上隐藏消息类型侧边栏 */
+      .message-type-sidebar {
+        display: none;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      /* 在平板和手机屏幕上 */
+      .weibo-message-container {
+        flex-direction: column;
+      }
+      
+      /* 会话列表在移动端占较小比例 */
+      .conversation-sidebar {
+        width: 100% !important;
+        height: 30vh;
+        border-right: none;
+        border-bottom: 1px solid #e9ecef;
+      }
+      
+      /* 消息详情区在移动端占较大比例 */
+      .message-detail {
+        height: calc(70vh - 70px);
+      }
+      
+      /* 会话列表项简化显示 */
+      .weibo-conversation-item {
+        padding: 0.5rem 0.75rem;
+      }
+      
+      /* 消息气泡宽度调整 */
+      .bubble-content {
+        max-width: 85%;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      /* 在小屏幕手机上进一步调整 */
+      .conversation-info {
+        margin-left: 0.5rem;
+      }
+      
+      .conversation-name {
+        font-size: 0.8125rem;
+      }
+      
+      .conversation-last-message {
+        font-size: 0.75rem;
+      }
+      
+      .message-content {
+        padding: 1rem;
+      }
+      
+      .weibo-input {
+        padding: 0.625rem;
+        padding-right: 3.5rem;
+      }
+    }
+    
     /* 左侧边栏 - 消息类型 */
     .message-type-sidebar {
       width: 200px;
@@ -143,6 +205,46 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+    }
+    
+    /* 加载状态 */
+    .loading-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      color: #657786;
+    }
+    
+    .loading-spinner {
+      width: 32px;
+      height: 32px;
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #1da1f2;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 0.75rem;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    /* 空状态 */
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      color: #aab8c2;
+    }
+    
+    .empty-icon {
+      font-size: 3rem;
+      margin-bottom: 0.75rem;
     }
     
     /* 主内容区 - 消息详情 */

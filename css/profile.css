@@ -163,3 +163,74 @@ select.readonly-input {
   background-color: #5a6268 !important;
   border-color: #5a6268 !important;
 }
+
+/* 响应式设计 */
+@media (max-width: 1024px) {
+
+  /* 在中等屏幕上隐藏侧边栏 */
+  #left-body,
+  #right-body {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+
+  /* 平板和手机屏幕 */
+  .avatar {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 0.75rem;
+  }
+
+  .avatar-text {
+    font-size: 2.5rem;
+  }
+
+  /* 个人资料表单调整 */
+  .editable-input,
+  .readonly-input {
+    padding: 0.625rem 0.875rem;
+    font-size: 0.9375rem;
+  }
+
+  /* 底部状态显示调整 */
+  .bottom-status {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.875rem;
+  }
+}
+
+@media (max-width: 480px) {
+
+  /* 小屏幕手机 */
+  .avatar {
+    width: 64px;
+    height: 64px;
+    margin-bottom: 0.5rem;
+  }
+
+  .avatar-text {
+    font-size: 2rem;
+  }
+
+  /* 按钮调整 */
+  #left-body .post-btn {
+    padding: 0.625rem 1.25rem;
+    font-size: 0.875rem;
+  }
+
+  /* 表单输入调整 */
+  .editable-input,
+  .readonly-input {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+  }
+
+  /* 底部状态显示进一步调整 */
+  .bottom-status {
+    padding: 0.625rem 1.25rem;
+    font-size: 0.8125rem;
+    bottom: 10px;
+  }
+}
