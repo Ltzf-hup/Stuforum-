@@ -38,8 +38,8 @@ new Vue({
             }
             // console.log(searchParams.get('uname')); // 输出: John
             //encodeURIComponent，对uname进行编码，防止特殊字符导致的问题
-            // const url = `http://10.11.192.14:8080/StuForum_war/api/forum/Son?uname=${encodeURIComponent(uname)}`; // 学校IP
-            const url = `http://192.168.86.1:8080/StuForum_war/api/forum/Son?uname=${encodeURIComponent(uname)}`; // 本地IP
+            const url = `http://10.11.192.14:8080/StuForum_war/api/forum/Son?uname=${encodeURIComponent(uname)}`; // 学校IP
+            // const url = `http://192.168.86.1:8080/StuForum_war/api/forum/Son?uname=${encodeURIComponent(uname)}`; // 本地IP
             const response = await fetch(url, {
                 method: 'get',
                 headers: {
@@ -61,8 +61,8 @@ new Vue({
         },
         //获取关注者数量
         async getGzNum() {
-            // const url = `http://10.11.192.14:8080/StuForum_war/api/concernedGzNum?fedId=${this.fedId}`; // 学校IP
-            const url = `http://192.168.86.1:8080/StuForum_war/api/concernedGzNum?fedId=${this.fedId}`; // 本地IP
+            const url = `http://10.11.192.14:8080/StuForum_war/api/concernedGzNum?fedId=${this.fedId}`; // 学校IP
+            // const url = `http://192.168.86.1:8080/StuForum_war/api/concernedGzNum?fedId=${this.fedId}`; // 本地IP
             const response = await fetch(url, {
                 method: 'get',
                 headers: {
@@ -75,8 +75,8 @@ new Vue({
         },
         //获取粉丝数量
         async getFansNum() {
-            // const url = `http://10.11.192.14:8080/StuForum_war/api/concernedFansNum?fedId=${this.fedId}`; // 学校IP
-            const url = `http://192.168.86.1:8080/StuForum_war/api/concernedFansNum?fedId=${this.fedId}`; // 本地IP
+            const url = `http://10.11.192.14:8080/StuForum_war/api/concernedFansNum?fedId=${this.fedId}`; // 学校IP
+            // const url = `http://192.168.86.1:8080/StuForum_war/api/concernedFansNum?fedId=${this.fedId}`; // 本地IP
             const response = await fetch(url, {
                 method: 'get',
                 headers: {
@@ -129,8 +129,8 @@ new Vue({
         // 关注用户
         async followInsert() {
 
-            // const url = `http://10.11.192.14:8080/StuForum_war//api/concernedInsert?ferId=${this.ferId}&fedId=${this.fedId}`; // 学校IP
-            const url = `http://192.168.86.1:8080/StuForum_war//api/concernedInsert?ferId=${this.ferId}&fedId=${this.fedId}`; // 本地IP
+            const url = `http://10.11.192.14:8080/StuForum_war//api/concernedInsert?ferId=${this.ferId}&fedId=${this.fedId}`; // 学校IP
+            // const url = `http://192.168.86.1:8080/StuForum_war//api/concernedInsert?ferId=${this.ferId}&fedId=${this.fedId}`; // 本地IP
             const response = await fetch(url, {
                 method: 'post',
                 headers: {
@@ -142,8 +142,8 @@ new Vue({
         },
         //取消关注
         async followDelete() {
-            // const url = `http://10.11.192.14:8080/StuForum_war/api/ConcernedDeleteServlet?ferId=${this.ferId}&fedId=${this.fedId}`; // 学校IP
-            const url = `http://192.168.86.1:8080/StuForum_war/api/ConcernedDeleteServlet?ferId=${this.ferId}&fedId=${this.fedId}`; // 本地IP
+            const url = `http://10.11.192.14:8080/StuForum_war/api/ConcernedDeleteServlet?ferId=${this.ferId}&fedId=${this.fedId}`; // 学校IP
+            // const url = `http://192.168.86.1:8080/StuForum_war/api/ConcernedDeleteServlet?ferId=${this.ferId}&fedId=${this.fedId}`; // 本地IP
             const response = await fetch(url, {
                 method: 'post',
                 headers: {
@@ -155,8 +155,8 @@ new Vue({
         },
         // 检查是否已关注
         async checkFollowStatus() {
-            // const url = `http://10.11.192.14:8080/StuForum_war/api/ConcernedIfGz?ferId=${this.ferId}&fedId=${this.fedId}`; // 学校IP
-            const url = `http://192.168.86.1:8080/StuForum_war/api/ConcernedIfGz?ferId=${this.ferId}&fedId=${this.fedId}`; // 本地IP
+            const url = `http://10.11.192.14:8080/StuForum_war/api/ConcernedIfGz?ferId=${this.ferId}&fedId=${this.fedId}`; // 学校IP
+            // const url = `http://192.168.86.1:8080/StuForum_war/api/ConcernedIfGz?ferId=${this.ferId}&fedId=${this.fedId}`; // 本地IP
             const response = await fetch(url, {
                 method: 'get',
                 headers: {
