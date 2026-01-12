@@ -39,7 +39,8 @@ new Vue({
     methods: {
         getAll() {
             $.ajax({
-                url: "http://10.11.192.14:8080/StuForum_war_exploded/forum",
+                // url: "http://10.11.192.14:8080/StuForum_war_exploded/forum",
+                url: "http://192.168.86.1:8080/StuForum_war_exploded/forum",
                 type: "GET",
                 dataType: "json",
                 success: (data) => {
