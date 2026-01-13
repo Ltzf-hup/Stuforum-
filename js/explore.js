@@ -8,7 +8,7 @@ let vm = new Vue({
         getExplore() {
             // 使用箭头函数回调
             $.ajax({
-                url: "http://10.11.192.233:8080/StuForum_war/forum",
+                url: "http://10.11.192.98:8080/StuForum_war/forum",
                 type: "GET",
                 dataType: "json",
                 success: (data) => {
@@ -28,7 +28,7 @@ let vm = new Vue({
             }
             // 执行搜索操作
             $.ajax({
-                url: "http://10.11.192.233:8080/StuForum_war/forum/search",
+                url: "http://10.11.192.98:8080/StuForum_war/forum/search",
                 type: "GET",
                 data: {
                     query: this.searchQuery

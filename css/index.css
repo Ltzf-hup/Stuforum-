@@ -361,6 +361,57 @@
 
 /* ========== 响应式调整 ========== */
 @media (max-width: 768px) {
+  /* 整体布局调整 */
+  #middle-body-text {
+    padding: 1rem;
+  }
+  
+  /* 发布区域调整 */
+  .post-header {
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+  
+  .post-input {
+    padding: 0.875rem;
+    font-size: 1.125rem;
+    min-height: 80px;
+  }
+  
+  /* 工具栏调整 */
+  .action-icons {
+    gap: 1rem;
+  }
+  
+  .action-icon {
+    font-size: 1.125rem;
+  }
+  
+  .action-icon img {
+    width: 30px;
+    height: 30px;
+  }
+  
+  /* 发布按钮调整 */
+  .post-submit {
+    padding: 0.625rem 1.25rem;
+    font-size: 0.875rem;
+  }
+  
+  /* 帖子列表调整 */
+  .post {
+    padding: 1.25rem;
+  }
+  
+  .post-avatar {
+    margin-right: 0.75rem;
+  }
+  
+  .post-text {
+    font-size: 0.9375rem;
+  }
+  
+  /* 图片相关调整 */
   .image-wrapper.collapsed {
     max-height: 250px;
   }
@@ -373,10 +424,72 @@
     padding: 6px 16px;
     font-size: 13px;
   }
+  
+  /* 编辑器调整 */
+  #editor-container {
+    padding: 0.875rem;
+    font-size: 1.125rem;
+    min-height: 80px;
+  }
 }
 
 /* 小屏幕设备 */
 @media (max-width: 480px) {
+  /* 发布区域进一步调整 */
+  .post-header {
+    gap: 0.5rem;
+  }
+  
+  .post-input {
+    padding: 0.75rem;
+    font-size: 1rem;
+    min-height: 70px;
+  }
+  
+  /* 工具栏进一步调整 */
+  .action-icons {
+    gap: 0.75rem;
+  }
+  
+  .action-icon {
+    font-size: 1rem;
+  }
+  
+  .action-icon img {
+    width: 28px;
+    height: 28px;
+  }
+  
+  /* 发布按钮进一步调整 */
+  .post-submit {
+    padding: 0.5rem 1rem;
+    font-size: 0.8125rem;
+  }
+  
+  /* 帖子列表进一步调整 */
+  .post {
+    padding: 1rem;
+  }
+  
+  .post-avatar {
+    margin-right: 0.5rem;
+  }
+  
+  .avatar {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+  
+  .post-header-info {
+    flex-wrap: wrap;
+  }
+  
+  .post-text {
+    font-size: 0.875rem;
+  }
+  
+  /* 图片相关进一步调整 */
   .image-wrapper.collapsed {
     max-height: 200px;
   }
@@ -384,6 +497,58 @@
   .post-text.collapsed {
     max-height: 4em;
     /* 约2.5行 */
+  }
+  
+  /* 图片网格调整 */
+  .image-grid {
+    gap: 3px;
+    max-width: 100%;
+  }
+  
+  /* 编辑器进一步调整 */
+  #editor-container {
+    padding: 0.75rem;
+    font-size: 1rem;
+    min-height: 70px;
+  }
+  
+  /* 图片预览模态框调整 */
+  .preview-arrow {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .preview-count {
+    font-size: 14px;
+  }
+  
+  .preview-close {
+    width: 36px;
+    height: 36px;
+    font-size: 20px;
+  }
+}
+
+/* 超小屏幕设备 */
+@media (max-width: 320px) {
+  /* 发布按钮调整 */
+  .post-submit {
+    font-size: 0.75rem;
+    padding: 0.4375rem 0.875rem;
+  }
+  
+  /* 帖子列表调整 */
+  .post {
+    padding: 0.75rem;
+  }
+  
+  .post-text {
+    font-size: 0.8125rem;
+  }
+  
+  /* 图片网格调整 */
+  .image-grid {
+    gap: 2px;
   }
 }
 

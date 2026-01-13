@@ -28,7 +28,7 @@ const vm = new Vue({
             this.showMessage('loading', '处理中', '登录中...');
 
             $.ajax({
-                url: 'http://10.11.192.14:8080/StuForum_war/api/user/login', // 学校IP
+                url: 'http://10.11.192.98:8080/StuForum_war/api/user/login', // 学校IP
                 // url: 'http://192.168.86.1:8080/StuForum_war/api/user/login', // 本地IP
                 // url: 'http://192.168.1.189:8080/StuForum_war/api/user/login',//家
                 type: 'POST',
@@ -86,7 +86,7 @@ const vm = new Vue({
 
             // 发送AJAX请求
             $.ajax({
-                url: 'http://10.11.192.14:8080/StuForum_war/api/user/register', // 学校IP
+                url: 'http://10.11.192.98:8080/StuForum_war/api/user/register', // 学校IP
                 // url: 'http://192.168.86.1:8080/StuForum_war/api/user/register', // 本地IP
                 // url: 'http://192.168.1.189:8080/StuForum_war/api/user/register',//家
                 type: 'POST',

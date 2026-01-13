@@ -39,7 +39,7 @@ new Vue({
     methods: {
         getAll() {
             $.ajax({
-                url: "http://10.11.192.14:8080/StuForum_war/forum",
+                url: "http://10.11.192.98:8080/StuForum_war/forum",
                 type: "GET",
                 dataType: "json",
                 success: (data) => {
@@ -161,7 +161,7 @@ new Vue({
                 formData.append('uid', userId);
                 formData.append('txt', this.txt);
                 formData.append('image_file', this.imageUrl);
-                const response = await fetch('http://10.11.192.14:8080/StuForum_war/api/forum/insert', { // 学校IP
+                const response = await fetch('http://10.11.192.98:8080/StuForum_war/api/forum/insert', { // 学校IP
                     // const response = await fetch('http://192.168.86.1:8080/StuForum_war/api/forum/insert', {
                     method: 'POST',
                     headers: {
@@ -527,14 +527,14 @@ new Vue({
             },
             MENU_CONF: {
                 uploadImage: {
-                    server: 'http://10.11.192.14:8080/StuForum_war/FileUploadServlet',
+                    server: 'http://10.11.192.98:8080/StuForum_war/FileUploadServlet',
                     fieldName: 'file1',
                     timeout: 60 * 1000,
                     customUpload: async (file, insertFn) => {
                         const formData = new FormData();
                         formData.append('file1', file);
                         try {
-                            const response = await fetch('http://10.11.192.14:8080/StuForum_war/FileUploadServlet', {
+                            const response = await fetch('http://10.11.192.98:8080/StuForum_war/FileUploadServlet', {
                                 method: 'POST',
                                 body: formData
                             });
