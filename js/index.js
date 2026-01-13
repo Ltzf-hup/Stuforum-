@@ -39,7 +39,7 @@ new Vue({
     methods: {
         getAll() {
             $.ajax({
-                url: "http://10.11.192.14:8080/StuForum_war_exploded/forum",
+                url: "http://10.11.192.14:8080/StuForum_war/forum",
                 type: "GET",
                 dataType: "json",
                 success: (data) => {
@@ -527,14 +527,14 @@ new Vue({
             },
             MENU_CONF: {
                 uploadImage: {
-                    server: 'http://10.11.192.14:8080/StuForum_war_exploded/FileUploadServlet',
+                    server: 'http://10.11.192.14:8080/StuForum_war/FileUploadServlet',
                     fieldName: 'file1',
                     timeout: 60 * 1000,
                     customUpload: async (file, insertFn) => {
                         const formData = new FormData();
                         formData.append('file1', file);
                         try {
-                            const response = await fetch('http://10.11.192.14:8080/StuForum_war_exploded/FileUploadServlet', {
+                            const response = await fetch('http://10.11.192.14:8080/StuForum_war/FileUploadServlet', {
                                 method: 'POST',
                                 body: formData
                             });

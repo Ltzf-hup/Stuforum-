@@ -129,7 +129,7 @@ new Vue({
         // 关注用户
         async followInsert() {
 
-            const url = `http://10.11.192.14:8080/StuForum_war//api/concernedInsert?ferId=${this.ferId}&fedId=${this.fedId}`; // 学校IP
+            const url = `http://10.11.192.14:8080/StuForum_war/api/concernedInsert?ferId=${this.ferId}&fedId=${this.fedId}`; // 学校IP
             // const url = `http://192.168.86.1:8080/StuForum_war//api/concernedInsert?ferId=${this.ferId}&fedId=${this.fedId}`; // 本地IP
             const response = await fetch(url, {
                 method: 'post',
