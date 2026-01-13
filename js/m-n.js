@@ -29,6 +29,8 @@ new Vue({
     }
     // 然后获取关注列表
     this.getConcernedList();
+    // 连接WebSocket
+    this.conn();
   },
   methods: {
     conn() {
@@ -87,9 +89,6 @@ new Vue({
       this.activeConversation = name;
       this.id = id;
       console.log('当前选中会话:', name, 'ID:', id);
-
-      // 连接WebSocket
-      this.conn();
     },
 
     selectMessageType(type) {
