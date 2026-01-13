@@ -29,8 +29,6 @@ new Vue({
     }
     // 然后获取关注列表
     this.getConcernedList();
-    // 连接WebSocket
-    this.conn();
   },
   methods: {
     conn() {
@@ -89,6 +87,9 @@ new Vue({
       this.activeConversation = name;
       this.id = id;
       console.log('当前选中会话:', name, 'ID:', id);
+
+      // 连接WebSocket
+      this.conn();
     },
 
     selectMessageType(type) {
@@ -286,7 +287,7 @@ new Vue({
         return;
       }
 
-      const apiUrl = `http://10.11.192.98:8080/StuForum_war/api/user/SocketConcernedServlet?mid=${userId}`; // 学校IP
+      const apiUrl = `http://10.11.192.14:8080/StuForum_war/api/user/SocketConcernedServlet?mid=${userId}`; // 学校IP
       // const apiUrl = `http://192.168.86.1:8080/StuForum_war/api/user/SocketConcernedServlet?mid=${userId}`; // 本地IP
       console.log('获取关注列表API:', apiUrl);
 
