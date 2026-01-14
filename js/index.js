@@ -527,14 +527,15 @@ new Vue({
             },
             MENU_CONF: {
                 uploadImage: {
-                    server: 'http://10.11.192.98:8080/StuForum_war/FileUploadServlet',
+                    server: 'https://ws.lztflioveqzs.dpdns.org/StuForum_war/FileUploadServlet', // 改为域名
                     fieldName: 'file1',
                     timeout: 60 * 1000,
                     customUpload: async (file, insertFn) => {
                         const formData = new FormData();
                         formData.append('file1', file);
                         try {
-                            const response = await fetch('http://10.11.192.98:8080/StuForum_war/FileUploadServlet', {
+                            // ✅ 修改这里：使用域名而不是IP
+                            const response = await fetch('https://ws.lztflioveqzs.dpdns.org/StuForum_war/FileUploadServlet', {
                                 method: 'POST',
                                 body: formData
                             });

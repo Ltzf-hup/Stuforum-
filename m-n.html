@@ -95,7 +95,7 @@
         <div class="message-content" ref="messageContainer">
           <!-- 动态显示当前选中会话的消息 -->
           <div v-for="message in messages" :key="message.id"
-            v-if="activeConversation && (message.sender === activeConversation || (message.isSelf && message.receiver === activeConversation))">
+            v-if="activeConversation && message.conversationId === activeConversation">
             <!-- 对方的消息（显示在左边） -->
             <div v-if="!message.isSelf" class="message-bubble other">
               <div class="avatar">
@@ -105,7 +105,6 @@
                 </template>
                 <template v-else>
                   <img :src="message.avatar" alt="用户头像" style="width: 100%; height: 100%; border-radius: 50%;">
-
                 </template>
               </div>
               <div class="bubble-content">
@@ -127,7 +126,6 @@
                 </template>
                 <template v-else>
                   <img :src="message.avatar" alt="用户头像" style="width: 100%; height: 100%; border-radius: 50%;">
-
                 </template>
               </div>
             </div>
@@ -135,8 +133,7 @@
 
           <!-- 当没有选中会话或会话中没有消息时显示的提示 -->
           <div v-if="!activeConversation" class="no-conversation-tip">请选择一个会话开始聊天</div>
-          <div
-            v-else-if="messages.filter(m => m.sender === activeConversation || (m.isSelf && m.receiver === activeConversation)).length === 0"
+          <div v-else-if="messages.filter(m => m.conversationId === activeConversation).length === 0"
             class="no-message-tip">暂无消息，开始发送第一条消息吧</div>
         </div>
 

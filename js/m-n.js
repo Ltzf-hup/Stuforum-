@@ -29,6 +29,7 @@ new Vue({
     }
     // 然后获取关注列表
     this.getConcernedList();
+
   },
   methods: {
     conn() {
@@ -74,7 +75,69 @@ new Vue({
         vm.handleIncomingMessage(message);
       };
     },
+    getAllMsg() {
+      // 确保用户信息是最新的
+      let userData = JSON.parse(localStorage.getItem('userData'));
+      if (userData) {
+        this.currentUser.id = userData.uid;
+        this.currentUser.name = userData.uname;
+        this.currentUser.avatar = userData.avatarUrl || userData.uname.charAt(0).toUpperCase() || 'U';
+      }
 
+      console.log('当前用户ID:', this.currentUser.id, '会话对方ID:', this.id);
+
+      fetch(`http://10.11.192.98:8080/StuForum_war/api/msg?sendId=${this.currentUser.id}&reId=${this.id}`)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('网络请求失败: ' + response.status);
+          }
+          return response.json();
+        })
+        .then(data => {
+          console.log('获取到的消息列表:', data);
+          // 清空当前消息列表
+          this.messages = [];
+
+          // 处理消息数据，转换为合适的格式
+          data.forEach(msg => {
+            console.log('处理单条消息:', msg);
+
+            // 确保msg对象包含必要字段
+            if (!msg.sender_id || !msg.content || !msg.create_time) {
+              console.warn('消息格式不完整，跳过:', msg);
+              return;
+            }
+
+            // 判断消息是否为自己发送的：发送者ID等于当前用户ID
+            const isSelf = msg.sender_id == this.currentUser.id;
+            console.log('判断消息发送者:', msg.sender_id, '是否等于当前用户ID:', this.currentUser.id, '结果:', isSelf);
+
+            // 获取发送者名称
+            const sender = isSelf ? this.currentUser.name : this.activeConversation;
+
+            // 添加消息到列表
+            this.messages.push({
+              id: msg.id || Date.now() + Math.random(), // 使用后端ID或生成唯一ID
+              sender: sender,
+              receiver: isSelf ? this.activeConversation : this.currentUser.name,
+              content: msg.content,
+              time: this.formatTime(msg.create_time), // 格式化时间戳
+              isSelf: isSelf,
+              avatar: this.getAvatar(sender, isSelf),
+              conversationId: this.activeConversation
+            });
+          });
+
+          // 滚动到底部显示最新消息
+          this.$nextTick(() => {
+            this.scrollToBottom();
+          });
+        })
+        .catch(error => {
+          console.error('获取消息失败:', error);
+          alert('获取历史消息失败，请稍后重试');
+        });
+    },
     selectConversation(name, id) {
       // 如果已经选中当前会话，不执行任何操作
       if (this.activeConversation === name) {
@@ -90,6 +153,9 @@ new Vue({
 
       // 连接WebSocket
       this.conn();
+      //查询当前会话信息
+      this.getAllMsg();
+
     },
 
     selectMessageType(type) {
@@ -272,6 +338,42 @@ new Vue({
     getCurrentTime() {
       const now = new Date();
       return `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+    },
+
+    // 格式化时间 - 支持时间戳和字符串格式
+    formatTime(timeInput) {
+      if (!timeInput) {
+        return '';
+      }
+
+      try {
+        let date;
+
+        // 处理不同类型的时间输入
+        if (typeof timeInput === 'number') {
+          // 时间戳（毫秒）
+          date = new Date(timeInput);
+        } else if (typeof timeInput === 'string') {
+          // 字符串格式
+          date = new Date(timeInput);
+        } else {
+          return '无效时间';
+        }
+
+        // 检查是否为有效日期
+        if (isNaN(date.getTime())) {
+          return '无效时间';
+        }
+
+        // 格式化为HH:MM
+        const hours = date.getHours().toString().padStart(2, '0');
+        const minutes = date.getMinutes().toString().padStart(2, '0');
+
+        return `${hours}:${minutes}`;
+      } catch (e) {
+        console.error('时间格式化错误:', e, '输入值:', timeInput);
+        return '时间格式错误';
+      }
     },
 
     // 获取关注列表
