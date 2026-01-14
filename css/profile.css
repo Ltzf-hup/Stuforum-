@@ -164,6 +164,19 @@ select.readonly-input {
   border-color: #5a6268 !important;
 }
 
+/* 退出登录按钮样式 */
+#left-body .post-btn.btn-logout {
+  background-color: #dc3545 !important;
+  border-color: #dc3545 !important;
+  color: white !important;
+  margin-top: 1rem;
+}
+
+#left-body .post-btn.btn-logout:hover {
+  background-color: #c82333 !important;
+  border-color: #bd2130 !important;
+}
+
 /* 响应式设计 */
 @media (max-width: 1024px) {
 

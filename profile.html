@@ -22,6 +22,12 @@
         <a href="m-n.html" class="nav-link">消息</a>
         <a href="profile.html" class="nav-link active">个人资料</a>
       </div>
+      <!-- 汉堡菜单按钮 -->
+      <button class="menu-toggle" id="menuToggle">
+        <span class="menu-icon"></span>
+        <span class="menu-icon"></span>
+        <span class="menu-icon"></span>
+      </button>
     </div>
 
     <div id="body">
@@ -134,6 +140,13 @@
             <input type="text" v-model="list.hobby" :class="isEditing ? 'editable-input' : 'readonly-input'"
               :readonly="!isEditing" placeholder="你的兴趣爱好...">
           </div>
+        </div>
+        
+        <!-- 退出登录按钮 -->
+        <div style="margin-top: 2rem; width: 100%;">
+          <button @click="logout" class="post-btn btn-logout" style="width: 100%;">
+            退出登录
+          </button>
         </div>
       </div>
 
@@ -358,6 +371,27 @@
   </div>
   <script src="lib/vue.js"></script>
   <script src="js/profile.js"></script>
+  <script>
+    // 汉堡菜单交互
+    const menuToggle = document.getElementById('menuToggle');
+    const navLinks = document.querySelector('.nav-links');
+    
+    if (menuToggle && navLinks) {
+      menuToggle.addEventListener('click', () => {
+        menuToggle.classList.toggle('active');
+        navLinks.classList.toggle('expanded');
+      });
+      
+      // 点击导航链接后关闭菜单
+      const navItems = navLinks.querySelectorAll('.nav-link');
+      navItems.forEach(item => {
+        item.addEventListener('click', () => {
+          menuToggle.classList.remove('active');
+          navLinks.classList.remove('expanded');
+        });
+      });
+    }
+  </script>
   
   <!-- 底部状态显示 -->
   <div class="bottom-status" v-if="message" :class="messageType">

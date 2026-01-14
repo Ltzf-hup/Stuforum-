@@ -105,6 +105,53 @@ body.forum-body .nav-link.active {
   color: white;
 }
 
+/* 汉堡菜单样式 */
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  z-index: 110;
+}
+
+.menu-icon {
+  display: block;
+  width: 25px;
+  height: 3px;
+  background-color: white;
+  margin: 5px 0;
+  transition: all 0.3s ease;
+}
+
+/* 导航栏展开状态 */
+.nav-links.expanded {
+  display: flex !important;
+  flex-direction: column;
+  position: absolute;
+  top: 70px;
+  left: 0;
+  right: 0;
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  padding: 1rem;
+  gap: 1rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  z-index: 100;
+}
+
+/* 汉堡菜单激活状态 */
+.menu-toggle.active .menu-icon:nth-child(1) {
+  transform: rotate(45deg) translate(7px, 7px);
+}
+
+.menu-toggle.active .menu-icon:nth-child(2) {
+  opacity: 0;
+}
+
+.menu-toggle.active .menu-icon:nth-child(3) {
+  transform: rotate(-45deg) translate(7px, -7px);
+}
+
 /* 主体内容区域 - 关键布局 - 只在首页使用 */
 body.forum-body #body {
   display: flex;
@@ -478,10 +525,17 @@ body.forum-body .user-handle {
 @media (max-width: 768px) {
   #header {
     padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 
   .nav-links {
     display: none;
+  }
+
+  .menu-toggle {
+    display: block;
   }
 
   #middle-body-text,

@@ -151,6 +151,19 @@ new Vue({
       this.id = id;
       console.log('当前选中会话:', name, 'ID:', id);
 
+      // 确保会话列表中该会话的isConcerned标记正确
+      const conversationIndex = this.conversationList.findIndex(item =>
+        item.uname === name || item.id === id
+      );
+
+      if (conversationIndex !== -1) {
+        // 检查该用户是否是已关注用户
+        const isUserConcerned = this.concernedUsers.some(user =>
+          user.uname === name || user.id === id
+        );
+        this.conversationList[conversationIndex].isConcerned = isUserConcerned;
+      }
+
       // 连接WebSocket
       this.conn();
       //查询当前会话信息
@@ -202,10 +215,33 @@ new Vue({
       }
 
       // 检查发送者是否在会话列表中
-      const senderInConversation = this.conversationList.some(item => item.uname === sender);
+      const senderInConversation = this.conversationList.some(item =>
+        item.uname === sender || item.id === sender
+      );
       if (!senderInConversation) {
-        // 添加未关注用户到会话列表（使用用户名作为ID）
-        this.addUnconcernedUserToConversation(sender, sender);
+        // 检查发送者是否是已关注用户
+        const isUserConcerned = this.concernedUsers.some(user =>
+          user.uname === sender || user.id === sender
+        );
+
+        if (isUserConcerned) {
+          // 如果是已关注用户，找到该用户的详细信息
+          const concernedUser = this.concernedUsers.find(user =>
+            user.uname === sender || user.id === sender
+          );
+          if (concernedUser) {
+            // 添加已关注用户的会话
+            this.conversationList.push({
+              ...concernedUser,
+              isConcerned: true,
+              lastMessage: content,
+              lastMessageTime: message.time
+            });
+          }
+        } else {
+          // 添加未关注用户到会话列表
+          this.addUnconcernedUserToConversation(sender, sender);
+        }
       }
 
       // 添加消息到聊天窗口
@@ -287,6 +323,12 @@ new Vue({
         this.conversationList[conversationIndex].lastMessage = content;
         this.conversationList[conversationIndex].lastMessageTime = message.time;
 
+        // 检查该用户是否是已关注用户，如果是，确保会话标记为已关注
+        const isUserConcerned = this.concernedUsers.some(user => user.uname === conversationUser || user.id === conversationUser);
+        if (isUserConcerned) {
+          this.conversationList[conversationIndex].isConcerned = true;
+        }
+
         // 将当前会话移到列表顶部
         if (conversationIndex > 0) {
           const [updatedConversation] = this.conversationList.splice(conversationIndex, 1);
@@ -295,13 +337,30 @@ new Vue({
       } else {
         // 如果会话不存在，添加到会话列表
         if (isSelf) {
-          // 发送消息时，如果会话不存在，可能是因为用户未关注对方
-          this.addUnconcernedUserToConversation(conversationUser, conversationUser);
-          // 更新新添加的会话的最新消息
-          const newIndex = this.conversationList.findIndex(item => item.uname === conversationUser);
-          if (newIndex !== -1) {
-            this.conversationList[newIndex].lastMessage = content;
-            this.conversationList[newIndex].lastMessageTime = message.time;
+          // 检查该用户是否是已关注用户
+          const isUserConcerned = this.concernedUsers.some(user => user.uname === conversationUser || user.id === conversationUser);
+
+          if (isUserConcerned) {
+            // 如果是已关注用户，找到该用户的详细信息
+            const concernedUser = this.concernedUsers.find(user => user.uname === conversationUser || user.id === conversationUser);
+            if (concernedUser) {
+              // 添加已关注用户的会话
+              this.conversationList.push({
+                ...concernedUser,
+                isConcerned: true,
+                lastMessage: content,
+                lastMessageTime: message.time
+              });
+            }
+          } else {
+            // 发送消息时，如果会话不存在且用户未关注对方
+            this.addUnconcernedUserToConversation(conversationUser, conversationUser);
+            // 更新新添加的会话的最新消息
+            const newIndex = this.conversationList.findIndex(item => item.uname === conversationUser);
+            if (newIndex !== -1) {
+              this.conversationList[newIndex].lastMessage = content;
+              this.conversationList[newIndex].lastMessageTime = message.time;
+            }
           }
         }
       }
@@ -418,8 +477,10 @@ new Vue({
     // 更新会话列表
     updateConversationList(newUsers) {
       newUsers.forEach(user => {
-        // 检查会话列表中是否已存在该用户（使用用户名判断，确保一致性）
-        const existingIndex = this.conversationList.findIndex(item => item.uname === user.uname);
+        // 检查会话列表中是否已存在该用户（使用用户名或ID判断，确保一致性）
+        const existingIndex = this.conversationList.findIndex(item =>
+          item.uname === user.uname || item.id === user.id
+        );
         if (existingIndex === -1) {
           // 添加到会话列表
           this.conversationList.push({
@@ -433,6 +494,7 @@ new Vue({
           this.conversationList[existingIndex].isConcerned = true;
           // 同步用户信息
           this.conversationList[existingIndex].id = user.id;
+          this.conversationList[existingIndex].uname = user.uname;
           this.conversationList[existingIndex].avatarUrl = user.avatarUrl;
         }
       });

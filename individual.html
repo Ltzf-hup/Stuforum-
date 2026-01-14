@@ -12,6 +12,22 @@
 <body class="forum-body">
     <div id="app">
         <div id="header">
+          <div class="logo">
+            <span class="logo-icon">🎓</span>
+            <span>StuForum</span>
+          </div>
+          <div class="nav-links">
+            <a href="index.html" class="nav-link">首页</a>
+            <a href="explore.html" class="nav-link">探索</a>
+            <a href="m-n.html" class="nav-link">消息</a>
+            <a href="profile.html" class="nav-link">个人资料</a>
+          </div>
+          <!-- 汉堡菜单按钮 -->
+          <button class="menu-toggle" id="menuToggle">
+            <span class="menu-icon"></span>
+            <span class="menu-icon"></span>
+            <span class="menu-icon"></span>
+          </button>
         </div>
 
         <div class="box">
@@ -114,6 +130,27 @@
     <script src="lib/vue.js"></script>
     <script src="https://unpkg.com/@wangeditor/editor@latest/dist/index.js"></script>
     <script src="js/individual.js"></script>
+    <script>
+      // 汉堡菜单交互
+      const menuToggle = document.getElementById('menuToggle');
+      const navLinks = document.querySelector('.nav-links');
+      
+      if (menuToggle && navLinks) {
+        menuToggle.addEventListener('click', () => {
+          menuToggle.classList.toggle('active');
+          navLinks.classList.toggle('expanded');
+        });
+        
+        // 点击导航链接后关闭菜单
+        const navItems = navLinks.querySelectorAll('.nav-link');
+        navItems.forEach(item => {
+          item.addEventListener('click', () => {
+            menuToggle.classList.remove('active');
+            navLinks.classList.remove('expanded');
+          });
+        });
+      }
+    </script>
 </body>
 
 </html>
