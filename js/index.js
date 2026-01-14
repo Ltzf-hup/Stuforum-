@@ -527,7 +527,7 @@ new Vue({
             },
             MENU_CONF: {
                 uploadImage: {
-                    server: 'https://ws.lztflioveqzs.dpdns.org/StuForum_war/FileUploadServlet', // 改为域名
+                    server: 'http://10.11.192.98:8080/StuForum_war/FileUploadServlet', // 使用学校IP
                     fieldName: 'file1',
                     timeout: 60 * 1000,
                     customUpload: async (file, insertFn) => {
@@ -535,13 +535,18 @@ new Vue({
                         formData.append('file1', file);
                         try {
                             // 上传图片到服务器
-                            const response = await fetch('https://ws.lztflioveqzs.dpdns.org/StuForum_war/FileUploadServlet', {
+                            const response = await fetch('http://10.11.192.98:8080/StuForum_war/FileUploadServlet', {
                                 method: 'POST',
                                 body: formData
                             });
                             const result = await response.json();
                             if (result.errno === 0) {
-                                const url = result.data.url;
+                                let url = result.data.url;
+                                // 确保URL是完整的
+                                if (url.startsWith('/')) {
+                                    // 相对路径转为完整URL
+                                    url = `http://10.11.192.98:8080${url}`;
+                                }
                                 const html = `<img src="${url}" alt="上传图片" style="max-width: 100%; height: auto;">`;
                                 const vm = this;
                                 vm.imageUrl.push(html);
