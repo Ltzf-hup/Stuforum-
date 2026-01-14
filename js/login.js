@@ -5,7 +5,6 @@ const vm = new Vue({
         loginData: {
             name: '',
             password: ''
-            , list: []
         },
 
         // 注册数据
@@ -20,8 +19,23 @@ const vm = new Vue({
     },
     methods: {
         login() {
-            if (this.loginData.name === '' || this.loginData.password === '') {
-                this.showMessage('error', '登录失败', '请输入用户名和密码');
+            // 验证用户名
+            if (this.loginData.name === '') {
+                this.showMessage('error', '登录失败', '请输入用户名');
+                return;
+            }
+            if (this.loginData.name.length < 3) {
+                this.showMessage('error', '登录失败', '用户名长度不能少于3个字符');
+                return;
+            }
+
+            // 验证密码
+            if (this.loginData.password === '') {
+                this.showMessage('error', '登录失败', '请输入密码');
+                return;
+            }
+            if (this.loginData.password.length < 6) {
+                this.showMessage('error', '登录失败', '密码长度不能少于6个字符');
                 return;
             }
 
@@ -59,25 +73,53 @@ const vm = new Vue({
         },
         // 注册方法
         register() {
-            if (this.registerData.name === '' || this.registerData.email === '' || this.registerData.password === '') {
-                this.showMessage('error', '注册失败', '请填写所有必填字段');
+            // 验证用户名
+            if (this.registerData.name === '') {
+                this.showMessage('error', '注册失败', '请输入用户名');
                 return;
             }
-            //邮箱验证
-            if (!this.registerData.email.includes('@')) {
+            if (this.registerData.name.length < 3) {
+                this.showMessage('error', '注册失败', '用户名长度不能少于3个字符');
+                return;
+            }
+            if (this.registerData.name.length > 20) {
+                this.showMessage('error', '注册失败', '用户名长度不能超过20个字符');
+                return;
+            }
+
+            // 验证邮箱
+            if (this.registerData.email === '') {
+                this.showMessage('error', '注册失败', '请输入邮箱');
+                return;
+            }
+            // 使用正则表达式验证邮箱格式
+            const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+            if (!emailRegex.test(this.registerData.email)) {
                 this.showMessage('error', '注册失败', '请输入正确的邮箱格式');
                 return;
             }
 
-            // 2. 密码一致性验证
-            if (this.registerData.password !== this.registerData.confirmPassword) {
-                this.showMessage('error', '注册失败', '两次输入的密码不一致');
+            // 验证密码
+            if (this.registerData.password === '') {
+                this.showMessage('error', '注册失败', '请输入密码');
+                return;
+            }
+            if (this.registerData.password.length < 6) {
+                this.showMessage('error', '注册失败', '密码长度不能少于6位');
+                return;
+            }
+            if (this.registerData.password.length > 20) {
+                this.showMessage('error', '注册失败', '密码长度不能超过20位');
                 return;
             }
 
-            // 3. 密码长度验证
-            if (this.registerData.password.length < 6) {
-                this.showMessage('error', '注册失败', '密码长度不能少于6位');
+            // 验证确认密码
+            if (this.registerData.confirmPassword === '') {
+                this.showMessage('error', '注册失败', '请再次输入密码进行确认');
+                return;
+            }
+            if (this.registerData.password !== this.registerData.confirmPassword) {
+                this.showMessage('error', '注册失败', '两次输入的密码不一致');
                 return;
             }
 
@@ -101,14 +143,14 @@ const vm = new Vue({
                     this.showMessage('success', '注册成功', '注册成功！即将跳转到登录页...');
                     // 注册成功后，跳转到登录页
                     setTimeout(() => {
-                        location.href = 'index.html';
+                        location.href = 'login.html';
                     }, 2000); // 2秒后跳转
 
 
                 },
                 error: (status, error) => {
                     console.error('注册失败:', status, error);
-                    // this.showMessage('error', '注册失败', '无法连接到服务器，请稍后重试');
+                    this.showMessage('error', '注册失败', '无法连接到服务器，请稍后重试');
                 }
             });
         },
@@ -124,8 +166,8 @@ const vm = new Vue({
 
         // 实现clearForm方法
         clearForm() {
-            this.loginData = { uname: '', pwd: '' };
-            this.registerData = { uname: '', email: '', pwd: '', confirmPassword: '' };
+            this.loginData = { name: '', password: '' };
+            this.registerData = { name: '', email: '', password: '', confirmPassword: '' };
             this.message = null;
         }
     }

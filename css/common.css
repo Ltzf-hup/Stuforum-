@@ -19,7 +19,12 @@
 
 /* 基本背景和布局 - 只在首页使用 */
 body.forum-body {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background:
+    linear-gradient(rgba(51, 51, 51, 0.8), rgba(34, 34, 34, 0.8)),
+    url('../image/cd78c20cadbe3e6d34bf80fb4e687fce.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
   color: #333;
   min-height: 100vh;
   overflow-x: hidden;
@@ -30,7 +35,7 @@ body.forum-body #app {
   width: 100%;
   max-width: 1400px;
   margin: 0 auto;
-  background-color: #fff;
+  background-color: #f8f9fa;
   box-shadow: 0 0 40px rgba(0, 0, 0, 0.15);
   position: relative;
   min-height: 100vh;
@@ -39,7 +44,12 @@ body.forum-body #app {
 
 /* 头部导航 - 只在首页使用 */
 body.forum-body #header {
-  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  background:
+    linear-gradient(rgba(51, 51, 51, 0.85), rgba(34, 34, 34, 0.85)),
+    url('../image/cd78c20cadbe3e6d34bf80fb4e687fce.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
   color: white;
   padding: 1rem 2rem;
   position: sticky;
@@ -161,7 +171,7 @@ body.forum-body #body {
 /* 左侧边栏 - 只在首页使用 */
 body.forum-body #left-body {
   width: 300px;
-  background-color: #fff;
+  background-color: #f8f9fa;
   padding: 1.5rem;
   position: sticky;
   top: 70px;
@@ -173,7 +183,7 @@ body.forum-body #left-body {
 /* 中间内容区域 - 可滚动 - 只在首页使用 */
 body.forum-body #middle-body {
   flex: 1;
-  background-color: #fff;
+  background-color: #f8f9fa;
   border-right: 1px solid #e9ecef;
   display: flex;
   flex-direction: column;
@@ -184,7 +194,7 @@ body.forum-body #middle-body {
 /* 右侧边栏 - 固定定位 - 只在首页使用 */
 body.forum-body #right-body {
   width: 300px;
-  background-color: #fff;
+  background-color: #f8f9fa;
   padding: 1.5rem;
   position: sticky;
   top: 70px;
@@ -202,7 +212,7 @@ body.forum-body #right-body span {
   display: block;
   color: #495057;
   padding-bottom: 0.5rem;
-  border-bottom: 2px solid #667eea;
+  border-bottom: 2px solid #1e40af;
 }
 
 /* 热门话题 - 只在首页使用 */
@@ -231,7 +241,7 @@ body.forum-body .trend-category {
 body.forum-body .trend-name {
   font-weight: 600;
   margin-bottom: 0.25rem;
-  color: #667eea;
+  color: #1e40af;
   font-size: 1.05rem;
 }
 
@@ -333,8 +343,8 @@ body.forum-body .user-handle {
 
 .follow-btn {
   background-color: #fff;
-  color: #667eea;
-  border: 2px solid #667eea;
+  color: #1e40af;
+  border: 2px solid #1e40af;
   border-radius: 50px;
   padding: 0.5rem 1rem;
   font-weight: 600;
@@ -343,10 +353,10 @@ body.forum-body .user-handle {
 }
 
 .follow-btn:hover {
-  background-color: #667eea;
+  background-color: #1e40af;
   color: white;
   transform: translateY(-1px);
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 4px 15px rgba(30, 64, 175, 0.3);
 }
 
 .logout-btn {
@@ -371,12 +381,12 @@ body.forum-body .user-handle {
   border-bottom: 1px solid #f1f3f5;
   display: flex;
   transition: all 0.3s ease;
-  background-color: white;
+  background-color: #f8f9fa;
 }
 
 .post:hover {
-  background-color: #fafbfc;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  background-color: #e9ecef;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
 
 .post-avatar {
@@ -433,8 +443,8 @@ body.forum-body .user-handle {
 }
 
 .post-action:hover {
-  color: #667eea;
-  background-color: rgba(102, 126, 234, 0.1);
+  color: #1e40af;
+  background-color: rgba(30, 64, 175, 0.1);
   transform: translateY(-1px);
 }
 

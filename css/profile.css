@@ -104,8 +104,8 @@
 
 .editable-input:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
+  border-color: #1e40af;
+  box-shadow: 0 0 0 2px rgba(30, 64, 175, 0.1);
 }
 
 .readonly-input {
@@ -133,9 +133,9 @@ select.readonly-input {
 
 /* 个人资料页面按钮样式 */
 #left-body .post-btn {
-  background-color: #667eea;
+  background-color: #1e40af;
   color: white;
-  border: 2px solid #667eea;
+  border: 2px solid #1e40af;
   border-radius: 8px;
   padding: 0.75rem 1.5rem;
   font-weight: 600;
@@ -147,10 +147,10 @@ select.readonly-input {
 }
 
 #left-body .post-btn:hover {
-  background-color: #5a67d8;
-  border-color: #5a67d8;
+  background-color: #1d4ed8;
+  border-color: #1d4ed8;
   transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 4px 15px rgba(30, 64, 175, 0.3);
 }
 
 #left-body .post-btn.btn-cancel {
