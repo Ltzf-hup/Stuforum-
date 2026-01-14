@@ -534,7 +534,7 @@ new Vue({
                         const formData = new FormData();
                         formData.append('file1', file);
                         try {
-                            // ✅ 修改这里：使用域名而不是IP
+                            // 上传图片到服务器
                             const response = await fetch('https://ws.lztflioveqzs.dpdns.org/StuForum_war/FileUploadServlet', {
                                 method: 'POST',
                                 body: formData
