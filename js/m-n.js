@@ -86,7 +86,7 @@ new Vue({
 
       console.log('当前用户ID:', this.currentUser.id, '会话对方ID:', this.id);
 
-      fetch(`http://10.11.192.98:8080/StuForum_war/api/msg?sendId=${this.currentUser.id}&reId=${this.id}`)
+      fetch(`http://192.168.86.1:8080/StuForum_war/api/msg?sendId=${this.currentUser.id}&reId=${this.id}`)
         .then(response => {
           if (!response.ok) {
             throw new Error('网络请求失败: ' + response.status);
@@ -389,8 +389,8 @@ new Vue({
         return;
       }
 
-      const apiUrl = `http://10.11.192.98:8080/StuForum_war/api/user/SocketConcernedServlet?mid=${userId}`; // 学校IP
-      // const apiUrl = `http://192.168.86.1:8080/StuForum_war/api/user/SocketConcernedServlet?mid=${userId}`; // 本地IP
+      // const apiUrl = `http://10.11.192.98:8080/StuForum_war/api/user/SocketConcernedServlet?mid=${userId}`; // 学校IP
+      const apiUrl = `http://192.168.86.1:8080/StuForum_war/api/user/SocketConcernedServlet?mid=${userId}`; // 本地IP
       console.log('获取关注列表API:', apiUrl);
 
       fetch(apiUrl)

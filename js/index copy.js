@@ -39,7 +39,7 @@ new Vue({
     methods: {
         getAll() {
             $.ajax({
-                url: "/StuForum_war/forum",
+                url: "/forum",
                 type: "GET",
                 dataType: "json",
                 success: (data) => {
@@ -221,8 +221,8 @@ new Vue({
                 });
 
                 formData.append('image_file', processedImages);
-                // const response = await fetch('http://10.11.192.98:8080/StuForum_war/api/forum/insert', { // 学校IP
-                const response = await fetch('/StuForum_war/api/forum/insert', {
+                // const response = await fetch('http://10.11.192.98:8080/api/forum/insert', { // 学校IP
+                const response = await fetch('/api/forum/insert', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
@@ -587,7 +587,7 @@ new Vue({
             },
             MENU_CONF: {
                 uploadImage: {
-                    server: '/StuForum_war/FileUploadServlet', // 使用相对路径
+                    server: '/FileUploadServlet', // 使用相对路径
                     fieldName: 'file1',
                     timeout: 60 * 1000,
                     customUpload: async (file, insertFn) => {
@@ -606,7 +606,7 @@ new Vue({
                         formData.append('file1', file);
                         try {
                             // 4. 上传图片到服务器
-                            const response = await fetch('/StuForum_war/FileUploadServlet', {
+                            const response = await fetch('/FileUploadServlet', {
                                 method: 'POST',
                                 body: formData
                             });

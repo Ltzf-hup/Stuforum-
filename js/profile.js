@@ -295,8 +295,8 @@ const profileVm = new Vue({
                 console.log('发送的参数:', params.toString());
                 console.log('头像数据长度:', this.list.avatarUrl ? this.list.avatarUrl.length : 0);
 
-                const response = await fetch('http://10.11.192.98:8080/StuForum_war/api/user/update', { // 学校IP
-                    // const response = await fetch('http://192.168.86.1:8080/StuForum_war/api/user/update', {
+                // const response = await fetch('http://10.11.192.98:8080/StuForum_war/api/user/update', { // 学校IP
+                    const response = await fetch('http://192.168.86.1:8080/StuForum_war/api/user/update', {
                     // 替换为家的IP
                     // const response = await fetch('http://192.168.1.189:8080/StuForum_war/api/user/update', {
                     method: 'POST',
