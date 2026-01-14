@@ -160,7 +160,8 @@ new Vue({
                 const formData = new URLSearchParams();
                 formData.append('uid', userId);
                 formData.append('txt', this.txt);
-                formData.append('image_file', this.imageUrl);
+                // 将imageUrl数组转换为逗号分隔的字符串
+                formData.append('image_file', this.imageUrl.join(','));
                 const response = await fetch('http://10.11.192.98:8080/StuForum_war/api/forum/insert', { // 学校IP
                     // const response = await fetch('http://192.168.86.1:8080/StuForum_war/api/forum/insert', {
                     method: 'POST',
@@ -240,7 +241,7 @@ new Vue({
                     id: 1,
                     uid: 101,
                     uname: '测试用户1',
-                    txt: '这是第一条测试帖子，内容很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长',
+                    txt: '这是第一条测试帖子',
                     postedTime: new Date(Date.now() - 1000 * 60 * 30),
                     likeCount: 5,
                     replyCount: 2,
@@ -317,12 +318,6 @@ new Vue({
             if (days < 7) return `${days}天前`;
 
             return date.toLocaleDateString('zh-CN');
-        },
-        // 获取图片src
-        getImageSrc(imgHtml) {
-            if (!imgHtml) return '';
-            const match = imgHtml.match(/src=["']([^"']+)["']/);
-            return match ? match[1] : imgHtml;
         },
         // 打开图片预览
         openImagePreview(images, index) {
@@ -502,6 +497,11 @@ new Vue({
         viewComments(post) {
             console.log('查看评论:', post);
             window.location.href = `post.html?id=${post.id}`;
+        },
+        getImageSrc(imgHtml) {
+            if (!imgHtml) return '';
+            const match = imgHtml.match(/src=["']([^"']+)["']/);
+            return match ? match[1] : imgHtml;
         }
     },
     mounted() {
@@ -542,10 +542,23 @@ new Vue({
                             const result = await response.json();
                             if (result.errno === 0) {
                                 let url = result.data.url;
+                                console.log(url)
                                 // 确保URL是完整的
-                                if (url.startsWith('/')) {
-                                    // 相对路径转为完整URL
-                                    url = `http://10.11.192.98:8080${url}`;
+                                if (url) {
+                                    // 根据后端ImageAccessServlet的配置生成正确的URL
+                                    // 格式：http://10.11.192.98:8080/StuForum_war/image/xxx.jpg
+                                    if (url.startsWith('/')) {
+                                        // 如果是绝对路径，直接拼接
+                                        url = "http://10.11.192.98:8080/StuForum_war" + url;
+                                    } else if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                                        // 如果是相对路径，确保包含/image/前缀
+                                        if (!url.startsWith('image/')) {
+                                            url = "http://10.11.192.98:8080/StuForum_war/image/" + url;
+                                            console.log(url)
+                                        } else {
+                                            url = "http://10.11.192.98:8080/StuForum_war/" + url;
+                                        }
+                                    }
                                 }
                                 const html = `<img src="${url}" alt="上传图片" style="max-width: 100%; height: auto;">`;
                                 const vm = this;

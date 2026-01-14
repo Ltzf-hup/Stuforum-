@@ -38,8 +38,8 @@
           </div>
           <!--图片列表 -->
           <div id="image-container" style="margin-top: 1rem;">
-            <div v-for="(img, index) in imageUrl" :key="index">
-              <div v-html="img" style="width: 100px; height: 100px;"></div>
+            <div v-for="(img, index) in imageUrl" :key="index" class="preview-image-item">
+              <div v-html="img" style="width: 100px; height: 100px; object-fit: cover;"></div>
             </div>
           </div>
           <!-- 工具栏容器 -->
