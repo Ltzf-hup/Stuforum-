@@ -39,55 +39,16 @@ new Vue({
     methods: {
         getAll() {
             $.ajax({
-                url: "/StuForum_war/forum",
+                url: "http://10.11.192.98:8080/StuForum_war/forum",
                 type: "GET",
                 dataType: "json",
                 success: (data) => {
                     console.log("请求成功:", data);
-                    this.list = data.map(item => {
-                        const processedItem = {
-                            ...item,
-                            txt: typeof item.txt === 'string' ? [item.txt] : item.txt,
-                            isLiked: false
-                        };
-
-                        // 处理图片URL，确保它们是完整的HTML img标签
-                        if (processedItem.image_file && typeof processedItem.image_file === 'string') {
-                            // 分割图片URL
-                            const imgUrls = processedItem.image_file.split(',').filter(img => img.trim());
-
-                            // 为每个URL构建完整的HTML img标签
-                            const imgTags = imgUrls.map(url => {
-                                // 确保URL包含完整路径
-                                let fullUrl = url;
-                                if (!fullUrl.startsWith('http') && !fullUrl.startsWith('https')) {
-                                    if (fullUrl.startsWith('/uploads/')) {
-                                        // 新的URL格式：/uploads/文件名，使用相对路径
-                                        fullUrl = `${fullUrl}`;
-                                    } else if (fullUrl.startsWith('/')) {
-                                        // 其他相对路径保持不变
-                                        fullUrl = `${fullUrl}`;
-                                    } else if (!fullUrl.startsWith('<img')) {
-                                        // 如果不是img标签，且是文件名格式
-                                        fullUrl = `/uploads/${fullUrl}`;
-                                    }
-                                }
-
-                                // 如果已经是img标签，直接返回
-                                if (fullUrl.startsWith('<img')) {
-                                    return fullUrl;
-                                }
-
-                                // 构建完整的img标签
-                                return `<img src="${fullUrl}" alt="帖子图片" style="max-width: 100%; height: auto;">`;
-                            });
-
-                            // 用逗号连接img标签
-                            processedItem.image_file = imgTags.join(',');
-                        }
-
-                        return processedItem;
-                    });
+                    this.list = data.map(item => ({
+                        ...item,
+                        txt: typeof item.txt === 'string' ? [item.txt] : item.txt,
+                        isLiked: false
+                    }));
                     this.isChecking = false;
                 },
                 error: (xhr, status, error) => {
@@ -199,30 +160,9 @@ new Vue({
                 const formData = new URLSearchParams();
                 formData.append('uid', userId);
                 formData.append('txt', this.txt);
-
-                // 确保图片URL包含正确的应用上下文路径
-                const processedImages = this.imageUrl.map(img => {
-                    // 提取图片URL
-                    let urlMatch = img.match(/src=["']([^"']+)["']/);
-                    if (urlMatch && urlMatch[1]) {
-                        let url = urlMatch[1];
-                        // 确保URL包含完整路径
-                        if (url.startsWith('http://localhost:8080/') || url.startsWith('http://192.168.86.1:8080/')) {
-                            // 转换为相对路径
-                            url = url.replace(/http:\/\/(localhost|192\.168\.86\.1):8080\//, '/');
-                        } else if (!url.startsWith('http') && !url.startsWith('/')) {
-                            // 相对路径处理
-                            url = `/uploads/${url}`;
-                        }
-                        // 重新构建图片HTML
-                        return `<img src="${url}" alt="上传图片" style="max-width: 100%; height: auto;">`;
-                    }
-                    return img;
-                });
-
-                formData.append('image_file', processedImages);
-                // const response = await fetch('http://10.11.192.98:8080/StuForum_war/api/forum/insert', { // 学校IP
-                const response = await fetch('/StuForum_war/api/forum/insert', {
+                formData.append('image_file', this.imageUrl);
+                const response = await fetch('http://10.11.192.98:8080/StuForum_war/api/forum/insert', { // 学校IP
+                    // const response = await fetch('http://192.168.86.1:8080/StuForum_war/api/forum/insert', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
@@ -587,60 +527,33 @@ new Vue({
             },
             MENU_CONF: {
                 uploadImage: {
-                    server: '/StuForum_war/FileUploadServlet', // 使用相对路径
+                    server: 'http://10.11.192.98:8080/StuForum_war/FileUploadServlet', // 使用学校IP
                     fieldName: 'file1',
                     timeout: 60 * 1000,
                     customUpload: async (file, insertFn) => {
-                        // 1. 生成本地预览URL
-                        const localPreviewUrl = URL.createObjectURL(file);
-
-                        // 2. 构建本地预览HTML
-                        const localPreviewHtml = `<img src="${localPreviewUrl}" alt="${file.name}" style="max-width: 100%; height: auto;">`;
-
-                        // 3. 立即在图片容器中显示本地预览图（不在编辑器中显示）
-                        const vm = this;
-                        vm.imageUrl.push(localPreviewHtml);
-                        console.log('本地预览图已添加到图片容器:', localPreviewHtml);
-
                         const formData = new FormData();
                         formData.append('file1', file);
                         try {
-                            // 4. 上传图片到服务器
-                            const response = await fetch('/StuForum_war/FileUploadServlet', {
+                            // 上传图片到服务器
+                            const response = await fetch('http://10.11.192.98:8080/StuForum_war/FileUploadServlet', {
                                 method: 'POST',
                                 body: formData
                             });
                             const result = await response.json();
                             if (result.errno === 0) {
                                 let url = result.data.url;
-                                // 使用相对路径，不再添加localhost
-                                // 如果返回的是完整URL，转换为相对路径
-                                if (url.startsWith('http://localhost:8080/')) {
-                                    url = url.replace('http://localhost:8080/', '/');
+                                // 确保URL是完整的
+                                if (url.startsWith('/')) {
+                                    // 相对路径转为完整URL
+                                    url = `http://10.11.192.98:8080${url}`;
                                 }
-
-                                // 5. 构建服务器图片HTML
-                                const serverHtml = `<img src="${url}" alt="上传图片" style="max-width: 100%; height: auto;">`;
-
-                                // 6. 替换图片容器中的本地预览图为服务器图片
-                                const index = vm.imageUrl.findIndex(img => img.includes(localPreviewUrl));
-                                if (index !== -1) {
-                                    vm.imageUrl[index] = serverHtml;
-                                    console.log('图片容器中的本地预览图已替换为服务器图片:', serverHtml);
-                                }
+                                const html = `<img src="${url}" alt="上传图片" style="max-width: 100%; height: auto;">`;
+                                const vm = this;
+                                vm.imageUrl.push(html);
+                                console.log('图片已保存到数组:', html);
                             }
                         } catch (error) {
                             console.error('上传失败:', error);
-
-                            // 7. 上传失败时，从图片容器中移除本地预览图
-                            const index = vm.imageUrl.findIndex(img => img.includes(localPreviewUrl));
-                            if (index !== -1) {
-                                vm.imageUrl.splice(index, 1);
-                                console.log('上传失败，已从图片容器中移除本地预览图');
-                            }
-                        } finally {
-                            // 8. 释放本地预览URL对象
-                            URL.revokeObjectURL(localPreviewUrl);
                         }
                     }
                 }
