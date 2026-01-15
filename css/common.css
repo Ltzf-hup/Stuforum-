@@ -59,7 +59,9 @@ body.forum-body #header {
   justify-content: space-between;
   align-items: center;
   height: 70px;
+  min-height: 70px;
   box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
 }
 
 body.forum-body .logo {
@@ -89,9 +91,11 @@ body.forum-body .logo-icon {
   }
 }
 
+/* 始终显示导航链接 */
 body.forum-body .nav-links {
   display: flex;
   gap: 1.5rem;
+  flex-wrap: wrap;
 }
 
 body.forum-body .nav-link {
@@ -101,6 +105,19 @@ body.forum-body .nav-link {
   border-radius: 50px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+}
+
+/* 导航链接文字显示控制 */
+body.forum-body .nav-link .full-text {
+  display: inline;
+}
+
+body.forum-body .nav-link .short-text {
+  display: none;
 }
 
 body.forum-body .nav-link:hover {
@@ -115,52 +132,33 @@ body.forum-body .nav-link.active {
   color: white;
 }
 
-/* 汉堡菜单样式 */
-.menu-toggle {
-  display: none;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 10px;
-  z-index: 110;
-}
 
-.menu-icon {
-  display: block;
-  width: 25px;
-  height: 3px;
-  background-color: white;
-  margin: 5px 0;
-  transition: all 0.3s ease;
-}
 
 /* 导航栏展开状态 */
-.nav-links.expanded {
+body.forum-body .nav-links.expanded {
   display: flex !important;
   flex-direction: column;
   position: absolute;
   top: 70px;
   left: 0;
   right: 0;
-  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  background: rgba(34, 34, 34, 0.95);
+  /* 半透明深色背景，与头部风格一致 */
+  backdrop-filter: blur(10px);
+  /* 毛玻璃效果 */
   padding: 1rem;
-  gap: 1rem;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  gap: 0.5rem;
+  /* 减小间距 */
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+  /* 增强阴影效果 */
   z-index: 100;
+  border-radius: 0 0 10px 10px;
+  /* 底部圆角 */
 }
 
-/* 汉堡菜单激活状态 */
-.menu-toggle.active .menu-icon:nth-child(1) {
-  transform: rotate(45deg) translate(7px, 7px);
-}
 
-.menu-toggle.active .menu-icon:nth-child(2) {
-  opacity: 0;
-}
 
-.menu-toggle.active .menu-icon:nth-child(3) {
-  transform: rotate(-45deg) translate(7px, -7px);
-}
+
 
 /* 主体内容区域 - 关键布局 - 只在首页使用 */
 body.forum-body #body {
@@ -211,6 +209,20 @@ body.forum-body #right-body span {
   margin-bottom: 1.5rem;
   display: block;
   color: #495057;
+}
+
+/* 左侧边栏logo样式 */
+body.forum-body #left-body .logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  border-radius: 10px;
+  background: linear-gradient(rgba(51, 51, 51, 0.85), rgba(34, 34, 34, 0.85));
+  color: white;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(20px);
   padding-bottom: 0.5rem;
   border-bottom: 2px solid #1e40af;
 }
@@ -533,19 +545,89 @@ body.forum-body .user-handle {
 }
 
 @media (max-width: 768px) {
-  #header {
-    padding: 1rem;
+  body.forum-body #header {
+    padding: 0.75rem 1rem;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
+    height: auto;
+    gap: 1rem;
   }
 
-  .nav-links {
+  /* 手机端显示简化导航链接 */
+  body.forum-body .nav-links {
+    display: flex !important;
+    gap: 0.5rem;
+    margin-left: auto;
+  }
+
+  /* 手机端显示简化文字 */
+  body.forum-body .nav-link .full-text {
+    display: none;
+  }
+  
+  body.forum-body .nav-link .short-text {
+    display: inline;
+  }
+
+  /* 调整导航链接样式 */
+  body.forum-body .nav-link {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9rem;
+  }
+
+  /* 确保logo在手机端可见且突出 */
+  body.forum-body .logo {
+    display: flex !important;
+    align-items: center;
+    z-index: 1000;
+    padding: 0.5rem;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+  }
+
+  /* 调整logo图标大小，使其更突出 */
+  body.forum-body .logo-icon {
+    font-size: 2rem;
+  }
+
+  /* 简化logo文字 */
+  body.forum-body .logo span {
     display: none;
   }
 
-  .menu-toggle {
-    display: block;
+  body.forum-body .logo::after {
+    content: '论';
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: white;
+    margin-left: 8px;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  }
+}
+
+/* 在中等屏幕上显示简化导航文字 */
+@media (min-width: 769px) and (max-width: 1024px) {
+
+  /* 显示简化导航 */
+  body.forum-body .nav-links {
+    display: flex !important;
+    gap: 1rem;
+  }
+
+  body.forum-body .nav-link .full-text {
+    display: none;
+  }
+
+  body.forum-body .nav-link .short-text {
+    display: inline;
+  }
+
+  /* 调整导航链接样式 */
+  body.forum-body .nav-link {
+    padding: 0.75rem 1rem;
+    font-size: 1.1rem;
   }
 
   #middle-body-text,
@@ -555,19 +637,74 @@ body.forum-body .user-handle {
 }
 
 @media (max-width: 480px) {
-  .logo span {
+  /* 调整导航栏在极小屏幕上的样式 */
+  body.forum-body #header {
+    padding: 0.5rem 0.75rem;
+    min-height: auto;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  /* 极小屏幕显示简化导航链接 */
+  body.forum-body .nav-links {
+    display: flex !important;
+    gap: 0.3rem;
+    margin-left: auto;
+  }
+
+  /* 极小屏幕显示简化文字 */
+  body.forum-body .nav-link .full-text {
+    display: none;
+  }
+  
+  body.forum-body .nav-link .short-text {
+    display: inline;
+  }
+
+  /* 进一步减小导航链接样式 */
+  body.forum-body .nav-link {
+    padding: 0.3rem 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  /* 调整logo样式 */
+  body.forum-body .logo {
+    display: flex !important;
+    align-items: center;
+  }
+
+  /* 进一步减小logo图标大小 */
+  body.forum-body .logo-icon {
+    font-size: 1.25rem;
+  }
+
+  /* 简化logo文字 */
+  body.forum-body .logo span {
     display: none;
   }
 
-  .post-input {
+  /* 使用伪元素显示简化文字 */
+  body.forum-body .logo::after {
+    content: '论';
+    font-size: 1rem;
+    font-weight: 800;
+    color: white;
+    margin-left: 5px;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  }
+
+  /* 调整其他元素大小 */
+  body.forum-body .post-input {
     font-size: 1rem;
   }
 
-  .action-icons {
+  body.forum-body .action-icons {
     gap: 1rem;
   }
 
-  .action-icon {
+  body.forum-body .action-icon {
     font-size: 1rem;
   }
 }

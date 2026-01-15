@@ -1,4 +1,7 @@
 const { createEditor, createToolbar } = window.wangEditor
+
+
+
 new Vue({
     el: '#app',
     data: {
@@ -174,7 +177,6 @@ new Vue({
                 // 检查响应状态
                 if (!response.ok) {
                     const errorText = await response.text();
-                    t
                     console.error('服务器响应错误:', response.status, errorText);
                     this.showMessage(`发布失败: 服务器错误 (${response.status})`, 'error');
                     return;
@@ -241,7 +243,7 @@ new Vue({
                     id: 1,
                     uid: 101,
                     uname: '测试用户1',
-                    txt: '这是第一条测试帖子',
+                    txt: ['这是第一条测试帖子'], // 改为数组类型
                     postedTime: new Date(Date.now() - 1000 * 60 * 30),
                     likeCount: 5,
                     replyCount: 2,
@@ -252,7 +254,7 @@ new Vue({
                     id: 2,
                     uid: 102,
                     uname: '测试用户2',
-                    txt: '今天的天气真好！',
+                    txt: ['今天的天气真好！'], // 改为数组类型
                     postedTime: new Date(Date.now() - 1000 * 60 * 60 * 2),
                     likeCount: 10,
                     replyCount: 5,
@@ -263,7 +265,7 @@ new Vue({
                     id: 3,
                     uid: 103,
                     uname: '测试用户3',
-                    txt: '分享一张好看的照片',
+                    txt: ['分享一张好看的照片'], // 改为数组类型
                     postedTime: new Date(Date.now() - 1000 * 60 * 60 * 5),
                     likeCount: 15,
                     replyCount: 8,
@@ -274,7 +276,7 @@ new Vue({
                     id: 4,
                     uid: 104,
                     uname: '测试用户4',
-                    txt: '学习编程的一天',
+                    txt: ['学习编程的一天'], // 改为数组类型
                     postedTime: new Date(Date.now() - 1000 * 60 * 60 * 24),
                     likeCount: 20,
                     replyCount: 10,

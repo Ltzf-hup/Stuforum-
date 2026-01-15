@@ -1,3 +1,5 @@
+
+
 new Vue({
   el: '#app',
   data: {
@@ -18,17 +20,27 @@ new Vue({
     name: this.activeConversation || '张三'
   },
   created() {
+
     // 先从localStorage获取用户信息
     let userData = JSON.parse(localStorage.getItem('userData'));
+    if (!userData) {
+      console.error('用户未登录');
+      // 跳转到登录页面
+      window.location.href = 'login.html';
+      return;
+    }
     if (userData) {
       this.currentUser.id = userData.uid;
+      console.log('用户ID:', this.currentUser.id);
       this.currentUser.name = userData.uname;
       // 确保头像正确初始化
       this.currentUser.avatar = userData.avatarUrl || userData.uname.charAt(0).toUpperCase() || 'U';
       console.log('当前用户信息:', this.currentUser);
     }
+
     // 然后获取关注列表
     this.getConcernedList();
+
 
   },
   methods: {

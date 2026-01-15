@@ -5,7 +5,9 @@ Vue.filter('truncate', function (value, length) {
     return value.substring(0, length) + '...';
 });
 
-const profileVm = new Vue({
+
+
+new Vue({
     el: '#app',
     data: {
         list: {
@@ -18,12 +20,16 @@ const profileVm = new Vue({
             hobby: '',
             avatarUrl: ''
         },
+        forumlists: [],
         isEditing: false,
         isLoggedIn: false,
         originalData: {},
         message: '',
         messageType: '',
         fieldErrors: {},
+        showSettings: false,
+        selectedPosts: [],
+        showPostSelect: false
     },
     computed: {
         // 计算头像样式
@@ -63,6 +69,16 @@ const profileVm = new Vue({
         }
     },
     methods: {
+        async profileFor() {
+            console.log(this.list.uname)
+            const url =
+                `http://192.168.86.1:8080/StuForum_war/api/forum/Son?uname=${(this.list.uname)}`; // 本地IP
+            //查询用户帖子数据
+
+            const response = await fetch(url);
+            const data = await response.json();
+            this.forumlists = data;
+        },
         // 保存用户数据到localStorage
         saveUserData() {
             localStorage.setItem('userData', JSON.stringify(this.list));
@@ -73,6 +89,9 @@ const profileVm = new Vue({
             localStorage.removeItem('userData');
             // 跳转到登录页面
             location.href = 'login.html';
+        },
+        deleteAllPosts() {
+
         },
         // 开始编辑
         startEditing() {
@@ -395,6 +414,46 @@ const profileVm = new Vue({
             }
         },
 
+        // 切换设置菜单显示
+        toggleSettings() {
+            this.showSettings = !this.showSettings;
+        },
+
+        // 删除选中帖子
+        async deleteSelectedPosts() {
+            // 如果没有选择帖子，显示/隐藏多选按钮
+            if (this.selectedPosts.length === 0) {
+                this.showPostSelect = !this.showPostSelect;
+                return;
+            }
+
+            if (confirm(`确定要删除选中的 ${this.selectedPosts.length} 个帖子吗？此操作不可恢复！`)) {
+                try {
+                    this.showMessage('正在删除选中帖子...', '');
+
+                    // 这里可以添加实际的删除选中帖子API调用
+                    // 暂时模拟删除操作
+                    setTimeout(() => {
+                        // 过滤掉选中的帖子
+                        const selectedIds = this.selectedPosts.map(post => post.id || post.uid);
+                        this.forumlists = this.forumlists.filter(post => {
+                            return !selectedIds.includes(post.id || post.uid);
+                        });
+
+                        // 清空选中状态并隐藏多选按钮
+                        this.selectedPosts = [];
+                        this.showPostSelect = false;
+
+                        this.showMessage(`成功删除 ${selectedIds.length} 个帖子`, 'success');
+                        this.showSettings = false;
+                    }, 1000);
+                } catch (error) {
+                    console.error('删除帖子失败:', error);
+                    this.showMessage('删除帖子失败，请重试', 'error');
+                }
+            }
+        },
+
         // 更新全局用户数据（用于其他页面）
         updateGlobalUserData() {
             // 如果有全局的用户数据存储，可以在这里更新
@@ -419,6 +478,10 @@ const profileVm = new Vue({
 
         // 初始化输入框
         this.initInputs();
+
+        // 初始化用户帖子数据
+        this.profileFor();
+
 
         // 监听页面可见性变化，当页面重新激活时刷新数据
         document.addEventListener('visibilitychange', () => {

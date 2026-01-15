@@ -1,4 +1,6 @@
-let vm = new Vue({
+
+
+new Vue({
     el: "#middle-body",
     data: {
         list: [],
