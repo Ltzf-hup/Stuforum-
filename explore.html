@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>探索 - StuForum</title>
-    <link rel="stylesheet" href="css/common.css">
-    <link rel="stylesheet" href="css/explore.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>探索 - StuForum</title>
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/explore.css">
 </head>
 
 <body class="forum-body">
-    <div id="app">
+  <div id="app">
     <div id="header">
       <div class="logo">
         <span class="logo-icon">🎓</span>
@@ -99,7 +100,7 @@
               <div class="post-image" v-if="item.firstImageUrl">
                 <img :src="item.firstImageUrl" alt="帖子图片" style="max-width: 100%; border-radius: 8px; margin-top: 8px;">
               </div>
-              <div class="post-actions-bar">
+              <!-- <div class="post-actions-bar">
                 <div class="post-action">
                   <span>💬</span>
                   <span class="action-count">{{item.replyCount || 0}}</span>
@@ -108,7 +109,7 @@
                   <span>❤️</span>
                   <span class="action-count">{{item.likeCount || 0}}</span>
                 </div>
-              </div>
+              </div> -->
             </div>
           </div>
         </div>
@@ -146,13 +147,13 @@
     // 汉堡菜单交互
     const menuToggle = document.getElementById('menuToggle');
     const navLinks = document.querySelector('.nav-links');
-    
+
     if (menuToggle && navLinks) {
       menuToggle.addEventListener('click', () => {
         menuToggle.classList.toggle('active');
         navLinks.classList.toggle('expanded');
       });
-      
+
       // 点击导航链接后关闭菜单
       const navItems = navLinks.querySelectorAll('.nav-link');
       navItems.forEach(item => {
