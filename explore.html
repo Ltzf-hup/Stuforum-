@@ -83,22 +83,78 @@
         <div v-else class="posts-container">
           <div class="post" v-for="(item, index) in list" :key="item.id + '-' + index">
             <div class="post-avatar">
-              <img :src="item.avatarUrl" alt="用户头像" class="avatar"
-                style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;">
+              <a :href="'individual.html?uname=' + encodeURIComponent(item.uname)+'&uid='+item.uid"
+                :key="item.uname">
+                <div class="avatar" :style="getAvatarColorStyle(item.user?.username || item.uname)">
+                  <!-- 如果有头像数据，显示图片 -->
+                  <img v-if="item.avatarUrl" :src="item.avatarUrl"
+                    style="width: 100%; height: 100%; object-fit: cover;">
+
+                  <!-- 如果没有头像，显示首字母 -->
+                  <div v-else>
+                    {{ getAvatarInitial(item.user?.username || item.uname) }}
+                  </div>
+                </div>
+              </a>
             </div>
             <div class="post-content">
               <div class="post-header-info">
                 <span class="post-user">{{item.uname || '未知用户'}}</span>
-                <span class="post-handle">@{{item.uname || 'unknown'}}</span>
+                <span class="post-handle">@{{item.uname || 'unknown'}} ·</span>
                 <span class="post-time">{{formatTime(item.postedTime) || '未知时间'}}</span>
-                <span class="post-location" v-if="item.location">{{item.location}}</span>
               </div>
-              <div class="post-text">
-                {{item.txt || ''}}
+              <!-- 文本内容 -->
+              <div class="post-text" :class="{ 'collapsed': !item.isTextExpanded }">
+                <div class="text-content" v-for="(txtItem, txtIndex) in item.txt" :key="txtIndex" v-html="txtItem">
+
+                </div>
               </div>
-              <!-- 显示帖子图片 -->
-              <div class="post-image" v-if="item.firstImageUrl">
-                <img :src="item.firstImageUrl" alt="帖子图片" style="max-width: 100%; border-radius: 8px; margin-top: 8px;">
+
+              <!-- 帖子图片展示区 - 微信9宫格 -->
+              <div v-if="item.image_file" class="image-grid"
+                :class="'grid-' + Math.min(item.image_file.split(',').filter(img => img.trim()).length, 9)">
+                <template v-for="(img, allIndex) in item.image_file.split(',').filter(img => img.trim()).slice(0, 9)">
+                  <div :key="allIndex" class="image-item"
+                    @click="openImagePreview(item.image_file.split(',').filter(i => i.trim()), allIndex)">
+                    <div class="image-wrapper" v-html="img"></div>
+                  </div>
+                </template>
+              </div>
+
+              <!-- 图片预览模态框 -->
+              <div v-if="imagePreview.show" class="image-preview-modal" @click.self="closeImagePreview">
+                <div class="preview-header">
+                  <span class="preview-count">{{ imagePreview.currentIndex + 1 }} / {{ imagePreview.images.length
+                    }}</span>
+                  <span class="preview-close" @click="closeImagePreview">✕</span>
+                </div>
+                <div class="preview-content" @touchstart="onPreviewTouchStart" @touchmove="onPreviewTouchMove"
+                  @touchend="onPreviewTouchEnd" @mousedown="onPreviewMouseDown" @mousemove="onPreviewMouseMove"
+                  @mouseup="onPreviewMouseUp" @mouseleave="onPreviewMouseUp">
+                  <!-- 左侧箭头 -->
+                  <div class="preview-arrow preview-arrow-left" @click.stop="goToPrevImage"
+                    v-if="imagePreview.images.length > 1">
+                    <svg viewBox="0 0 24 24" width="32" height="32" fill="white">
+                      <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+                    </svg>
+                  </div>
+                  <div class="preview-wrapper" :style="{ transform: 'translateX(' + imagePreview.offsetX + 'px)' }">
+                    <div v-for="(img, idx) in imagePreview.images" :key="idx" class="preview-item">
+                      <img :src="getImageSrc(img)" @click.stop="closeImagePreview">
+                    </div>
+                  </div>
+                  <!-- 右侧箭头 -->
+                  <div class="preview-arrow preview-arrow-right" @click.stop="goToNextImage"
+                    v-if="imagePreview.images.length > 1">
+                    <svg viewBox="0 0 24 24" width="32" height="32" fill="white">
+                      <path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z" />
+                    </svg>
+                  </div>
+                </div>
+                <div class="preview-indicator">
+                  <span v-for="(img, idx) in imagePreview.images" :key="idx" class="preview-dot"
+                    :class="{ active: idx === imagePreview.currentIndex }" @click="goToImage(idx)"></span>
+                </div>
               </div>
               <!-- <div class="post-actions-bar">
                 <div class="post-action">
@@ -141,6 +197,7 @@
     </div>
   </div>
   <script src="lib/jquery-1.12.4.js"></script>
+  <script src="js/config.js"></script>
   <script src="lib/vue.js"></script>
   <script src="js/explore.js"></script>
   <script>
