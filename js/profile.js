@@ -77,7 +77,28 @@ new Vue({
 
             const response = await fetch(url);
             const data = await response.json();
-            this.forumlists = data;
+            // 查看image_file的结构
+            if (data.length > 0) {
+                console.log('图片数据结构:', data[0].image_file);
+            }
+
+            // 处理图片URL，添加token参数
+            const token = localStorage.getItem('token');
+            if (token) {
+                this.forumlists = data.map(item => {
+                    if (item.image_file) {
+                        // 为所有图片URL添加token参数
+                        item.image_file = item.image_file.replace(/(src=['"])([^'"]+)(['"])/g, (match, prefix, url, suffix) => {
+                            // 检查URL是否已经包含参数
+                            const separator = url.includes('?') ? '&' : '?';
+                            return `${prefix}${url}${separator}token=${token}${suffix}`;
+                        });
+                    }
+                    return item;
+                });
+            } else {
+                this.forumlists = data;
+            }
         },
         // 保存用户数据到localStorage
         saveUserData() {

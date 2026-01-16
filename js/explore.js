@@ -26,10 +26,26 @@ new Vue({
                 dataType: "json",
                 success: (data) => {
                     console.log(data);
-                    this.list = data.map(item => ({
-                        ...item,
-                        txt: typeof item.txt === 'string' ? [item.txt] : item.txt
-                    }));
+                    
+                    // 处理图片URL，添加token参数
+                    const token = localStorage.getItem('token');
+                    this.list = data.map(item => {
+                        const processedItem = {
+                            ...item,
+                            txt: typeof item.txt === 'string' ? [item.txt] : item.txt
+                        };
+                        
+                        if (token && processedItem.image_file) {
+                            // 为所有图片URL添加token参数
+                            processedItem.image_file = processedItem.image_file.replace(/(src=['"])([^'"]+)(['"])/g, (match, prefix, url, suffix) => {
+                                // 检查URL是否已经包含参数
+                                const separator = url.includes('?') ? '&' : '?';
+                                return `${prefix}${url}${separator}token=${token}${suffix}`;
+                            });
+                        }
+                        
+                        return processedItem;
+                    });
                 },
                 error: (error) => {
                     console.error("请求失败:", error);
@@ -52,10 +68,26 @@ new Vue({
                 dataType: "json",
                 success: (data) => {
                     console.log("搜索结果:", data);
-                    this.list = data.map(item => ({
-                        ...item,
-                        txt: typeof item.txt === 'string' ? [item.txt] : item.txt
-                    }));
+                    
+                    // 处理图片URL，添加token参数
+                    const token = localStorage.getItem('token');
+                    this.list = data.map(item => {
+                        const processedItem = {
+                            ...item,
+                            txt: typeof item.txt === 'string' ? [item.txt] : item.txt
+                        };
+                        
+                        if (token && processedItem.image_file) {
+                            // 为所有图片URL添加token参数
+                            processedItem.image_file = processedItem.image_file.replace(/(src=['"])([^'"]+)(['"])/g, (match, prefix, url, suffix) => {
+                                // 检查URL是否已经包含参数
+                                const separator = url.includes('?') ? '&' : '?';
+                                return `${prefix}${url}${separator}token=${token}${suffix}`;
+                            });
+                        }
+                        
+                        return processedItem;
+                    });
                 },
                 error: (error) => {
                     console.error("搜索失败:", error);

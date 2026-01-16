@@ -47,11 +47,27 @@ new Vue({
                 dataType: "json",
                 success: (data) => {
                     console.log("请求成功:", data);
-                    this.list = data.map(item => ({
-                        ...item,
-                        txt: typeof item.txt === 'string' ? [item.txt] : item.txt,
-                        isLiked: false
-                    }));
+                    
+                    // 处理图片URL，添加token参数
+                    const token = localStorage.getItem('token');
+                    this.list = data.map(item => {
+                        const processedItem = {
+                            ...item,
+                            txt: typeof item.txt === 'string' ? [item.txt] : item.txt,
+                            isLiked: false
+                        };
+                        
+                        if (token && processedItem.image_file) {
+                            // 为所有图片URL添加token参数
+                            processedItem.image_file = processedItem.image_file.replace(/(src=['"])([^'"]+)(['"])/g, (match, prefix, url, suffix) => {
+                                // 检查URL是否已经包含参数
+                                const separator = url.includes('?') ? '&' : '?';
+                                return `${prefix}${url}${separator}token=${token}${suffix}`;
+                            });
+                        }
+                        
+                        return processedItem;
+                    });
                     this.isChecking = false;
                 },
                 error: (xhr, status, error) => {
