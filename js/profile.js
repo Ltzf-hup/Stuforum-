@@ -87,6 +87,8 @@ new Vue({
         logout() {
             // 清除localStorage中的用户数据
             localStorage.removeItem('userData');
+            // 清除token
+            localStorage.removeItem('token');
             // 跳转到登录页面
             location.href = 'login.html';
         },
@@ -417,41 +419,6 @@ new Vue({
         // 切换设置菜单显示
         toggleSettings() {
             this.showSettings = !this.showSettings;
-        },
-
-        // 删除选中帖子
-        async deleteSelectedPosts() {
-            // 如果没有选择帖子，显示/隐藏多选按钮
-            if (this.selectedPosts.length === 0) {
-                this.showPostSelect = !this.showPostSelect;
-                return;
-            }
-
-            if (confirm(`确定要删除选中的 ${this.selectedPosts.length} 个帖子吗？此操作不可恢复！`)) {
-                try {
-                    this.showMessage('正在删除选中帖子...', '');
-
-                    // 这里可以添加实际的删除选中帖子API调用
-                    // 暂时模拟删除操作
-                    setTimeout(() => {
-                        // 过滤掉选中的帖子
-                        const selectedIds = this.selectedPosts.map(post => post.id || post.uid);
-                        this.forumlists = this.forumlists.filter(post => {
-                            return !selectedIds.includes(post.id || post.uid);
-                        });
-
-                        // 清空选中状态并隐藏多选按钮
-                        this.selectedPosts = [];
-                        this.showPostSelect = false;
-
-                        this.showMessage(`成功删除 ${selectedIds.length} 个帖子`, 'success');
-                        this.showSettings = false;
-                    }, 1000);
-                } catch (error) {
-                    console.error('删除帖子失败:', error);
-                    this.showMessage('删除帖子失败，请重试', 'error');
-                }
-            }
         },
 
         // 更新全局用户数据（用于其他页面）

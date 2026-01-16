@@ -55,9 +55,11 @@ const vm = new Vue({
                             location.href = 'index.html';
                         }, 1000);
                     } else if (data && data.user && data.user.uname) {
-                        // 兼容原有的JSON格式响应
-                        this.showMessage('success', '登录成功', `欢迎您，${data.user.uname}`);
                         localStorage.setItem('userData', JSON.stringify(data.user));
+                        const token = data.token;
+                        localStorage.setItem('token', token);
+                        console.log('token:', token);
+                        this.showMessage('success', '登录成功', `欢迎您，${data.user.uname}`);
                         setTimeout(() => {
                             location.href = 'index.html';
                         }, 1000);
