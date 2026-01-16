@@ -83,8 +83,7 @@
         <div v-else class="posts-container">
           <div class="post" v-for="(item, index) in list" :key="item.id + '-' + index">
             <div class="post-avatar">
-              <a :href="'individual.html?uname=' + encodeURIComponent(item.uname)+'&uid='+item.uid"
-                :key="item.uname">
+              <a :href="'individual.html?uname=' + encodeURIComponent(item.uname)+'&uid='+item.uid" :key="item.uname">
                 <div class="avatar" :style="getAvatarColorStyle(item.user?.username || item.uname)">
                   <!-- 如果有头像数据，显示图片 -->
                   <img v-if="item.avatarUrl" :src="item.avatarUrl"
@@ -171,7 +170,7 @@
         </div>
       </div>
 
-      <div id="right-body">
+      <!-- <div id="right-body">
         <span>推荐关注</span>
         <div class="user-item">
           <div class="user-info">
@@ -193,34 +192,14 @@
           </div>
           <button class="follow-btn">关注</button>
         </div>
-      </div>
+      </div> -->
+
     </div>
   </div>
   <script src="lib/jquery-1.12.4.js"></script>
   <script src="js/config.js"></script>
   <script src="lib/vue.js"></script>
   <script src="js/explore.js"></script>
-  <script>
-    // 汉堡菜单交互
-    const menuToggle = document.getElementById('menuToggle');
-    const navLinks = document.querySelector('.nav-links');
-
-    if (menuToggle && navLinks) {
-      menuToggle.addEventListener('click', () => {
-        menuToggle.classList.toggle('active');
-        navLinks.classList.toggle('expanded');
-      });
-
-      // 点击导航链接后关闭菜单
-      const navItems = navLinks.querySelectorAll('.nav-link');
-      navItems.forEach(item => {
-        item.addEventListener('click', () => {
-          menuToggle.classList.remove('active');
-          navLinks.classList.remove('expanded');
-        });
-      });
-    }
-  </script>
 </body>
 
 </html>

@@ -29,7 +29,18 @@ new Vue({
         fieldErrors: {},
         showSettings: false,
         selectedPosts: [],
-        showPostSelect: false
+        showPostSelect: false,
+        imagePreview: {
+            show: false,
+            images: [],
+            currentIndex: 0,
+            offsetX: 0,
+            touchStartX: 0,
+            touchStartTime: 0,
+            isDragging: false,
+            dragStartX: 0,
+            dragStartOffset: 0
+        }
     },
     computed: {
         // 计算头像样式
@@ -135,6 +146,105 @@ new Vue({
         // 触发文件输入框
         triggerFileInput() {
             document.getElementById('avatarInput').click();
+        },
+
+        // 打开图片预览
+        openImagePreview(images, index = 0) {
+            // 如果images是字符串，转换为数组
+            const imageList = typeof images === 'string' ? [images] : images;
+            const validImages = imageList.filter(img => img && img.trim());
+            if (validImages.length > 0) {
+                this.imagePreview.images = validImages;
+                this.imagePreview.currentIndex = Math.min(index, validImages.length - 1);
+                this.imagePreview.offsetX = -this.imagePreview.currentIndex * window.innerWidth;
+                this.imagePreview.show = true;
+                document.body.style.overflow = 'hidden';
+            }
+        },
+
+        // 关闭图片预览
+        closeImagePreview() {
+            this.imagePreview.show = false;
+            document.body.style.overflow = 'auto';
+        },
+
+        // 跳转到指定图片
+        goToImage(index) {
+            if (index >= 0 && index < this.imagePreview.images.length) {
+                this.imagePreview.currentIndex = index;
+                this.imagePreview.offsetX = -index * window.innerWidth;
+            }
+        },
+
+        // 上一张图片
+        goToPrevImage() {
+            if (this.imagePreview.currentIndex > 0) {
+                this.imagePreview.currentIndex--;
+                this.imagePreview.offsetX = -this.imagePreview.currentIndex * window.innerWidth;
+            }
+        },
+
+        // 下一张图片
+        goToNextImage() {
+            if (this.imagePreview.currentIndex < this.imagePreview.images.length - 1) {
+                this.imagePreview.currentIndex++;
+                this.imagePreview.offsetX = -this.imagePreview.currentIndex * window.innerWidth;
+            }
+        },
+
+        // 触摸开始
+        onPreviewTouchStart(e) {
+            this.imagePreview.touchStartX = e.touches[0].clientX;
+            this.imagePreview.touchStartTime = Date.now();
+        },
+
+        // 触摸移动
+        onPreviewTouchMove(e) {
+            const deltaX = e.touches[0].clientX - this.imagePreview.touchStartX;
+            this.imagePreview.offsetX = -this.imagePreview.currentIndex * window.innerWidth + deltaX;
+        },
+
+        // 触摸结束
+        onPreviewTouchEnd(e) {
+            const deltaX = this.imagePreview.offsetX + this.imagePreview.currentIndex * window.innerWidth;
+            const threshold = 50;
+            const timeDiff = Date.now() - this.imagePreview.touchStartTime;
+
+            if (deltaX > threshold && this.imagePreview.currentIndex > 0) {
+                this.imagePreview.currentIndex--;
+            } else if (deltaX < -threshold && this.imagePreview.currentIndex < this.imagePreview.images.length - 1) {
+                this.imagePreview.currentIndex++;
+            }
+            // 更新偏移量
+            this.imagePreview.offsetX = -this.imagePreview.currentIndex * window.innerWidth;
+        },
+
+        // 鼠标拖拽
+        onPreviewMouseDown(e) {
+            this.imagePreview.isDragging = true;
+            this.imagePreview.dragStartX = e.clientX;
+            this.imagePreview.dragStartOffset = this.imagePreview.offsetX;
+            e.preventDefault();
+        },
+
+        onPreviewMouseMove(e) {
+            if (!this.imagePreview.isDragging) return;
+            const deltaX = e.clientX - this.imagePreview.dragStartX;
+            this.imagePreview.offsetX = this.imagePreview.dragStartOffset + deltaX;
+        },
+
+        onPreviewMouseUp(e) {
+            if (!this.imagePreview.isDragging) return;
+            this.imagePreview.isDragging = false;
+            const deltaX = this.imagePreview.offsetX - (-this.imagePreview.currentIndex * window.innerWidth);
+            const threshold = 50;
+
+            if (deltaX > threshold && this.imagePreview.currentIndex > 0) {
+                this.imagePreview.currentIndex--;
+            } else if (deltaX < -threshold && this.imagePreview.currentIndex < this.imagePreview.images.length - 1) {
+                this.imagePreview.currentIndex++;
+            }
+            this.imagePreview.offsetX = -this.imagePreview.currentIndex * window.innerWidth;
         },
 
         // 保存资料

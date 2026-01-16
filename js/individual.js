@@ -13,6 +13,18 @@ new Vue({
         isFollowed: false,//没有关注状态
         gzNum: 0,
         fansNum: 0,
+        // 使用与首页相同的图片预览数据结构
+        imagePreview: {
+            show: false,
+            images: [],
+            currentIndex: 0,
+            offsetX: 0,
+            touchStartX: 0,
+            touchStartTime: 0,
+            isDragging: false,
+            dragStartX: 0,
+            dragStartOffset: 0
+        }
     },
     created() {
         this.init();
@@ -50,7 +62,25 @@ new Vue({
             });
             const data = await response.json();
             console.log(data);
-            this.list = data;
+            
+            // 处理图片URL，添加token参数
+            const token = localStorage.getItem('token');
+            if (token) {
+                this.list = data.map(item => {
+                    if (item.image_file) {
+                        // 为所有图片URL添加token参数
+                        item.image_file = item.image_file.replace(/(src=['"])([^'"]+)(['"])/g, (match, prefix, url, suffix) => {
+                            // 检查URL是否已经包含参数
+                            const separator = url.includes('?') ? '&' : '?';
+                            return `${prefix}${url}${separator}token=${token}${suffix}`;
+                        });
+                    }
+                    return item;
+                });
+            } else {
+                this.list = data;
+            }
+            
             this.avatarUrl = this.list[0].avatarUrl;
             this.numOfPosts = this.list.length;
             console.log("返回的" + data[0].txt);
@@ -246,6 +276,137 @@ new Vue({
             const temp = document.createElement('textarea');
             temp.innerHTML = html;
             return temp.value;
+        },
+        
+        // 图片预览相关方法
+        openImagePreview(images, index) {
+            this.imagePreview.images = images;
+            this.imagePreview.currentIndex = index;
+            this.imagePreview.offsetX = -index * window.innerWidth;
+            this.imagePreview.show = true;
+        },
+        
+        closeImagePreview() {
+            this.imagePreview.show = false;
+        },
+        
+        goToPrevImage() {
+            if (this.imagePreview.currentIndex > 0) {
+                this.imagePreview.currentIndex--;
+                this.imagePreview.offsetX = -this.imagePreview.currentIndex * window.innerWidth;
+            }
+        },
+        
+        goToNextImage() {
+            if (this.imagePreview.currentIndex < this.imagePreview.images.length - 1) {
+                this.imagePreview.currentIndex++;
+                this.imagePreview.offsetX = -this.imagePreview.currentIndex * window.innerWidth;
+            }
+        },
+        
+        getImageSrc(imgHtml) {
+            if (!imgHtml) return '';
+            const match = imgHtml.match(/src=["']([^"']+)["']/);
+            return match ? match[1] : imgHtml;
+        },
+        
+        // 打开图片预览
+        openImagePreview(images, index = 0) {
+            // 如果images是字符串，转换为数组
+            const imageList = typeof images === 'string' ? [images] : images;
+            const validImages = imageList.filter(img => img && img.trim());
+            if (validImages.length > 0) {
+                this.imagePreview.images = validImages;
+                this.imagePreview.currentIndex = Math.min(index, validImages.length - 1);
+                this.imagePreview.offsetX = -this.imagePreview.currentIndex * window.innerWidth;
+                this.imagePreview.show = true;
+                document.body.style.overflow = 'hidden';
+            }
+        },
+        
+        // 关闭图片预览
+        closeImagePreview() {
+            this.imagePreview.show = false;
+            document.body.style.overflow = 'auto';
+        },
+        
+        // 跳转到指定图片
+        goToImage(index) {
+            if (index >= 0 && index < this.imagePreview.images.length) {
+                this.imagePreview.currentIndex = index;
+                this.imagePreview.offsetX = -index * window.innerWidth;
+            }
+        },
+        
+        // 上一张图片
+        goToPrevImage() {
+            if (this.imagePreview.currentIndex > 0) {
+                this.imagePreview.currentIndex--;
+                this.imagePreview.offsetX = -this.imagePreview.currentIndex * window.innerWidth;
+            }
+        },
+        
+        // 下一张图片
+        goToNextImage() {
+            if (this.imagePreview.currentIndex < this.imagePreview.images.length - 1) {
+                this.imagePreview.currentIndex++;
+                this.imagePreview.offsetX = -this.imagePreview.currentIndex * window.innerWidth;
+            }
+        },
+        
+        // 触摸开始
+        onPreviewTouchStart(e) {
+            this.imagePreview.touchStartX = e.touches[0].clientX;
+            this.imagePreview.touchStartTime = Date.now();
+        },
+        
+        // 触摸移动
+        onPreviewTouchMove(e) {
+            const deltaX = e.touches[0].clientX - this.imagePreview.touchStartX;
+            this.imagePreview.offsetX = -this.imagePreview.currentIndex * window.innerWidth + deltaX;
+        },
+        
+        // 触摸结束
+        onPreviewTouchEnd(e) {
+            const deltaX = this.imagePreview.offsetX + this.imagePreview.currentIndex * window.innerWidth;
+            const threshold = 50;
+            const timeDiff = Date.now() - this.imagePreview.touchStartTime;
+
+            if (deltaX > threshold && this.imagePreview.currentIndex > 0) {
+                this.imagePreview.currentIndex--;
+            } else if (deltaX < -threshold && this.imagePreview.currentIndex < this.imagePreview.images.length - 1) {
+                this.imagePreview.currentIndex++;
+            }
+            // 更新偏移量
+            this.imagePreview.offsetX = -this.imagePreview.currentIndex * window.innerWidth;
+        },
+        
+        // 鼠标拖拽
+        onPreviewMouseDown(e) {
+            this.imagePreview.isDragging = true;
+            this.imagePreview.dragStartX = e.clientX;
+            this.imagePreview.dragStartOffset = this.imagePreview.offsetX;
+            e.preventDefault();
+        },
+        
+        onPreviewMouseMove(e) {
+            if (!this.imagePreview.isDragging) return;
+            const deltaX = e.clientX - this.imagePreview.dragStartX;
+            this.imagePreview.offsetX = this.imagePreview.dragStartOffset + deltaX;
+        },
+        
+        onPreviewMouseUp(e) {
+            if (!this.imagePreview.isDragging) return;
+            this.imagePreview.isDragging = false;
+            const deltaX = this.imagePreview.offsetX - (-this.imagePreview.currentIndex * window.innerWidth);
+            const threshold = 50;
+
+            if (deltaX > threshold && this.imagePreview.currentIndex > 0) {
+                this.imagePreview.currentIndex--;
+            } else if (deltaX < -threshold && this.imagePreview.currentIndex < this.imagePreview.images.length - 1) {
+                this.imagePreview.currentIndex++;
+            }
+            this.imagePreview.offsetX = -this.imagePreview.currentIndex * window.innerWidth;
         }
 
     }, // 添加一个mounted钩子，确保DOM渲染后执行

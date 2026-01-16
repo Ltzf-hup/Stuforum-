@@ -19,22 +19,29 @@ new Vue({
     },
     methods: {
         getExplore() {
+            // 获取token并配置请求头
+            const token = localStorage.getItem('token');
+            const headers = {};
+            if (token) {
+                headers['Authorization'] = `Bearer ${token}`;
+            }
+
             // 使用箭头函数回调
             $.ajax({
                 url: "http://10.11.192.98:8080/StuForum_war/forum",
                 type: "GET",
                 dataType: "json",
+                headers: headers,
                 success: (data) => {
                     console.log(data);
-                    
+
                     // 处理图片URL，添加token参数
-                    const token = localStorage.getItem('token');
                     this.list = data.map(item => {
                         const processedItem = {
                             ...item,
                             txt: typeof item.txt === 'string' ? [item.txt] : item.txt
                         };
-                        
+
                         if (token && processedItem.image_file) {
                             // 为所有图片URL添加token参数
                             processedItem.image_file = processedItem.image_file.replace(/(src=['"])([^'"]+)(['"])/g, (match, prefix, url, suffix) => {
@@ -43,7 +50,7 @@ new Vue({
                                 return `${prefix}${url}${separator}token=${token}${suffix}`;
                             });
                         }
-                        
+
                         return processedItem;
                     });
                 },
@@ -59,6 +66,13 @@ new Vue({
                 return;
             }
             // 执行搜索操作
+            // 获取token并配置请求头
+            const token = localStorage.getItem('token');
+            const headers = {};
+            if (token) {
+                headers['Authorization'] = `Bearer ${token}`;
+            }
+
             $.ajax({
                 url: "http://10.11.192.98:8080/StuForum_war/forum/search",
                 type: "GET",
@@ -66,32 +80,31 @@ new Vue({
                     query: this.searchQuery
                 },
                 dataType: "json",
+                headers: headers,
                 success: (data) => {
                     console.log("搜索结果:", data);
-                    
+
                     // 处理图片URL，添加token参数
-                    const token = localStorage.getItem('token');
                     this.list = data.map(item => {
                         const processedItem = {
                             ...item,
                             txt: typeof item.txt === 'string' ? [item.txt] : item.txt
                         };
-                        
+
                         if (token && processedItem.image_file) {
                             // 为所有图片URL添加token参数
-                            processedItem.image_file = processedItem.image_file.replace(/(src=['"])([^'"]+)(['"])/g, (match, prefix, url, suffix) => {
+                            processedItem.image_file = processedItem.image_file.replace(/(src=['"'])([^'"']+)(['"'])/g, (match, prefix, url, suffix) => {
                                 // 检查URL是否已经包含参数
                                 const separator = url.includes('?') ? '&' : '?';
                                 return `${prefix}${url}${separator}token=${token}${suffix}`;
                             });
                         }
-                        
+
                         return processedItem;
                     });
                 },
                 error: (error) => {
                     console.error("搜索失败:", error);
-                    // 搜索失败时可以显示提示或保持原有列表
                 }
             });
         },

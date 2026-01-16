@@ -174,27 +174,6 @@
   <script src="lib/vue.js"></script>
   <script src="https://unpkg.com/@wangeditor/editor@latest/dist/index.js"></script>
   <script src="js/index.js"></script>
-  <script>
-    // 汉堡菜单交互
-    const menuToggle = document.getElementById('menuToggle');
-    const navLinks = document.querySelector('.nav-links');
-
-    if (menuToggle && navLinks) {
-      menuToggle.addEventListener('click', () => {
-        menuToggle.classList.toggle('active');
-        navLinks.classList.toggle('expanded');
-      });
-
-      // 点击导航链接后关闭菜单
-      const navItems = navLinks.querySelectorAll('.nav-link');
-      navItems.forEach(item => {
-        item.addEventListener('click', () => {
-          menuToggle.classList.remove('active');
-          navLinks.classList.remove('expanded');
-        });
-      });
-    }
-  </script>
 </body>
 
 </html>

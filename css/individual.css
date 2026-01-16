@@ -348,20 +348,242 @@
           padding: 0.5rem 1rem;
           font-size: 0.8125rem;
       }
-      
-      /* 调整统计数据 */
-      .stats {
-          padding: 0.75rem 0;
-      }
-      
-      .stat-number {
-          font-size: 1.25rem;
-      }
-      
-      .stat-label {
-          font-size: 0.8125rem;
-      }
   }
+
+/* 微信风格图片网格样式 */
+.image-grid {
+  display: grid;
+  gap: 4px;
+  margin-top: 12px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.grid-1 {
+  grid-template-columns: 1fr;
+}
+
+.grid-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.grid-3,
+.grid-4,
+.grid-5,
+.grid-6,
+.grid-7,
+.grid-8,
+.grid-9 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.image-item {
+  position: relative;
+  width: 100%;
+  padding-bottom: 100%;
+  overflow: hidden;
+  border-radius: 4px;
+  cursor: pointer;
+  background: #f5f5f5;
+}
+
+.image-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* 强制统一图片大小 */
+.image-wrapper img {
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 100%;
+  min-height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover !important;
+  object-position: center;
+  flex-shrink: 0;
+}
+
+.image-item:hover img {
+  transform: scale(1.05);
+}
+
+.image-count {
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 10px;
+  font-size: 12px;
+}
+
+.image-item:hover .image-count {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 微信风格图片预览样式 */
+.clickable-image {
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.clickable-image:hover {
+    opacity: 0.8;
+}
+
+#image-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* 新的图片预览模态框样式 */
+.image-preview-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+}
+
+.preview-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 10001;
+}
+
+.preview-count {
+    color: white;
+    font-size: 16px;
+}
+
+.preview-close {
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    transition: background 0.2s;
+}
+
+.preview-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.preview-content {
+    flex: 1;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    margin-top: 50px;
+}
+
+.preview-wrapper {
+    display: flex;
+    height: 100%;
+    transition: transform 0.3s ease;
+}
+
+.preview-item {
+    min-width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.preview-item img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.preview-indicator {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 10001;
+}
+
+.preview-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.4);
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.preview-dot.active {
+    background: white;
+    transform: scale(1.2);
+}
+
+/* 预览左右箭头 */
+.preview-arrow {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 10002;
+    transition: all 0.3s ease;
+}
+
+.preview-arrow:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.preview-arrow:active {
+    transform: translateY(-50%) scale(0.95);
+}
+
+.preview-arrow-left {
+    left: 20px;
+}
+
+.preview-arrow-right {
+    right: 20px;
+}
+
+/* 头像预览功能使用与首页相同的图片预览样式 */
   
   @media (max-width: 480px) {
       /* 小屏幕手机 */

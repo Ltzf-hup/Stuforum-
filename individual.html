@@ -12,28 +12,28 @@
 <body class="forum-body">
     <div id="app">
         <div id="header">
-          <div class="logo">
-            <span class="logo-icon">🎓</span>
-            <span>StuForum</span>
-          </div>
-          <div class="nav-links">
-            <a href="index.html" class="nav-link">
-              <span class="full-text">首页</span>
-              <span class="short-text">首</span>
-            </a>
-            <a href="explore.html" class="nav-link">
-              <span class="full-text">探索</span>
-              <span class="short-text">探</span>
-            </a>
-            <a href="m-n.html" class="nav-link">
-              <span class="full-text">消息</span>
-              <span class="short-text">消</span>
-            </a>
-            <a href="profile.html" class="nav-link">
-              <span class="full-text">个人资料</span>
-              <span class="short-text">我</span>
-            </a>
-          </div>
+            <div class="logo">
+                <span class="logo-icon">🎓</span>
+                <span>StuForum</span>
+            </div>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">
+                    <span class="full-text">首页</span>
+                    <span class="short-text">首</span>
+                </a>
+                <a href="explore.html" class="nav-link">
+                    <span class="full-text">探索</span>
+                    <span class="short-text">探</span>
+                </a>
+                <a href="m-n.html" class="nav-link">
+                    <span class="full-text">消息</span>
+                    <span class="short-text">消</span>
+                </a>
+                <a href="profile.html" class="nav-link">
+                    <span class="full-text">个人资料</span>
+                    <span class="short-text">我</span>
+                </a>
+            </div>
 
         </div>
 
@@ -43,9 +43,44 @@
                     <!-- 背景封面区域 -->
                 </div>
                 <div class="left-middle">
-                    <div class="tx">
-                        <img :src="avatarUrl" alt="">
-                    </div>
+                    <div class="tx" @click="openImagePreview([avatarUrl], 0)">
+                            <img :src="avatarUrl" alt="" style="cursor: pointer;">
+                        </div>
+                        
+                        <!-- 头像预览模态框 -->
+                        <div v-if="imagePreview.show" class="image-preview-modal" @click.self="closeImagePreview">
+                            <div class="preview-header">
+                                <span class="preview-count">{{ imagePreview.currentIndex + 1 }} / {{ imagePreview.images.length }}</span>
+                                <span class="preview-close" @click="closeImagePreview">✕</span>
+                            </div>
+                            <div class="preview-content" @touchstart="onPreviewTouchStart" @touchmove="onPreviewTouchMove"
+                              @touchend="onPreviewTouchEnd" @mousedown="onPreviewMouseDown" @mousemove="onPreviewMouseMove"
+                              @mouseup="onPreviewMouseUp" @mouseleave="onPreviewMouseUp">
+                              <!-- 左侧箭头 -->
+                              <div class="preview-arrow preview-arrow-left" @click.stop="goToPrevImage"
+                                v-if="imagePreview.images.length > 1">
+                                <svg viewBox="0 0 24 24" width="32" height="32" fill="white">
+                                  <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+                                </svg>
+                              </div>
+                              <div class="preview-wrapper" :style="{ transform: 'translateX(' + imagePreview.offsetX + 'px)' }">
+                                <div v-for="(img, idx) in imagePreview.images" :key="idx" class="preview-item">
+                                  <img :src="img" alt="头像" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                                </div>
+                              </div>
+                              <!-- 右侧箭头 -->
+                              <div class="preview-arrow preview-arrow-right" @click.stop="goToNextImage"
+                                v-if="imagePreview.images.length > 1">
+                                <svg viewBox="0 0 24 24" width="32" height="32" fill="white">
+                                  <path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z" />
+                                </svg>
+                              </div>
+                            </div>
+                            <div class="preview-indicator">
+                              <span v-for="(img, idx) in imagePreview.images" :key="idx" class="preview-dot"
+                                :class="{ active: idx === imagePreview.currentIndex }" @click="goToImage(idx)"></span>
+                            </div>
+                        </div>
 
                     <div class="action-buttons" v-if="isSelf">
                         <button class="btn btn-primary follow-btn" @click="followUser">关注</button>
@@ -83,7 +118,7 @@
             <div class="right">
                 <div class="right-top">
                     <div class="tab active" @click="switchTab('posts')">帖子</div>
-                    <div class="tab" @click="switchTab('replies')">回复</div>
+                    <!-- <div class="tab" @click="switchTab('replies')">回复</div> -->
                 </div>
 
                 <div class="right-content">
@@ -96,13 +131,59 @@
                             </div>
 
                             <div class="post-text" v-html="decodeHtml(item.txt)"></div>
+                            
+                            <!-- 帖子图片展示区 - 微信9宫格 -->
+                            <div v-if="item.image_file" class="image-grid"
+                                :class="'grid-' + Math.min(item.image_file.split(',').filter(img => img.trim()).length, 9)">
+                                <template v-for="(img, allIndex) in item.image_file.split(',').filter(img => img.trim()).slice(0, 9)">
+                                  <div :key="allIndex" class="image-item"
+                                    @click="openImagePreview(item.image_file.split(',').filter(i => i.trim()), allIndex)">
+                                    <div class="image-wrapper" v-html="img"></div>
+                                  </div>
+                                </template>
+                            </div>
+                        </div>
+                        
+                        <!-- 图片预览模态框 -->
+                        <div v-if="imagePreview.show" class="image-preview-modal" @click.self="closeImagePreview">
+                            <div class="preview-header">
+                                <span class="preview-count">{{ imagePreview.currentIndex + 1 }} / {{ imagePreview.images.length }}</span>
+                                <span class="preview-close" @click="closeImagePreview">✕</span>
+                            </div>
+                            <div class="preview-content" @touchstart="onPreviewTouchStart" @touchmove="onPreviewTouchMove"
+                                @touchend="onPreviewTouchEnd" @mousedown="onPreviewMouseDown" @mousemove="onPreviewMouseMove"
+                                @mouseup="onPreviewMouseUp" @mouseleave="onPreviewMouseUp">
+                                <!-- 左侧箭头 -->
+                                <div class="preview-arrow preview-arrow-left" @click.stop="goToPrevImage"
+                                    v-if="imagePreview.images.length > 1">
+                                    <svg viewBox="0 0 24 24" width="32" height="32" fill="white">
+                                        <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+                                    </svg>
+                                </div>
+                                <div class="preview-wrapper" :style="{ transform: 'translateX(' + imagePreview.offsetX + 'px)' }">
+                                    <div v-for="(img, idx) in imagePreview.images" :key="idx" class="preview-item">
+                                        <img :src="getImageSrc(img)" alt="图片" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                                    </div>
+                                </div>
+                                <!-- 右侧箭头 -->
+                                <div class="preview-arrow preview-arrow-right" @click.stop="goToNextImage"
+                                    v-if="imagePreview.images.length > 1">
+                                    <svg viewBox="0 0 24 24" width="32" height="32" fill="white">
+                                        <path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="preview-indicator">
+                                <span v-for="(img, idx) in imagePreview.images" :key="idx" class="preview-dot"
+                                    :class="{ active: idx === imagePreview.currentIndex }" @click="goToImage(idx)"></span>
+                            </div>
                         </div>
                     </div>
 
                 </div>
 
 
-                <div id="replies" class="content-section">
+                <!-- <div id="replies" class="content-section">
                     <div class="post">
                         <div class="post-header-info">
                             <span class="post-user">User123</span>
@@ -123,7 +204,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
 
                 <div id="media" class="content-section">
                     <div style="text-align: center; padding: 2rem; color: #6c757d;">
@@ -140,25 +221,25 @@
     <script src="https://unpkg.com/@wangeditor/editor@latest/dist/index.js"></script>
     <script src="js/individual.js"></script>
     <script>
-      // 汉堡菜单交互
-      const menuToggle = document.getElementById('menuToggle');
-      const navLinks = document.querySelector('.nav-links');
-      
-      if (menuToggle && navLinks) {
-        menuToggle.addEventListener('click', () => {
-          menuToggle.classList.toggle('active');
-          navLinks.classList.toggle('expanded');
-        });
-        
-        // 点击导航链接后关闭菜单
-        const navItems = navLinks.querySelectorAll('.nav-link');
-        navItems.forEach(item => {
-          item.addEventListener('click', () => {
-            menuToggle.classList.remove('active');
-            navLinks.classList.remove('expanded');
-          });
-        });
-      }
+        // 汉堡菜单交互
+        const menuToggle = document.getElementById('menuToggle');
+        const navLinks = document.querySelector('.nav-links');
+
+        if (menuToggle && navLinks) {
+            menuToggle.addEventListener('click', () => {
+                menuToggle.classList.toggle('active');
+                navLinks.classList.toggle('expanded');
+            });
+
+            // 点击导航链接后关闭菜单
+            const navItems = navLinks.querySelectorAll('.nav-link');
+            navItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    menuToggle.classList.remove('active');
+                    navLinks.classList.remove('expanded');
+                });
+            });
+        }
     </script>
 </body>
 
