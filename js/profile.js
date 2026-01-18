@@ -5,8 +5,6 @@ Vue.filter('truncate', function (value, length) {
     return value.substring(0, length) + '...';
 });
 
-
-
 new Vue({
     el: '#app',
     data: {

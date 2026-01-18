@@ -58,6 +58,8 @@ const vm = new Vue({
                         localStorage.setItem('userData', JSON.stringify(data.user));
                         const token = data.token;
                         localStorage.setItem('token', token);
+                        // 存储token的获取时间（毫秒）
+                        localStorage.setItem('tokenTimestamp', Date.now());
                         console.log('token:', token);
                         this.showMessage('success', '登录成功', `欢迎您，${data.user.uname}`);
                         setTimeout(() => {

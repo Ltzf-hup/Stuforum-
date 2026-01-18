@@ -1,7 +1,5 @@
 const { createEditor, createToolbar } = window.wangEditor
 
-
-
 new Vue({
     el: '#app',
     data: {
@@ -57,7 +55,11 @@ new Vue({
                 error: (xhr, status, error) => {
                     console.error("请求失败:", status, error);
                     this.isChecking = false;
-                    this.loadMockData();
+                    // 如果是401错误，则加载模拟数据
+                    if (xhr.status === 401) {
+                        // 跳转到登录页面
+                        window.location.href = 'login.html';
+                    }
                 }
             });
         },
@@ -236,55 +238,6 @@ new Vue({
                 console.error('发布出错:', error);
                 this.showMessage('发布失败，请稍后重试', 'error');
             }
-        },
-        loadMockData() {
-            this.list = [
-                {
-                    id: 1,
-                    uid: 101,
-                    uname: '测试用户1',
-                    txt: ['这是第一条测试帖子'], // 改为数组类型
-                    postedTime: new Date(Date.now() - 1000 * 60 * 30),
-                    likeCount: 5,
-                    replyCount: 2,
-                    avatarUrl: '',
-                    image_file: '<img src="https://picsum.photos/400/300" alt="测试图片1"><img src="https://picsum.photos/400/301" alt="测试图片2">'
-                },
-                {
-                    id: 2,
-                    uid: 102,
-                    uname: '测试用户2',
-                    txt: ['今天的天气真好！'], // 改为数组类型
-                    postedTime: new Date(Date.now() - 1000 * 60 * 60 * 2),
-                    likeCount: 10,
-                    replyCount: 5,
-                    avatarUrl: '',
-                    image_file: '<img src="https://picsum.photos/400/302" alt="测试图片">'
-                },
-                {
-                    id: 3,
-                    uid: 103,
-                    uname: '测试用户3',
-                    txt: ['分享一张好看的照片'], // 改为数组类型
-                    postedTime: new Date(Date.now() - 1000 * 60 * 60 * 5),
-                    likeCount: 15,
-                    replyCount: 8,
-                    avatarUrl: '',
-                    image_file: '<img src="https://picsum.photos/400/303" alt="测试图片1"><img src="https://picsum.photos/400/304" alt="测试图片2"><img src="https://picsum.photos/400/305" alt="测试图片3">'
-                },
-                {
-                    id: 4,
-                    uid: 104,
-                    uname: '测试用户4',
-                    txt: ['学习编程的一天'], // 改为数组类型
-                    postedTime: new Date(Date.now() - 1000 * 60 * 60 * 24),
-                    likeCount: 20,
-                    replyCount: 10,
-                    avatarUrl: '',
-                    image_file: '<img src="https://picsum.photos/400/306" alt="测试图片1"><img src="https://picsum.photos/400/307" alt="测试图片2">'
-                }
-            ];
-            console.log('使用模拟数据');
         },
         getAvatarColorStyle(username) {
             const colors = [

@@ -38,6 +38,16 @@ $.ajaxSetup({
       }
       xhr.setRequestHeader('Authorization', 'Bearer ' + token);
     }
+  },
+  error: function (xhr, status, error) {
+    // 全局处理401错误，token可能已过期
+    if (xhr.status === 401) {
+      console.log('Token已过期或无效，已清除本地数据');
+      localStorage.removeItem('token');
+      localStorage.removeItem('tokenTimestamp');
+      localStorage.removeItem('userData');
+      window.location.href = 'login.html';
+    }
   }
 });
 
@@ -63,8 +73,18 @@ window.fetch = function (url, options = {}) {
     }
   }
 
-  // 调用原始的fetch函数
-  return originalFetch(url, options);
+  // 调用原始的fetch函数并添加错误处理
+  return originalFetch(url, options).then(response => {
+    // 检查响应状态码
+    if (response.status === 401) {
+      console.log('Token已过期或无效，已清除本地数据');
+      localStorage.removeItem('token');
+      localStorage.removeItem('tokenTimestamp');
+      localStorage.removeItem('userData');
+      window.location.href = 'login.html';
+    }
+    return response;
+  });
 };
 
 const AppConfig = {
