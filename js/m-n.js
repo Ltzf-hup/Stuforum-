@@ -60,17 +60,8 @@ new Vue({
         console.error('WebSocket连接失败：缺少必要的用户信息', { currentUser: this.currentUser, id: this.id });
         return;
       }
-      // 获取token用于WebSocket认证
-      const token = localStorage.getItem('token');
-
-      // 构建完整的WebSocket URL，确保所有参数都被正确编码
-      const encodedUsername = encodeURIComponent(this.currentUser.name);
-      const encodedUserId = encodeURIComponent(this.currentUser.id);
-      const encodedTargetId = encodeURIComponent(this.id);
-      const encodedToken = encodeURIComponent(token || '');
-
-      // 将token作为查询参数添加到WebSocket URL中
-      const wsUrl = `${wsBaseUrl}/${encodedUsername}/${encodedUserId}/${encodedTargetId}?token=${encodedToken}`;
+      // 构建完整的WebSocket URL
+      const wsUrl = `${wsBaseUrl}/${this.currentUser.name}/${this.currentUser.id}/${this.id}`;
       console.log('WebSocket连接地址:', wsUrl);
       console.log('当前选中用户ID:', this.id);
       this.socket = new WebSocket(wsUrl);
