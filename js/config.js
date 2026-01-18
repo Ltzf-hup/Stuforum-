@@ -95,7 +95,7 @@ const AppConfig = {
       return 'wss://ws.lztflioveqzs.dpdns.org/StuForum_war/chat';
     }
     // 否则用8080端口
-    return 'ws://192.168.86.1:8080/StuForum_war/chat';
+    return 'ws://10.11.192.98:8080/StuForum_war/chat';
   }
 };
 window.AppConfig = AppConfig;
