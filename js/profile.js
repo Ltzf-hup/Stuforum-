@@ -81,7 +81,7 @@ new Vue({
         async profileFor() {
             console.log(this.list.uname)
             const url =
-                `http://192.168.86.1:8080/StuForum_war/api/forum/Son?uname=${(this.list.uname)}`; // 本地IP
+                `http://10.11.192.98:8080/StuForum_war/api/forum/Son?uname=${(this.list.uname)}`; // 本地IP
             //查询用户帖子数据
 
             const response = await fetch(url);
